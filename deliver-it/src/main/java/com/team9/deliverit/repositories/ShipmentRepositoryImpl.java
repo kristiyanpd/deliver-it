@@ -1,6 +1,7 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.Warehouse;
 import org.springframework.stereotype.Repository;
@@ -55,6 +56,7 @@ public class ShipmentRepositoryImpl {
                 .filter(shipment -> shipment.getDestinationWarehouse() == warehouse)
                 .collect(Collectors.toList());
     }
+
 
 
 }
