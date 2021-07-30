@@ -1,35 +1,19 @@
 package com.team9.deliverit.models;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-@Entity
-@Table(name = "addresses")
-public class Address {
+public class AddressDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
-    private int id;
-
-    @Column(name = "street_name")
+    @NotBlank(message = "Street name can't be blank!")
+    @Size(min = 2, max = 50, message = "Street name length should be between 2 and 50 symbols!")
     private String streetName;
 
 //    City city;
 
-    public Address() {}
-
-    public Address(int id, String streetName, City city) {
-        setId(id);
+    public AddressDto(String streetName, City city) {
         setStreetName(streetName);
 //        setCity(city);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getStreetName() {
