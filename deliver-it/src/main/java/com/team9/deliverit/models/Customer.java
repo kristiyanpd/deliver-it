@@ -1,20 +1,28 @@
 package com.team9.deliverit.models;
 
+import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
+
+@Entity
+@Table(name = "customers")
 public class Customer {
 
     @Positive(message = "ID should be positive")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id")
     private int id;
 
+    @OneToOne
+    @JoinColumn(name = "person_id")
     private Person person;
 
+    @ManyToOne
+    @JoinColumn(name = "address_id")
     private Address address;
 
-    public Customer(int id, Person person, Address address) {
-        setId(id);
-        setPerson(person);
-        setAddress(address);
+    public Customer() {
     }
 
     public int getId() {

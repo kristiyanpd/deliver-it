@@ -1,33 +1,40 @@
 package com.team9.deliverit.models;
 
+import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
+@Entity
+@Table(name = "parcels")
 public class Parcel {
 
-    @Positive(message = "Parcel id must be positive")
+    //@Positive(message = "Parcel id must be positive")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "parcel_id")
     private int id;
 
-    @Positive(message = "Weight should be positive")
+    //@Positive(message = "Weight should be positive")
+    @Column(name = "weight")
     private double weight;
 
+    @Column(name = "pick_up_from_warehouse")
     private boolean pickUpFromWarehouse;
 
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id")
     private Warehouse warehouse;
 
+    @ManyToOne
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "shipment_id")
     private  Shipment shipment;
 
-    private Category category;
 
-    public Parcel(int id, double weight, boolean pickUpFromWarehouse, Warehouse warehouse, Customer customer, Shipment shipment, Category category) {
-        setId(id);
-        setWeight(weight);
-        setPickUpFromWarehouse(pickUpFromWarehouse);
-        setWarehouse(warehouse);
-        setCustomer(customer);
-        setShipment(shipment);
-        setCategory(category);
+    //private Category category;
+
+    public Parcel() {
     }
 
     public int getId() {
@@ -78,11 +85,11 @@ public class Parcel {
         this.shipment = shipment;
     }
 
-    public Category getCategory() {
+/*    public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
-    }
+    }*/
 }

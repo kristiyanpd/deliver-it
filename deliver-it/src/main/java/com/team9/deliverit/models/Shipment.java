@@ -1,30 +1,33 @@
 package com.team9.deliverit.models;
 
+import com.team9.deliverit.models.enums.Status;
+
+import javax.persistence.*;
 import javax.validation.constraints.Positive;
 import java.sql.Date;
 
+@Entity
+@Table(name = "shipments")
 public class Shipment {
 
     @Positive(message = "ID should be a positive number!")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "shipment_id")
     private int id;
 
     private Date departureDate;
 
     private Date arrivalDate;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
-    private Warehouse originWarehouse;
+   // private Warehouse originWarehouse;
 
-    private Warehouse destinationWarehouse;
+    //private Warehouse destinationWarehouse;
 
-    public Shipment(int id, Date departureDate, Date arrivalDate, Status status, Warehouse originWarehouse, Warehouse destinationWarehouse) {
-        setId(id);
-        setDepartureDate(departureDate);
-        setArrivalDate(arrivalDate);
-        setStatus(status);
-        setOriginWarehouse(originWarehouse);
-        setDestinationWarehouse(destinationWarehouse);
+    public Shipment() {
     }
 
     public int getId() {
@@ -59,7 +62,7 @@ public class Shipment {
         this.status = status;
     }
 
-    public Warehouse getOriginWarehouse() {
+/*    public Warehouse getOriginWarehouse() {
         return originWarehouse;
     }
 
@@ -73,5 +76,5 @@ public class Shipment {
 
     public void setDestinationWarehouse(Warehouse destinationWarehouse) {
         this.destinationWarehouse = destinationWarehouse;
-    }
+    }*/
 }

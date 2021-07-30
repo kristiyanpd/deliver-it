@@ -1,25 +1,31 @@
 package com.team9.deliverit.models;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Positive;
 
+@Entity
+@Table(name = "personal_details")
 public class Person {
 
     @Positive(message = "ID should be positive")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "person_id")
     private int id;
 
+    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     private String lastName;
 
     @Email
+    @Column(name = "email")
     private String email;
 
-    public Person(int id, String firstName, String lastName, String email) {
-        setId(id);
-        setFirstName(firstName);
-        setLastName(lastName);
-        setEmail(email);
+    public Person() {
     }
 
     public int getId() {

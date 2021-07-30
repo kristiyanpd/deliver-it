@@ -14,15 +14,18 @@ public class Address {
     @Column(name = "street_name")
     private String streetName;
 
-//    City city;
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
 
-    public Address() {}
+    public Address() {
+    }
 
-    public Address(int id, String streetName, City city) {
+/*    public Address(int id, String streetName, City city) {
         setId(id);
         setStreetName(streetName);
-//        setCity(city);
-    }
+        setCity(city);
+    }*/
 
     public int getId() {
         return id;
@@ -40,11 +43,11 @@ public class Address {
         this.streetName = streetName;
     }
 
-//    public City getCity() {
-//        return city;
-//    }
-//
-//    public void setCity(City city) {
-//        this.city = city;
-//    }
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 }

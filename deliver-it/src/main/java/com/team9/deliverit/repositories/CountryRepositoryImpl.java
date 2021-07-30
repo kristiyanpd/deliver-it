@@ -14,12 +14,6 @@ public class CountryRepositoryImpl implements CountryRepository {
 
     public CountryRepositoryImpl() {
         this.countries = new ArrayList<>();
-
-        countries.add(new Country(1, "Bulgaria"));
-        countries.add(new Country(2, "Russia"));
-        countries.add(new Country(3, "USA"));
-        countries.add(new Country(4, "Germany"));
-        countries.add(new Country(5, "China"));
     }
 
     @Override
