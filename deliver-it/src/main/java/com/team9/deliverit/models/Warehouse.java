@@ -14,7 +14,9 @@ public class Warehouse {
     @Column(name = "warehouse_id")
     private int id;
 
-   // Address address;
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     public Warehouse() {
     }
@@ -27,11 +29,11 @@ public class Warehouse {
         this.id = id;
     }
 
-  /*  //public Address getAddress() {
+    public Address getAddress() {
         return address;
-    }*/
+    }
 
-  /*  public void setAddress(Address address) {
+    public void setAddress(Address address) {
         this.address = address;
-    }*/
+    }
 }

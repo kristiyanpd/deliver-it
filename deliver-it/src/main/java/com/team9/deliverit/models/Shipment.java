@@ -10,22 +10,29 @@ import java.sql.Date;
 @Table(name = "shipments")
 public class Shipment {
 
-    @Positive(message = "ID should be a positive number!")
+   // @Positive(message = "ID should be a positive number!")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shipment_id")
     private int id;
 
+    @Column(name = "departure_date")
     private Date departureDate;
 
+    @Column(name = "arrival_date")
     private Date arrivalDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private Status status;
 
-   // private Warehouse originWarehouse;
+    @ManyToOne
+    @JoinColumn(name = "origin_warehouse_id")
+    private Warehouse originWarehouse;
 
-    //private Warehouse destinationWarehouse;
+    @ManyToOne
+    @JoinColumn(name = "destination_warehouse_id")
+    private Warehouse destinationWarehouse;
 
     public Shipment() {
     }
@@ -62,7 +69,7 @@ public class Shipment {
         this.status = status;
     }
 
-/*    public Warehouse getOriginWarehouse() {
+    public Warehouse getOriginWarehouse() {
         return originWarehouse;
     }
 
@@ -76,5 +83,5 @@ public class Shipment {
 
     public void setDestinationWarehouse(Warehouse destinationWarehouse) {
         this.destinationWarehouse = destinationWarehouse;
-    }*/
+    }
 }

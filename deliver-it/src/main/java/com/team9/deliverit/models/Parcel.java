@@ -1,5 +1,7 @@
 package com.team9.deliverit.models;
 
+import com.team9.deliverit.models.enums.Category;
+
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
@@ -13,7 +15,7 @@ public class Parcel {
     @Column(name = "parcel_id")
     private int id;
 
-    //@Positive(message = "Weight should be positive")
+    @Positive(message = "Weight should be positive")
     @Column(name = "weight")
     private double weight;
 
@@ -25,14 +27,16 @@ public class Parcel {
     private Warehouse warehouse;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "shipment_id")
-    private  Shipment shipment;
+    private Shipment shipment;
 
-
-    //private Category category;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private Category category;
 
     public Parcel() {
     }
@@ -85,11 +89,11 @@ public class Parcel {
         this.shipment = shipment;
     }
 
-/*    public Category getCategory() {
+    public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
-    }*/
+    }
 }

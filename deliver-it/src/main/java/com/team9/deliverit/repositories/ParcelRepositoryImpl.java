@@ -1,10 +1,10 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.Category;
 import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Warehouse;
+import com.team9.deliverit.models.enums.Category;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
