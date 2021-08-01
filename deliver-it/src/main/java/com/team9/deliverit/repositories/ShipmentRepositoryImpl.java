@@ -1,62 +1,90 @@
 package com.team9.deliverit.repositories;
 
+
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.Customer;
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
-import com.team9.deliverit.models.Warehouse;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Repository
-public class ShipmentRepositoryImpl {
+public class ShipmentRepositoryImpl implements ShipmentRepository {
 
-    private final List<Shipment> shipments;
+    private final SessionFactory sessionFactory;
 
-    public ShipmentRepositoryImpl() {
-        this.shipments = new ArrayList<>();
+    @Autowired
+    public ShipmentRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    public List<Shipment> getAllShipments() {
-        return shipments;
+    @Override
+    public List<Shipment> getAll() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Shipment> query = session.createQuery("from Shipment", Shipment.class);
+            return query.list();
+        }
     }
 
-    public Shipment getShipmentById(int id) {
-        return shipments.stream()
-                .filter(shipment -> shipment.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Shipment", id));
+    @Override
+    public Shipment getById(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            Shipment shipment = session.get(Shipment.class, id);
+            if (shipment == null) {
+                throw new EntityNotFoundException("Shipment", id);
+            }
+            return shipment;
+        }
     }
 
-    public void createShipment(Shipment shipment) {
-        shipments.add(shipment);
+    @Override
+    public void create(Shipment shipment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.save(shipment);
+        }
     }
 
-    public Shipment updateShipment(Shipment shipment) {
-        Shipment shipmentToUpdate = getShipmentById(shipment.getId());
-
-        shipmentToUpdate.setArrivalDate(shipment.getArrivalDate());
-        shipmentToUpdate.setDepartureDate(shipment.getDepartureDate());
-        shipmentToUpdate.setDestinationWarehouse(shipment.getDestinationWarehouse());
-        shipmentToUpdate.setOriginWarehouse(shipment.getOriginWarehouse());
-        shipmentToUpdate.setStatus(shipment.getStatus());
-
-        return shipmentToUpdate;
+    @Override
+    public void update(Shipment shipment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(shipment);
+            session.getTransaction().commit();
+        }
     }
 
-    public void deleteShipment(int id) {
-        Shipment shipmentToDelete = getShipmentById(id);
-        shipments.remove(shipmentToDelete);
+    @Override
+    public void delete(int id) {
+        Shipment shipmentToDelete = getById(id);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(shipmentToDelete);
+            session.getTransaction().commit();
+        }
     }
 
-    public List<Shipment> filterByDestinationWarehouse(Warehouse warehouse) {
-        return shipments.stream()
-                .filter(shipment -> shipment.getDestinationWarehouse() == warehouse)
-                .collect(Collectors.toList());
+    @Override
+    public List<Shipment> filterByDestinationWarehouse(int warehouseId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Shipment> query = session.createQuery("from Shipment where destinationWarehouse.id = :warehouseId", Shipment.class);
+            query.setParameter("warehouseId", warehouseId);
+            return query.list();
+        }
     }
 
-
+    @Override
+    public List<Shipment> filterByCustomer(int customerId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Parcel> query = session.createQuery("from Parcel where customer.id = :customerId",Parcel.class);
+            query.setParameter("customerId", customerId);
+            return query.list().stream().map(Parcel::getShipment).collect(Collectors.toList());
+        }
+    }
 
 }
