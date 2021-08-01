@@ -5,9 +5,15 @@ import com.team9.deliverit.models.Country;
 import java.util.List;
 
 public interface CountryService {
-    List<Country> getAllCountries();
+    List<Country> getAll();
 
-    Country getCountryById(int id);
+    Country getById(int id);
 
-    Country getCountryByName(String name);
+    Country getByName(String name);
+
+    void create(Country country);
+
+    void update(Country country);
+
+    void delete(int id);
 }

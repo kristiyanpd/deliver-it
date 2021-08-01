@@ -1,22 +1,15 @@
 package com.team9.deliverit.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "cities")
 public class City {
 
-    //@Positive(message = "ID should be a positive number!")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "city_id")
     private int id;
-
-   //  @NotBlank(message = "City name can't be blank!")
-   // @Size(min = 2, max = 50, message = "City name length should be between 2 and 50 symbols!")
 
     @Column(name = "city_name")
     private String name;

@@ -1,10 +1,10 @@
-package com.team9.deliverit.repositories;
+package com.team9.deliverit.services;
 
 import com.team9.deliverit.models.Address;
 
 import java.util.List;
 
-public interface AddressRepository {
+public interface AddressService {
     List<Address> getAll();
 
     Address getById(int id);

@@ -42,11 +42,40 @@ public class CityRepositoryImpl implements CityRepository {
     @Override
     public City getByName(String name) {
         try (Session session = sessionFactory.openSession()) {
-            City city = session.get(City.class, name);
-            if (city == null) {
+            Query<City> query = session.createQuery("from City where name = :name", City.class);
+            query.setParameter("name", name);
+            List<City> result = query.list();
+            if (result.size() == 0) {
                 throw new EntityNotFoundException("City", "name", name);
             }
-            return city;
+            return result.get(0);
         }
     }
+
+    @Override
+    public void create(City city) {
+        try (Session session = sessionFactory.openSession()) {
+            session.save(city);
+        }
+    }
+
+    @Override
+    public void update(City city) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(city);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        City cityToDelete = getById(id);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(cityToDelete);
+            session.getTransaction().commit();
+        }
+    }
+
 }

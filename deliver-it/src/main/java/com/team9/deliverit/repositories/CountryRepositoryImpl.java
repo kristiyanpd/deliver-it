@@ -42,11 +42,40 @@ public class CountryRepositoryImpl implements CountryRepository {
     @Override
     public Country getByName(String name) {
         try (Session session = sessionFactory.openSession()) {
-            Country country = session.get(Country.class, name);
-            if (country == null) {
+            Query<Country> query = session.createQuery("from Country where name = :name", Country.class);
+            query.setParameter("name", name);
+            List<Country> result = query.list();
+            if (result.size() == 0) {
                 throw new EntityNotFoundException("Country", "name", name);
             }
-            return country;
+            return result.get(0);
         }
     }
+
+    @Override
+    public void create(Country country) {
+        try (Session session = sessionFactory.openSession()) {
+            session.save(country);
+        }
+    }
+
+    @Override
+    public void update(Country country) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(country);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        Country CountryToDelete = getById(id);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(CountryToDelete);
+            session.getTransaction().commit();
+        }
+    }
+
 }

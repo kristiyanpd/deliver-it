@@ -2,62 +2,62 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.City;
-import com.team9.deliverit.repositories.CityRepository;
+import com.team9.deliverit.models.Address;
+import com.team9.deliverit.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CityServiceImpl implements CityService {
+public class AddressServiceImpl implements AddressService {
 
-    private final CityRepository repository;
+    private final AddressRepository repository;
 
     @Autowired
-    public CityServiceImpl(CityRepository repository) {
+    public AddressServiceImpl(AddressRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public List<City> getAll() {
+    public List<Address> getAll() {
         return repository.getAll();
     }
 
     @Override
-    public City getById(int id) {
+    public Address getById(int id) {
         return repository.getById(id);
     }
 
     @Override
-    public City getByName(String name) {
+    public Address getByName(String name) {
         return repository.getByName(name);
     }
 
     @Override
-    public void create(City city) {
+    public void create(Address address) {
         boolean duplicateExists = true;
 
         try {
-            repository.getByName(city.getName());
+            repository.getByName(address.getStreetName());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
 
         if (duplicateExists) {
-            throw new DuplicateEntityException("City", "name", city.getName());
+            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
         }
 
-        repository.create(city);
+        repository.create(address);
     }
 
     @Override
-    public void update(City city) {
+    public void update(Address address) {
         boolean duplicateExists = true;
 
         try {
-            City existingCity = repository.getByName(city.getName());
-            if (existingCity.getId() == city.getId()) {
+            Address existingAddress = repository.getByName(address.getStreetName());
+            if (existingAddress.getId() == address.getId()) {
                 duplicateExists = false;
             }
         } catch (EntityNotFoundException e) {
@@ -65,10 +65,10 @@ public class CityServiceImpl implements CityService {
         }
 
         if (duplicateExists) {
-            throw new DuplicateEntityException("City", "name", city.getName());
+            throw new DuplicateEntityException("City", "name", address.getStreetName());
         }
 
-        repository.update(city);
+        repository.update(address);
     }
 
     @Override

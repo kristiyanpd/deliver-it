@@ -9,7 +9,6 @@ import javax.validation.constraints.Positive;
 @Table(name = "parcels")
 public class Parcel {
 
-    //@Positive(message = "Parcel id must be positive")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "parcel_id")

@@ -21,12 +21,6 @@ public class Address {
     public Address() {
     }
 
-/*    public Address(int id, String streetName, City city) {
-        setId(id);
-        setStreetName(streetName);
-        setCity(city);
-    }*/
-
     public int getId() {
         return id;
     }

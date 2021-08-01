@@ -1,6 +1,7 @@
-package com.team9.deliverit.models;
+package com.team9.deliverit.models.dtos;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 public class AddressDto {
@@ -9,11 +10,11 @@ public class AddressDto {
     @Size(min = 2, max = 50, message = "Street name length should be between 2 and 50 symbols!")
     private String streetName;
 
-//    City city;
+    @Positive(message = "City ID should be positive!")
+    private int cityId;
 
-    public AddressDto(String streetName, City city) {
-        setStreetName(streetName);
-//        setCity(city);
+    public AddressDto() {
+
     }
 
     public String getStreetName() {
@@ -24,11 +25,11 @@ public class AddressDto {
         this.streetName = streetName;
     }
 
-//    public City getCity() {
-//        return city;
-//    }
-//
-//    public void setCity(City city) {
-//        this.city = city;
-//    }
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
+    }
 }

@@ -1,14 +1,11 @@
 package com.team9.deliverit.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "employee")
 public class Employee {
 
-    @Positive(message = "ID should be positive")
-    @Positive(message = "ID should be positive")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")

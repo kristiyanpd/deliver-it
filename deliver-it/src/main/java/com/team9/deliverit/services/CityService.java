@@ -5,9 +5,15 @@ import com.team9.deliverit.models.City;
 import java.util.List;
 
 public interface CityService {
-    List<City> getAllCities();
+    List<City> getAll();
 
-    City getCityById(int id);
+    City getById(int id);
 
-    City getCityByName(String name);
+    City getByName(String name);
+
+    void create(City city);
+
+    void update(City city);
+
+    void delete(int id);
 }

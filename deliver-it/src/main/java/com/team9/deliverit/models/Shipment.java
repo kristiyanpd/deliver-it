@@ -3,14 +3,12 @@ package com.team9.deliverit.models;
 import com.team9.deliverit.models.enums.Status;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
 import java.sql.Date;
 
 @Entity
 @Table(name = "shipments")
 public class Shipment {
 
-   // @Positive(message = "ID should be a positive number!")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shipment_id")

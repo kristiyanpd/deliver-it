@@ -10,4 +10,10 @@ public interface CountryRepository {
     Country getById(int id);
 
     Country getByName(String name);
+
+    void create(Country Country);
+
+    void update(Country Country);
+
+    void delete(int id);
 }
