@@ -5,9 +5,8 @@ import com.team9.deliverit.models.City;
 import java.util.List;
 
 public interface CityRepository {
-    List<City> getAllCities();
+    List<City> getAll();
 
-    City getCityById(int id);
-
-    City getCityByName(String name);
+    City getById(int id);
+    City getByName(String name);
 }

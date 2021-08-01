@@ -5,9 +5,9 @@ import com.team9.deliverit.models.Country;
 import java.util.List;
 
 public interface CountryRepository {
-    List<Country> getAllCountries();
+    List<Country> getAll();
 
-    Country getCountryById(int id);
+    Country getById(int id);
 
-    Country getCountryByName(String name);
+    Country getByName(String name);
 }

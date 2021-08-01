@@ -19,16 +19,16 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public List<Country> getAllCountries() {
-        return repository.getAllCountries();
+        return repository.getAll();
     }
 
     @Override
     public Country getCountryById(int id) {
-        return repository.getCountryById(id);
+        return repository.getById(id);
     }
 
     @Override
     public Country getCountryByName(String name) {
-        return repository.getCountryByName(name);
+        return repository.getByName(name);
     }
 }

@@ -31,11 +31,11 @@ public class AddressRepositoryImpl implements AddressRepository {
     @Override
     public Address getById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Address beer = session.get(Address.class, id);
-            if (beer == null) {
-                throw new EntityNotFoundException("Beer", id);
+            Address address = session.get(Address.class, id);
+            if (address == null) {
+                throw new EntityNotFoundException("Address", id);
             }
-            return beer;
+            return address;
         }
     }
 }

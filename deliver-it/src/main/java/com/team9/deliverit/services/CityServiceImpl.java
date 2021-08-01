@@ -21,16 +21,16 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<City> getAllCities() {
-        return repository.getAllCities();
+        return repository.getAll();
     }
 
     @Override
     public City getCityById(int id) {
-        return repository.getCityById(id);
+        return repository.getById(id);
     }
 
     @Override
     public City getCityByName(String name) {
-        return repository.getCityByName(name);
+        return repository.getByName(name);
     }
 }
