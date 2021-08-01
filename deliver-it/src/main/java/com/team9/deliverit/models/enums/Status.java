@@ -3,5 +3,19 @@ package com.team9.deliverit.models.enums;
 public enum Status {
     PREPARING,
     ON_THE_WAY,
-    COMPLETED
+    COMPLETED;
+
+    @Override
+    public String toString() {
+        switch (this) {
+            case PREPARING:
+                return "Preparing";
+            case ON_THE_WAY:
+                return "On the way";
+            case COMPLETED:
+                return "Completed";
+            default:
+                throw new IllegalArgumentException("Status must be Preparing, On the way or Completed");
+        }
+    }
 }
