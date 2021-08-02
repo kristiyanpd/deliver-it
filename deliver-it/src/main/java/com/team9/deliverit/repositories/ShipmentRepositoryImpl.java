@@ -1,6 +1,5 @@
 package com.team9.deliverit.repositories;
 
-
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Repository
 public class ShipmentRepositoryImpl implements ShipmentRepository {
@@ -72,6 +70,7 @@ public class ShipmentRepositoryImpl implements ShipmentRepository {
     @Override
     public List<Shipment> filterByDestinationWarehouse(int warehouseId) {
         try (Session session = sessionFactory.openSession()) {
+            //TODO Verify that this works, probably should be from Shipment...
             Query<Shipment> query = session.createQuery("from Shipment where destinationWarehouse.id = :warehouseId", Shipment.class);
             query.setParameter("warehouseId", warehouseId);
             return query.list();
@@ -81,7 +80,7 @@ public class ShipmentRepositoryImpl implements ShipmentRepository {
     @Override
     public List<Shipment> filterByCustomer(int customerId) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Parcel> query = session.createQuery("from Parcel where customer.id = :customerId",Parcel.class);
+            Query<Parcel> query = session.createQuery("from Parcel where customer.id = :customerId", Parcel.class);
             query.setParameter("customerId", customerId);
             return query.list().stream().map(Parcel::getShipment).collect(Collectors.toList());
         }
