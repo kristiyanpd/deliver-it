@@ -37,17 +37,14 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void create(Address address) {
         boolean duplicateExists = true;
-
         try {
             repository.getByName(address.getStreetName());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
-
         if (duplicateExists) {
             throw new DuplicateEntityException("Address", "street name", address.getStreetName());
         }
-
         repository.create(address);
     }
 

@@ -1,9 +1,10 @@
-package com.team9.deliverit.services;
+package com.team9.deliverit.services.mappers;
 
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Country;
 import com.team9.deliverit.models.dtos.CityDto;
 import com.team9.deliverit.repositories.CountryRepository;
+import com.team9.deliverit.services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
