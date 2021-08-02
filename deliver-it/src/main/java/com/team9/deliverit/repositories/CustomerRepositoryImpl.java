@@ -2,46 +2,119 @@ package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Customer;
+import com.team9.deliverit.models.Parcel;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerRepositoryImpl {
+@Repository
+public class CustomerRepositoryImpl implements CustomerRepository {
 
-    private final List<Customer> customers;
+    private final SessionFactory sessionFactory;
 
-    public CustomerRepositoryImpl() {
-        customers = new ArrayList<>();
+    @Autowired
+    public CustomerRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+
+    @Override
     public List<Customer> getAll() {
-        return customers;
+        try (Session session = sessionFactory.openSession()) {
+            Query<Customer> query = session.createQuery("from Customer", Customer.class);
+            return query.list();
+        }
     }
 
+    @Override
     public Customer getById(int id) {
-        return customers
-                .stream()
-                .filter(customer -> customer.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Customer", id));
+        try (Session session = sessionFactory.openSession()) {
+            Customer customer = session.get(Customer.class, id);
+            if (customer == null) {
+                throw new EntityNotFoundException("Customer", id);
+            }
+            return customer;
+        }
     }
 
+
+    @Override
     public void create(Customer customer) {
-        customers.add(customer);
+        try (Session session = sessionFactory.openSession()) {
+            session.save(customer);
+        }
     }
 
-    public Customer update(Customer customer) {
-        Customer customerToUpdate = getById(customer.getId());
-
-        customerToUpdate.getPerson().setFirstName(customer.getPerson().getFirstName());
-        customerToUpdate.getPerson().setLastName(customer.getPerson().getLastName());
-        customerToUpdate.getPerson().setEmail(customer.getPerson().getEmail());
-
-        return customer;
+    @Override
+    public void update(Customer customer) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(customer);
+            session.getTransaction().commit();
+        }
     }
 
-    public void delete(int id){
+    @Override
+    public void delete(int id) {
         Customer customerToDelete = getById(id);
-        customers.remove(customerToDelete);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(customerToDelete);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public List<Customer> searchByEmail(String email) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Customer> query = session.createQuery("from Customer c join Person p where  p.email like concat('%',:email,'%')", Customer.class);
+            query.setParameter("email", email);
+            List<Customer> result = query.list();
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Customer", "email", email);
+            }
+            return result;
+        }
+    }
+
+    @Override
+    public List<Customer> searchByName(String name) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Customer> query = session.createQuery("from Customer c join Person p where p.firstName = :name or p.lastName = :name", Customer.class);
+            query.setParameter("name", name);
+            List<Customer> result = query.list();
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Customer", "name", name);
+            }
+            return result;
+        }
+    }
+
+    @Override
+    public List<Parcel> incomingParcels(int customerId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Parcel> query = session.createQuery("from Parcel p join Shipment s where p.customer = :customerId and s.status != 'COMPLETED'", Parcel.class);
+            query.setParameter("customerId", customerId);
+            return query.list();
+        }
+    }
+
+    //TODO SEARCH BY MULTIPLE CRITERIA
+
+    @Override
+    public List<Customer> searchAllFields(String param) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Customer> query = session.createQuery("from Customer c join Person p where p.email like concat('%',:param,'%') or p.firstName like :param or p.lastName like :param", Customer.class);
+            query.setParameter("param", param);
+            List<Customer> result = query.list();
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Customer", "param", param);
+            }
+            return result;
+        }
     }
 }
