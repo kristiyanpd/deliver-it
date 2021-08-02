@@ -12,4 +12,6 @@ public interface WarehouseService {
     void create(Warehouse warehouse);
 
     void update(Warehouse warehouse);
+
+    void delete(int id);
 }

@@ -37,11 +37,9 @@ public class WarehouseServiceImpl implements WarehouseService {
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
-
         if (duplicateExists) {
             throw new DuplicateEntityException("Warehouse", "address_id", String.valueOf(warehouse.getAddress().getId()));
         }
-
         repository.create(warehouse);
     }
 
@@ -64,4 +62,8 @@ public class WarehouseServiceImpl implements WarehouseService {
         repository.update(warehouse);
     }
 
+    @Override
+    public void delete(int id) {
+        repository.delete(id);
+    }
 }
