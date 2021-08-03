@@ -18,8 +18,12 @@ public class CustomerRegistrationDto {
     @Email
     private String email;
 
-    @Positive(message = "Address ID should be positive!")
-    private int addressId;
+    @NotBlank
+    private String streetName;
+
+    @Positive(message = "City id must be positive")
+    private int cityId;
+
 
     public CustomerRegistrationDto() {
 
@@ -49,11 +53,19 @@ public class CustomerRegistrationDto {
         this.email = email;
     }
 
-    public int getAddressId() {
-        return addressId;
+    public String getStreetName() {
+        return streetName;
     }
 
-    public void setAddressId(int addressId) {
-        this.addressId = addressId;
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 }

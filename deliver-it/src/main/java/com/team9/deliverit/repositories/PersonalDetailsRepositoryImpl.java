@@ -3,12 +3,14 @@ package com.team9.deliverit.repositories;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Country;
 import com.team9.deliverit.models.PersonalDetails;
+import com.team9.deliverit.models.Shipment;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 
 @Repository
@@ -19,6 +21,18 @@ public class PersonalDetailsRepositoryImpl implements PersonalDetailsRepository 
     @Autowired
     public PersonalDetailsRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public PersonalDetails getByEmail(@Email String email) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<PersonalDetails> query = session.createQuery("from PersonalDetails where email = :email", PersonalDetails.class);
+            query.setParameter("email", email);
+            if (query.list().size() == 0) {
+                throw new EntityNotFoundException("PersonalDetails", "email", email);
+            }
+            return query.list().get(0);
+        }
     }
 
     @Override

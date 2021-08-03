@@ -2,6 +2,8 @@ package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.models.PersonalDetails;
 
+import javax.validation.constraints.Email;
+
 public interface PersonalDetailsRepository {
     PersonalDetails getById(int id);
 
@@ -10,4 +12,6 @@ public interface PersonalDetailsRepository {
     void update(PersonalDetails personalDetails);
 
     void delete(int id);
+
+    PersonalDetails getByEmail(@Email String email);
 }
