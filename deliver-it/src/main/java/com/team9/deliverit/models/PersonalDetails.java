@@ -1,14 +1,10 @@
 package com.team9.deliverit.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "personal_details")
 public class PersonalDetails {
-
-    @Positive(message = "ID should be positive")
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +17,6 @@ public class PersonalDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Email
     @Column(name = "email")
     private String email;
 
