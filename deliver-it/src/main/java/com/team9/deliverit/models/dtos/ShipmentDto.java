@@ -1,6 +1,5 @@
 package com.team9.deliverit.models.dtos;
 
-import com.team9.deliverit.exceptions.StatusNotFoundException;
 import com.team9.deliverit.models.enums.Status;
 
 import javax.validation.constraints.Positive;
@@ -45,11 +44,7 @@ public class ShipmentDto {
     }
 
     public void setStatus(String status) {
-        try {
-            this.status = Status.valueOf(status);
-        } catch (EnumConstantNotPresentException e) {
-            throw new StatusNotFoundException();
-        }
+        this.status = Status.valueOf(status);
     }
 
     public int getOriginWarehouseId() {
@@ -67,4 +62,5 @@ public class ShipmentDto {
     public void setDestinationWarehouseId(int destinationWarehouseId) {
         this.destinationWarehouseId = destinationWarehouseId;
     }
+
 }

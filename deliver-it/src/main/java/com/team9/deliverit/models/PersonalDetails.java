@@ -6,7 +6,7 @@ import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "personal_details")
-public class Person {
+public class PersonalDetails {
 
     @Positive(message = "ID should be positive")
 
@@ -25,7 +25,7 @@ public class Person {
     @Column(name = "email")
     private String email;
 
-    public Person() {
+    public PersonalDetails() {
     }
 
     public int getId() {

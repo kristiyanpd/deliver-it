@@ -1,14 +1,11 @@
 package com.team9.deliverit.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
-
 
 @Entity
 @Table(name = "customers")
 public class Customer {
 
-    @Positive(message = "ID should be positive")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
@@ -16,7 +13,7 @@ public class Customer {
 
     @OneToOne
     @JoinColumn(name = "person_id")
-    private Person person;
+    private PersonalDetails person;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
@@ -33,11 +30,11 @@ public class Customer {
         this.id = id;
     }
 
-    public Person getPerson() {
+    public PersonalDetails getPerson() {
         return person;
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(PersonalDetails person) {
         this.person = person;
     }
 
