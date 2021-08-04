@@ -1,6 +1,7 @@
 package com.team9.deliverit.models;
 
 import com.team9.deliverit.models.enums.Category;
+import com.team9.deliverit.models.enums.PickUpOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -14,12 +15,14 @@ public class Parcel {
     @Column(name = "parcel_id")
     private int id;
 
+
     @Positive(message = "Weight should be positive")
     @Column(name = "weight")
     private double weight;
 
-    @Column(name = "pick_up_from_warehouse")
-    private boolean pickUpFromWarehouse;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pick_up_option")
+    private PickUpOption pickUpOption;
 
     @ManyToOne
     @JoinColumn(name = "warehouse_id")
@@ -48,20 +51,20 @@ public class Parcel {
         this.id = id;
     }
 
+    public PickUpOption getPickUpOption() {
+        return pickUpOption;
+    }
+
+    public void setPickUpOption(PickUpOption pickUpOption) {
+        this.pickUpOption = pickUpOption;
+    }
+
     public double getWeight() {
         return weight;
     }
 
     public void setWeight(double weight) {
         this.weight = weight;
-    }
-
-    public boolean isPickUpFromWarehouse() {
-        return pickUpFromWarehouse;
-    }
-
-    public void setPickUpFromWarehouse(boolean pickUpFromWarehouse) {
-        this.pickUpFromWarehouse = pickUpFromWarehouse;
     }
 
     public Warehouse getWarehouse() {
