@@ -38,34 +38,36 @@ public class AddressServiceImpl implements AddressService {
     public void create(Address address) {
         boolean duplicateExists = true;
         try {
-            repository.getByName(address.getStreetName());
+            repository.getDuplicates(address.getStreetName(), address.getCity().getId());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
+
         if (duplicateExists) {
             throw new DuplicateEntityException("Address", "street name", address.getStreetName());
         }
+
         repository.create(address);
     }
 
     @Override
     public void update(Address address) {
         boolean duplicateExists = true;
-
         try {
-            Address existingAddress = repository.getByName(address.getStreetName());
-            if (existingAddress.getId() == address.getId()) {
-                duplicateExists = false;
-            }
+            repository.getDuplicates(address.getStreetName(), address.getCity().getId());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
 
         if (duplicateExists) {
-            throw new DuplicateEntityException("City", "name", address.getStreetName());
+            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
         }
 
         repository.update(address);
+    }
+
+    public List<Address> getDuplicates(String name,int cityId){
+       return repository.getDuplicates(name,cityId);
     }
 
     @Override

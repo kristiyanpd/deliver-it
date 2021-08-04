@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class ShipmentRepositoryImpl implements ShipmentRepository {
@@ -80,9 +79,11 @@ public class ShipmentRepositoryImpl implements ShipmentRepository {
     @Override
     public List<Shipment> filterByCustomer(int customerId) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Parcel> query = session.createQuery("from Parcel where customer.id = :customerId", Parcel.class);
+            //Query<Parcel> query = session.createQuery("from Parcel where customer.id = :customerId", Parcel.class);
+            Query<Shipment> query = session.createQuery("select s from Shipment s left join Parcel p on s.id = p.shipment.id where p.customer.id = :customerId", Shipment.class);
             query.setParameter("customerId", customerId);
-            return query.list().stream().map(Parcel::getShipment).collect(Collectors.toList());
+            return query.list();
+            //return query.list().stream().map(Parcel::getShipment).collect(Collectors.toList());
         }
     }
 

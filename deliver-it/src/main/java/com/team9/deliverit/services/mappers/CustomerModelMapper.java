@@ -1,6 +1,8 @@
 package com.team9.deliverit.services.mappers;
 
+import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.models.Address;
+import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.PersonalDetails;
 import com.team9.deliverit.models.dtos.CustomerRegistrationDto;
@@ -47,10 +49,18 @@ public class CustomerModelMapper {
         personalDetails.setEmail(customerRegistrationDto.getEmail());
         personalDetailsService.create(personalDetails);
 
+
         Address address = new Address();
-        address.setStreetName(customerRegistrationDto.getStreetName());
-        address.setCity(cityService.getById(customerRegistrationDto.getCityId()));
-        addressService.create(address);
+        String streetName = customerRegistrationDto.getStreetName();
+        City city = cityService.getById(customerRegistrationDto.getCityId());
+
+        try {
+            address.setStreetName(streetName);
+            address.setCity(city);
+            addressService.create(address);
+        } catch (DuplicateEntityException e) {
+            address = addressService.getDuplicates(streetName, city.getId()).get(0);
+        }
 
         customer.setAddress(address);
         customer.setPerson(personalDetails);

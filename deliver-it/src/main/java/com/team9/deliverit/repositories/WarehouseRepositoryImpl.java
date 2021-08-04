@@ -42,7 +42,7 @@ public class WarehouseRepositoryImpl implements WarehouseRepository {
     @Override
     public Warehouse getByAddressId(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Warehouse> query = session.createQuery("from Warehouse where id = :id", Warehouse.class);
+            Query<Warehouse> query = session.createQuery("from Warehouse where address.id = :id", Warehouse.class);
             query.setParameter("id", id);
             List<Warehouse> result = query.list();
             if (result.size() == 0) {

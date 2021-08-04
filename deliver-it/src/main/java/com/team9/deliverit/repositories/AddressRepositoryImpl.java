@@ -53,6 +53,20 @@ public class AddressRepositoryImpl implements AddressRepository {
     }
 
     @Override
+    public List <Address> getDuplicates (String name, int cityId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Address> query = session.createQuery("from Address where streetName = :name and city.id = :cityId", Address.class);
+            query.setParameter("name", name);
+            query.setParameter("cityId", cityId);
+            List<Address> result = query.list();
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Address","street name",name);
+            }
+            return result;
+        }
+    }
+
+    @Override
     public void create(Address address) {
         try (Session session = sessionFactory.openSession()) {
             session.save(address);
