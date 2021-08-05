@@ -51,21 +51,6 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public List<Parcel> sortByWeight() {
-        return repository.sortByWeight();
-    }
-
-    @Override
-    public List<Parcel> sortByArrivalDate() {
-        return repository.sortByArrivalDate();
-    }
-
-    @Override
-    public List<Parcel> sortByWeightAndArrivalDate() {
-        return repository.sortByWeightAndArrivalDate();
-    }
-
-    @Override
     public List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate) {
         return repository.sort(weight,arrivalDate);
     }

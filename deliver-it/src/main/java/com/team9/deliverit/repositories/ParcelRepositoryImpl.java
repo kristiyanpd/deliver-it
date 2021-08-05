@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements ParcelRepository {
@@ -53,64 +52,59 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
     @Override
     public List<Parcel> filter(Optional<Double> weight, Optional<Integer> customerId,
                                Optional<Integer> warehouseId, Optional<Category> category) {
-        List<Parcel> parcels = getAll();
-        if (weight.isPresent()) {
-            parcels = parcels.stream().filter(parcel -> parcel.getWeight() == weight.get()).collect(Collectors.toList());
-        }
-        if (customerId.isPresent()) {
-            parcels = parcels.stream().filter(parcel -> parcel.getCustomer().getId() == customerId.get()).collect(Collectors.toList());
-        }
-        if (warehouseId.isPresent()) {
-            parcels = parcels.stream().filter(parcel -> parcel.getShipment().getDestinationWarehouse().getId() == warehouseId.get()).collect(Collectors.toList());
-        }
-        if (category.isPresent()) {
-            parcels = parcels.stream().filter(parcel -> parcel.getCategory().equals(category.get())).collect(Collectors.toList());
-        }
-        return parcels;
-    }
 
-    @Override
-    public List<Parcel> sortByWeight() {
         try (Session session = sessionFactory.openSession()) {
-            Query<Parcel> query = session.createQuery("from Parcel ORDER BY weight", Parcel.class);
-            return query.list();
-        }
-    }
+            var baseQuery = "select p from Parcel p join Shipment s on p.shipment.id = s.id ";
+            List<String> filters = new ArrayList<>();
 
-    @Override
-    public List<Parcel> sortByArrivalDate() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Parcel> query = session.createQuery("select p from Parcel p join Shipment s  on p.shipment.id = s.id order by s.arrivalDate", Parcel.class);
-            return query.list();
-        }
-    }
+            if (warehouseId.isPresent()) {
+                filters.add("s.originWarehouse.id or destinationWarehouse.id = :warehouseId");
+            }
+            if (weight.isPresent()) {
+                filters.add("p.weight = :weight");
+            }
+            if (category.isPresent()) {
+                filters.add("p.category like :category");
+            }
+            if (customerId.isPresent()) {
+                filters.add("p.customerId = :customerId");
+            }
 
-    @Override
-    public List<Parcel> sortByWeightAndArrivalDate() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Parcel> query = session.createQuery("select p from Parcel p join Shipment s on p.shipment.id = s.id order by p.weight,s.arrivalDate", Parcel.class);
+            if (!filters.isEmpty()) {
+                baseQuery += " where " + String.join(" and ", filters);
+            }
+
+            Query<Parcel> query = session.createQuery(baseQuery, Parcel.class);
+
+            warehouseId.ifPresent(integer -> query.setParameter("warehouseId", integer));
+            weight.ifPresent(aDouble -> query.setParameter("weight", aDouble));
+            category.ifPresent(value -> query.setParameter("category", value));
+            customerId.ifPresent(integer -> query.setParameter("customerId", integer));
+
             return query.list();
         }
     }
 
     @Override
     public List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate) {
-        List<Parcel> output = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
+
+            var baseQuery = "select p from Parcel p join Shipment s on p.shipment.id = s.id ";
             if (weight.isPresent() && arrivalDate.isEmpty()) {
-                Query<Parcel> query = session.createQuery("from Parcel order by weight", Parcel.class);
-                output = query.list();
+                baseQuery += " order by p.weight ";
             }
             if (weight.isEmpty() && arrivalDate.isPresent()) {
-                Query<Parcel> query = session.createQuery("select p from Parcel p join Shipment s  on p.shipment.id = s.id order by s.arrivalDate", Parcel.class);
-                output = query.list();
+                baseQuery += " order by s.arrivalDate ";
             }
-            if (weight.isPresent() && arrivalDate.isPresent()){
-                Query<Parcel> query = session.createQuery("select p from Parcel p join Shipment s on p.shipment.id = s.id order by p.weight,s.arrivalDate", Parcel.class);
-                return query.list();
+            if (weight.isPresent() && arrivalDate.isPresent()) {
+                baseQuery += " order by p.weight,s.arrivalDate ";
             }
-        }
-        return output;
-    }
 
+            Query<Parcel> query = session.createQuery(baseQuery, Parcel.class);
+
+            return query.list();
+
+        }
+
+    }
 }

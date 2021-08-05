@@ -19,11 +19,5 @@ public interface ParcelService {
 
     List<Parcel> filter(Optional<Double> weight, Optional<Integer> customerId, Optional<Integer> warehouseId, Optional<Category> category);
 
-    List<Parcel> sortByWeight();
-
-    List<Parcel> sortByArrivalDate();
-
-    List<Parcel> sortByWeightAndArrivalDate();
-
     List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate);
 }

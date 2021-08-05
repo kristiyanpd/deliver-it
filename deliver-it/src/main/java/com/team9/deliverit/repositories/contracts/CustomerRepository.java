@@ -4,6 +4,7 @@ import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.Parcel;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerRepository {
     List<Customer> getAll();
@@ -16,11 +17,9 @@ public interface CustomerRepository {
 
     void delete(int id);
 
-    List<Customer> searchByEmail(String email);
-
-    List<Customer> searchByName(String name);
+    public List<Customer> search(Optional<String> email, Optional<String> firstName, Optional<String> lastName);
 
     List<Parcel> incomingParcels(int customerId);
 
-    List<Customer> searchAllFields(String param);
+    List<Customer> searchEverywhere(String param);
 }

@@ -1,6 +1,5 @@
 package com.team9.deliverit.repositories;
 
-import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.repositories.contracts.CustomerRepository;
@@ -10,7 +9,9 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer> implements CustomerRepository {
@@ -50,28 +51,33 @@ public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer> impleme
     }
 
     @Override
-    public List<Customer> searchByEmail(String email) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Customer> query = session.createQuery("select c from Customer c join PersonalDetails p on c.person.id = p.id where  p.email like concat('%',:email,'%')", Customer.class);
-            query.setParameter("email", email);
-            List<Customer> result = query.list();
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("Customer", "email", email);
-            }
-            return result;
-        }
-    }
+    public List<Customer> search(Optional<String> email, Optional<String> firstName, Optional<String> lastName) {
 
-    @Override
-    public List<Customer> searchByName(String name) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Customer> query = session.createQuery("select c from Customer c join PersonalDetails p on c.person.id = p.id where p.firstName = :name or p.lastName = :name", Customer.class);
-            query.setParameter("name", name);
-            List<Customer> result = query.list();
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("Customer", "name", name);
+            var baseQuery = "select c from Customer c join PersonalDetails p on c.person.id = p.id ";
+            List<String> filters = new ArrayList<>();
+
+            if (email.isPresent()) {
+                filters.add(" p.email like concat('%',:email,'%') ");
             }
-            return result;
+            if (firstName.isPresent()) {
+                filters.add("p.firstName like :firstName");
+            }
+            if (lastName.isPresent()) {
+                filters.add("p.lastName like :lastName");
+            }
+
+            if (!filters.isEmpty()) {
+                baseQuery += " where " + String.join(" and ", filters);
+            }
+
+            Query<Customer> query = session.createQuery(baseQuery, Customer.class);
+
+            email.ifPresent(s -> query.setParameter("email", s));
+            firstName.ifPresent(s -> query.setParameter("firstName", s));
+            lastName.ifPresent(s -> query.setParameter("lastName", s));
+
+            return query.list();
         }
     }
 
@@ -84,18 +90,15 @@ public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer> impleme
         }
     }
 
-    //TODO SEARCH BY MULTIPLE CRITERIA
 
     @Override
-    public List<Customer> searchAllFields(String param) {
+    public List<Customer> searchEverywhere(String param) {
         try (Session session = sessionFactory.openSession()) {
             Query<Customer> query = session.createQuery("select c from Customer c join PersonalDetails p on c.person.id = p.id where p.email like concat('%',:param,'%') or p.firstName like :param or p.lastName like :param", Customer.class);
             query.setParameter("param", param);
-            List<Customer> result = query.list();
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("Customer", "param", param);
-            }
-            return result;
+
+            return query.list();
         }
     }
+    //TODO SEARCH AND FILTERS NOT TESTED
 }

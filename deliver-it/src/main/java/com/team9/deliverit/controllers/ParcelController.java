@@ -42,6 +42,8 @@ public class ParcelController {
         return parcelService.sort(weight,date);
     }
 
+    //TODO SORTING IN ARRAY
+
     @GetMapping
     public List<Parcel> getAll() {
         return parcelService.getAll();
