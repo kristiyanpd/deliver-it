@@ -8,7 +8,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +50,7 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
     @Override
     public List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId) {
         try (Session session = sessionFactory.openSession()) {
-            List<Shipment> output = new ArrayList<>();
+/*            List<Shipment> output = new ArrayList<>();
             if (warehouseId.isPresent() && customerId.isEmpty()) {
                 Query<Shipment> query = session.createQuery("from Shipment where destinationWarehouse.id = :warehouseId", Shipment.class);
                 query.setParameter("warehouseId", warehouseId.get());
@@ -63,8 +62,30 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
                 query.setParameter("customerId", customerId.get());
                 output = query.list();
             }
-            return output;
-        }
-    }
+            return output;*/
 
+            var baseQuery = "select s from Shipment s left join Parcel p on s.id = p.shipment.id ";
+            if (warehouseId.isPresent() && customerId.isEmpty()) {
+                baseQuery += " where s.destinationWarehouse.id = :warehouseId or s.originWarehouse.id = :warehouseId ";
+            }
+            if (customerId.isPresent() && warehouseId.isEmpty()) {
+                baseQuery += " where p.customer.id = :customerId ";
+            }
+
+            Query<Shipment> query = session.createQuery(baseQuery, Shipment.class);
+
+            if (warehouseId.isPresent() && customerId.isEmpty()) {
+                query.setParameter("warehouseId", warehouseId.get());
+            }
+
+            if (customerId.isPresent() && warehouseId.isEmpty()) {
+                query.setParameter("customerId", customerId.get());
+            }
+
+            return query.list();
+
+        }
+
+    }
+    //TODO VERIFY IF THAT WORKS
 }
