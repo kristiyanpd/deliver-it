@@ -2,6 +2,7 @@ package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Address;
+import com.team9.deliverit.repositories.contracts.AddressRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -11,32 +12,39 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class AddressRepositoryImpl implements AddressRepository {
+public class AddressRepositoryImpl extends BaseRepositoryImpl<Address> implements AddressRepository {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
     public AddressRepositoryImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Address> getAll() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Address> query = session.createQuery("from Address", Address.class);
-            return query.list();
-        }
+        return super.getAll(Address.class);
     }
 
     @Override
     public Address getById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            Address address = session.get(Address.class, id);
-            if (address == null) {
-                throw new EntityNotFoundException("Address", id);
-            }
-            return address;
-        }
+        return super.getById(Address.class, id);
+    }
+
+    @Override
+    public void create(Address address) {
+        super.create(Address.class, address);
+    }
+
+    @Override
+    public void update(Address address) {
+        super.update(Address.class, address);
+    }
+
+    @Override
+    public void delete(int id) {
+        super.delete(Address.class, id);
     }
 
     @Override
@@ -66,29 +74,4 @@ public class AddressRepositoryImpl implements AddressRepository {
         }
     }
 
-    @Override
-    public void create(Address address) {
-        try (Session session = sessionFactory.openSession()) {
-            session.save(address);
-        }
-    }
-
-    @Override
-    public void update(Address address) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.update(address);
-            session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public void delete(int id) {
-        Address addressToDelete = getById(id);
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.delete(addressToDelete);
-            session.getTransaction().commit();
-        }
-    }
 }

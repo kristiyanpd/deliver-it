@@ -1,9 +1,8 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.Country;
 import com.team9.deliverit.models.PersonalDetails;
-import com.team9.deliverit.models.Shipment;
+import com.team9.deliverit.repositories.contracts.PersonalDetailsRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -11,16 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.Email;
-import java.util.List;
 
 @Repository
-public class PersonalDetailsRepositoryImpl implements PersonalDetailsRepository {
+public class PersonalDetailsRepositoryImpl extends BaseRepositoryImpl<PersonalDetails> implements PersonalDetailsRepository {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
     public PersonalDetailsRepositoryImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public void create(PersonalDetails personalDetails) {
+        super.create(PersonalDetails.class, personalDetails);
+    }
+
+    @Override
+    public void update(PersonalDetails personalDetails) {
+        super.update(PersonalDetails.class, personalDetails);
+    }
+
+    @Override
+    public void delete(int id) {
+        super.delete(PersonalDetails.class, id);
     }
 
     @Override
@@ -43,33 +57,6 @@ public class PersonalDetailsRepositoryImpl implements PersonalDetailsRepository 
                 throw new EntityNotFoundException("PersonalDetails", id);
             }
             return personalDetails;
-        }
-    }
-
-    @Override
-    public void create(PersonalDetails personalDetails) {
-        try (Session session = sessionFactory.openSession()) {
-            session.save(personalDetails);
-        }
-    }
-
-
-    @Override
-    public void update(PersonalDetails personalDetails) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.update(personalDetails);
-            session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public void delete(int id) {
-        PersonalDetails personalDetails = getById(id);
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.delete(personalDetails);
-            session.getTransaction().commit();
         }
     }
 

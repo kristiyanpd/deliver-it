@@ -2,15 +2,13 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.PersonalDetails;
-import com.team9.deliverit.repositories.AddressRepository;
-import com.team9.deliverit.repositories.PersonalDetailsRepository;
+import com.team9.deliverit.repositories.contracts.PersonalDetailsRepository;
+import com.team9.deliverit.services.contracts.PersonalDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Email;
-import java.util.List;
 
 @Service
 public class PersonalDetailsServiceImpl implements PersonalDetailsService {

@@ -2,6 +2,7 @@ package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.City;
+import com.team9.deliverit.repositories.contracts.CityRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -11,32 +12,39 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CityRepositoryImpl implements CityRepository {
+public class CityRepositoryImpl extends BaseRepositoryImpl<City> implements CityRepository {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
     public CityRepositoryImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<City> getAll() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<City> query = session.createQuery("from City", City.class);
-            return query.list();
-        }
+        return super.getAll(City.class);
     }
 
     @Override
     public City getById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            City city = session.get(City.class, id);
-            if (city == null) {
-                throw new EntityNotFoundException("City", id);
-            }
-            return city;
-        }
+        return super.getById(City.class, id);
+    }
+
+    @Override
+    public void create(City city) {
+        super.create(City.class, city);
+    }
+
+    @Override
+    public void update(City city) {
+        super.update(City.class, city);
+    }
+
+    @Override
+    public void delete(int id) {
+        super.delete(City.class, id);
     }
 
     @Override
@@ -49,32 +57,6 @@ public class CityRepositoryImpl implements CityRepository {
                 throw new EntityNotFoundException("City", "name", name);
             }
             return result.get(0);
-        }
-    }
-
-    @Override
-    public void create(City city) {
-        try (Session session = sessionFactory.openSession()) {
-            session.save(city);
-        }
-    }
-
-    @Override
-    public void update(City city) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.update(city);
-            session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public void delete(int id) {
-        City cityToDelete = getById(id);
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.delete(cityToDelete);
-            session.getTransaction().commit();
         }
     }
 

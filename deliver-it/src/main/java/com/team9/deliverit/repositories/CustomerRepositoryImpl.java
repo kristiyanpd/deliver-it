@@ -3,6 +3,7 @@ package com.team9.deliverit.repositories;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.Parcel;
+import com.team9.deliverit.repositories.contracts.CustomerRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -12,60 +13,40 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CustomerRepositoryImpl implements CustomerRepository {
+public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer> implements CustomerRepository {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
     public CustomerRepositoryImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
         this.sessionFactory = sessionFactory;
     }
 
 
     @Override
     public List<Customer> getAll() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Customer> query = session.createQuery("from Customer", Customer.class);
-            return query.list();
-        }
+        return super.getAll(Customer.class);
     }
 
     @Override
     public Customer getById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            Customer customer = session.get(Customer.class, id);
-            if (customer == null) {
-                throw new EntityNotFoundException("Customer", id);
-            }
-            return customer;
-        }
+        return super.getById(Customer.class, id);
     }
-
 
     @Override
     public void create(Customer customer) {
-        try (Session session = sessionFactory.openSession()) {
-            session.save(customer);
-        }
+        super.create(Customer.class, customer);
     }
 
     @Override
     public void update(Customer customer) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.update(customer);
-            session.getTransaction().commit();
-        }
+        super.update(Customer.class, customer);
     }
 
     @Override
     public void delete(int id) {
-        Customer customerToDelete = getById(id);
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.delete(customerToDelete);
-            session.getTransaction().commit();
-        }
+        super.delete(Customer.class, id);
     }
 
     @Override

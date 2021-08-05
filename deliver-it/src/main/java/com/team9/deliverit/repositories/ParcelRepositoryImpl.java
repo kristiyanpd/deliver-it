@@ -1,8 +1,8 @@
 package com.team9.deliverit.repositories;
 
-import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.enums.Category;
+import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -14,60 +14,40 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Repository
-public class ParcelRepositoryImpl implements ParcelRepository {
+public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements ParcelRepository {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
     public ParcelRepositoryImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Parcel> getAll() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Parcel> query = session.createQuery("from Parcel", Parcel.class);
-            return query.list();
-        }
+        return super.getAll(Parcel.class);
     }
 
     @Override
     public Parcel getById(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            Parcel parcel = session.get(Parcel.class, id);
-            if (parcel == null) {
-                throw new EntityNotFoundException("Parcel", id);
-            }
-            return parcel;
-        }
+        return super.getById(Parcel.class, id);
     }
 
     @Override
     public void create(Parcel parcel) {
-        try (Session session = sessionFactory.openSession()) {
-            session.save(parcel);
-        }
+        super.create(Parcel.class, parcel);
     }
 
     @Override
     public void update(Parcel parcel) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.update(parcel);
-            session.getTransaction().commit();
-        }
+        super.update(Parcel.class, parcel);
     }
 
     @Override
     public void delete(int id) {
-        Parcel parcelToDelete = getById(id);
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.delete(parcelToDelete);
-            session.getTransaction().commit();
-        }
+        super.delete(Parcel.class, id);
     }
 
     @Override
@@ -81,7 +61,7 @@ public class ParcelRepositoryImpl implements ParcelRepository {
             parcels = parcels.stream().filter(parcel -> parcel.getCustomer().getId() == customerId.get()).collect(Collectors.toList());
         }
         if (warehouseId.isPresent()) {
-            parcels = parcels.stream().filter(parcel -> parcel.getWarehouse().getId() == warehouseId.get()).collect(Collectors.toList());
+            parcels = parcels.stream().filter(parcel -> parcel.getShipment().getDestinationWarehouse().getId() == warehouseId.get()).collect(Collectors.toList());
         }
         if (category.isPresent()) {
             parcels = parcels.stream().filter(parcel -> parcel.getCategory().equals(category.get())).collect(Collectors.toList());
@@ -132,5 +112,5 @@ public class ParcelRepositoryImpl implements ParcelRepository {
         }
         return output;
     }
-//TODO
+
 }
