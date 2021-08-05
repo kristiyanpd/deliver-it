@@ -3,6 +3,7 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.models.Shipment;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ShipmentService {
     List<Shipment> getAll();
@@ -15,7 +16,6 @@ public interface ShipmentService {
 
     void delete(int id);
 
-    List<Shipment> filterByDestinationWarehouse(int warehouseId);
+    List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId);
 
-    List<Shipment> filterByCustomer(int customerId);
 }

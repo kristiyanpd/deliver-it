@@ -1,13 +1,12 @@
 package com.team9.deliverit.services;
 
 import com.team9.deliverit.models.Shipment;
-import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.repositories.ShipmentRepository;
-import com.team9.deliverit.repositories.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
@@ -32,26 +31,22 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public void create(Shipment shipment) {
-       repository.create(shipment);
+        repository.create(shipment);
     }
 
     @Override
     public void update(Shipment shipment) {
-      repository.update(shipment);
+        repository.update(shipment);
     }
 
     @Override
     public void delete(int id) {
-      repository.delete(id);
+        repository.delete(id);
     }
 
     @Override
-    public List<Shipment> filterByDestinationWarehouse(int warehouseId) {
-        return repository.filterByDestinationWarehouse(warehouseId);
+    public List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId) {
+        return repository.filter(warehouseId, customerId);
     }
 
-    @Override
-    public List<Shipment> filterByCustomer(int customerId) {
-        return repository.filterByCustomer(customerId);
-    }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/shipments")
@@ -43,6 +44,12 @@ public class ShipmentController {
                     e.getMessage()
             );
         }
+    }
+
+    @GetMapping("/filter")
+    public List<Shipment> filter(@RequestParam(required = false) Optional<Integer> warehouseId,
+                                 Optional<Integer> customerId){
+        return service.filter(warehouseId, customerId);
     }
 
     @PostMapping
@@ -79,5 +86,6 @@ public class ShipmentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
 
 }

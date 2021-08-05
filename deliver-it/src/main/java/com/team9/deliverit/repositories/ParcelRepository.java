@@ -3,6 +3,7 @@ package com.team9.deliverit.repositories;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.enums.Category;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +26,6 @@ public interface ParcelRepository {
     List<Parcel> sortByArrivalDate();
 
     List<Parcel> sortByWeightAndArrivalDate();
+
+    List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate);
 }

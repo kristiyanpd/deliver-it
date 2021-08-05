@@ -3,6 +3,7 @@ package com.team9.deliverit.repositories;
 import com.team9.deliverit.models.Shipment;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ShipmentRepository {
     List<Shipment> getAll();
@@ -15,7 +16,5 @@ public interface ShipmentRepository {
 
     void delete(int id);
 
-    List<Shipment> filterByDestinationWarehouse(int warehouseId);
-
-    List<Shipment> filterByCustomer(int customerId);
+    List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId);
 }

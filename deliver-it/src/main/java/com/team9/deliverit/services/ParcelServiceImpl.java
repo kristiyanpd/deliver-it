@@ -6,6 +6,7 @@ import com.team9.deliverit.repositories.ParcelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,5 +63,10 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public List<Parcel> sortByWeightAndArrivalDate() {
         return repository.sortByWeightAndArrivalDate();
+    }
+
+    @Override
+    public List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate) {
+        return repository.sort(weight,arrivalDate);
     }
 }

@@ -38,6 +38,11 @@ public class ParcelController {
 
     }
 
+    @GetMapping("/sort")
+    public List<Parcel> sort(@RequestParam(required = false) Optional<String> weight, Optional<String> date) {
+        return parcelService.sort(weight,date);
+    }
+
     @GetMapping
     public List<Parcel> getAll() {
         return parcelService.getAll();

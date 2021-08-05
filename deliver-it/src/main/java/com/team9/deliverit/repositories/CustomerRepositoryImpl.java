@@ -71,7 +71,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public List<Customer> searchByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Customer> query = session.createQuery("from Customer c join PersonalDetails p where  p.email like concat('%',:email,'%')", Customer.class);
+            Query<Customer> query = session.createQuery("select c from Customer c join PersonalDetails p on c.person.id = p.id where  p.email like concat('%',:email,'%')", Customer.class);
             query.setParameter("email", email);
             List<Customer> result = query.list();
             if (result.size() == 0) {
@@ -84,7 +84,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public List<Customer> searchByName(String name) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Customer> query = session.createQuery("from Customer c join PersonalDetails p where p.firstName = :name or p.lastName = :name", Customer.class);
+            Query<Customer> query = session.createQuery("select c from Customer c join PersonalDetails p on c.person.id = p.id where p.firstName = :name or p.lastName = :name", Customer.class);
             query.setParameter("name", name);
             List<Customer> result = query.list();
             if (result.size() == 0) {
@@ -97,7 +97,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public List<Parcel> incomingParcels(int customerId) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Parcel> query = session.createQuery("from Parcel p join Shipment s where p.customer = :customerId and s.status != 'COMPLETED'", Parcel.class);
+            Query<Parcel> query = session.createQuery("select p from Parcel p join Shipment s on p.shipment.id = s.id where p.customer = :customerId and s.status != 'COMPLETED'", Parcel.class);
             query.setParameter("customerId", customerId);
             return query.list();
         }
@@ -108,7 +108,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public List<Customer> searchAllFields(String param) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Customer> query = session.createQuery("from Customer c join PersonalDetails p where p.email like concat('%',:param,'%') or p.firstName like :param or p.lastName like :param", Customer.class);
+            Query<Customer> query = session.createQuery("select c from Customer c join PersonalDetails p on c.person.id = p.id where p.email like concat('%',:param,'%') or p.firstName like :param or p.lastName like :param", Customer.class);
             query.setParameter("param", param);
             List<Customer> result = query.list();
             if (result.size() == 0) {
