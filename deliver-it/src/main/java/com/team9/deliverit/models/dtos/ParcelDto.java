@@ -3,7 +3,6 @@ package com.team9.deliverit.models.dtos;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.PickUpOption;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
 public class ParcelDto {
@@ -17,9 +16,6 @@ public class ParcelDto {
 
     @Positive(message = "Customer id should be positive!")
     private int customerId;
-
-    @Positive(message = "Warehouse id should be positive!")
-    private int warehouseId;
 
     @Positive(message = "Shipment id should be positive!")
     private int shipmentId;
@@ -51,14 +47,6 @@ public class ParcelDto {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
-    }
-
-    public int getWarehouseId() {
-        return warehouseId;
-    }
-
-    public void setWarehouseId(int warehouseId) {
-        this.warehouseId = warehouseId;
     }
 
     public int getShipmentId() {

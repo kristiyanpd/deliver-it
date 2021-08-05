@@ -2,13 +2,9 @@ package com.team9.deliverit.controllers;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Customer;
-import com.team9.deliverit.models.dtos.CityDto;
 import com.team9.deliverit.models.dtos.CustomerRegistrationDto;
-import com.team9.deliverit.services.CityService;
-import com.team9.deliverit.services.CustomerService;
-import com.team9.deliverit.services.mappers.CityModelMapper;
+import com.team9.deliverit.services.contracts.CustomerService;
 import com.team9.deliverit.services.mappers.CustomerModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

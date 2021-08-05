@@ -3,7 +3,8 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Address;
-import com.team9.deliverit.repositories.AddressRepository;
+import com.team9.deliverit.repositories.contracts.AddressRepository;
+import com.team9.deliverit.services.contracts.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

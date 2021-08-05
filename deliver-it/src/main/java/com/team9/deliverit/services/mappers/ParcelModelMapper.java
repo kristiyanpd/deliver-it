@@ -3,13 +3,11 @@ package com.team9.deliverit.services.mappers;
 import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
-import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.models.dtos.ParcelDto;
-import com.team9.deliverit.repositories.ParcelRepository;
-import com.team9.deliverit.services.CustomerService;
-import com.team9.deliverit.services.ParcelService;
-import com.team9.deliverit.services.ShipmentService;
-import com.team9.deliverit.services.WarehouseService;
+import com.team9.deliverit.services.contracts.CustomerService;
+import com.team9.deliverit.services.contracts.ParcelService;
+import com.team9.deliverit.services.contracts.ShipmentService;
+import com.team9.deliverit.services.contracts.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +40,6 @@ public class ParcelModelMapper {
     }
 
     private void dtoToObject(ParcelDto parcelDto, Parcel parcel) {
-        Warehouse warehouse = warehouseService.getById(parcelDto.getWarehouseId());
         Shipment shipment = shipmentService.getById(parcelDto.getShipmentId());
         Customer customer = customerService.getById(parcelDto.getCustomerId());
 
@@ -51,8 +48,6 @@ public class ParcelModelMapper {
         parcel.setPickUpOption(parcelDto.getPickUpOption());
         parcel.setCustomer(customer);
         parcel.setShipment(shipment);
-        parcel.setWarehouse(warehouse);
-
     }
 
 }

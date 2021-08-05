@@ -3,8 +3,8 @@ package com.team9.deliverit.services.mappers;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.models.dtos.ShipmentDto;
-import com.team9.deliverit.repositories.WarehouseRepository;
-import com.team9.deliverit.services.ShipmentService;
+import com.team9.deliverit.repositories.contracts.WarehouseRepository;
+import com.team9.deliverit.services.contracts.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

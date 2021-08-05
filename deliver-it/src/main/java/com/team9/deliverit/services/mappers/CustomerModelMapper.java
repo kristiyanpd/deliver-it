@@ -6,10 +6,10 @@ import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.PersonalDetails;
 import com.team9.deliverit.models.dtos.CustomerRegistrationDto;
-import com.team9.deliverit.services.AddressService;
-import com.team9.deliverit.services.CityService;
-import com.team9.deliverit.services.CustomerService;
-import com.team9.deliverit.services.PersonalDetailsService;
+import com.team9.deliverit.services.contracts.AddressService;
+import com.team9.deliverit.services.contracts.CityService;
+import com.team9.deliverit.services.contracts.CustomerService;
+import com.team9.deliverit.services.contracts.PersonalDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,7 +49,6 @@ public class CustomerModelMapper {
         personalDetails.setEmail(customerRegistrationDto.getEmail());
         personalDetailsService.create(personalDetails);
 
-
         Address address = new Address();
         String streetName = customerRegistrationDto.getStreetName();
         City city = cityService.getById(customerRegistrationDto.getCityId());
@@ -64,7 +63,5 @@ public class CustomerModelMapper {
 
         customer.setAddress(address);
         customer.setPerson(personalDetails);
-
-
     }
 }

@@ -1,9 +1,8 @@
-package com.team9.deliverit.services;
+package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.enums.Category;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

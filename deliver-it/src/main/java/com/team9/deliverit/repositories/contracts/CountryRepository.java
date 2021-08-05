@@ -1,19 +1,19 @@
-package com.team9.deliverit.services;
+package com.team9.deliverit.repositories.contracts;
 
 import com.team9.deliverit.models.Country;
 
 import java.util.List;
 
-public interface CountryService {
+public interface CountryRepository {
     List<Country> getAll();
 
     Country getById(int id);
 
     Country getByName(String name);
 
-    void create(Country country);
+    void create(Country Country);
 
-    void update(Country country);
+    void update(Country Country);
 
     void delete(int id);
 }

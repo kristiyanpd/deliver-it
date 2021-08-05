@@ -1,7 +1,8 @@
 package com.team9.deliverit.services;
 
 import com.team9.deliverit.models.Customer;
-import com.team9.deliverit.repositories.CustomerRepository;
+import com.team9.deliverit.repositories.contracts.CustomerRepository;
+import com.team9.deliverit.services.contracts.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

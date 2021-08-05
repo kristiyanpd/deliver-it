@@ -2,11 +2,11 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.enums.Category;
-import com.team9.deliverit.repositories.ParcelRepository;
+import com.team9.deliverit.repositories.contracts.ParcelRepository;
+import com.team9.deliverit.services.contracts.ParcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

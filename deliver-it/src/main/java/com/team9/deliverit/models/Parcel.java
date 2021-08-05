@@ -25,10 +25,6 @@ public class Parcel {
     private PickUpOption pickUpOption;
 
     @ManyToOne
-    @JoinColumn(name = "warehouse_id")
-    private Warehouse warehouse;
-
-    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
@@ -65,14 +61,6 @@ public class Parcel {
 
     public void setWeight(double weight) {
         this.weight = weight;
-    }
-
-    public Warehouse getWarehouse() {
-        return warehouse;
-    }
-
-    public void setWarehouse(Warehouse warehouse) {
-        this.warehouse = warehouse;
     }
 
     public Customer getCustomer() {

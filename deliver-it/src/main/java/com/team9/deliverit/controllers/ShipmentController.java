@@ -5,7 +5,7 @@ import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.StatusNotFoundException;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.dtos.ShipmentDto;
-import com.team9.deliverit.services.ShipmentService;
+import com.team9.deliverit.services.contracts.ShipmentService;
 import com.team9.deliverit.services.mappers.ShipmentModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

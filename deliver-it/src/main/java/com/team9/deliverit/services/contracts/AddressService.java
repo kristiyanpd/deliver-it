@@ -1,10 +1,10 @@
-package com.team9.deliverit.repositories;
+package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.Address;
 
 import java.util.List;
 
-public interface AddressRepository {
+public interface AddressService {
     List<Address> getAll();
 
     Address getById(int id);
@@ -16,5 +16,6 @@ public interface AddressRepository {
     void update(Address address);
 
     void delete(int id);
-    List <Address> getDuplicates (String name, int cityId);
+
+    List<Address> getDuplicates(String name,int cityId);
 }

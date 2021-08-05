@@ -3,8 +3,8 @@ package com.team9.deliverit.services.mappers;
 import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.dtos.AddressDto;
-import com.team9.deliverit.repositories.CityRepository;
-import com.team9.deliverit.services.AddressService;
+import com.team9.deliverit.repositories.contracts.CityRepository;
+import com.team9.deliverit.services.contracts.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

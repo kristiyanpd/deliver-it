@@ -1,10 +1,10 @@
-package com.team9.deliverit.repositories;
+package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.Warehouse;
 
 import java.util.List;
 
-public interface WarehouseRepository {
+public interface WarehouseService {
     List<Warehouse> getAll();
 
     Warehouse getById(int id);
@@ -14,6 +14,4 @@ public interface WarehouseRepository {
     void update(Warehouse warehouse);
 
     void delete(int id);
-
-    Warehouse getByAddressId(int id);
 }

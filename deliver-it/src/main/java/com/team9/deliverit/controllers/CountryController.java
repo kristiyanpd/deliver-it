@@ -3,7 +3,7 @@ package com.team9.deliverit.controllers;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Country;
-import com.team9.deliverit.services.CountryService;
+import com.team9.deliverit.services.contracts.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

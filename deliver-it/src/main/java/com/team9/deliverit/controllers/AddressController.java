@@ -4,7 +4,7 @@ import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.dtos.AddressDto;
-import com.team9.deliverit.services.AddressService;
+import com.team9.deliverit.services.contracts.AddressService;
 import com.team9.deliverit.services.mappers.AddressModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

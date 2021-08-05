@@ -1,4 +1,4 @@
-package com.team9.deliverit.repositories;
+package com.team9.deliverit.repositories.contracts;
 
 import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.Parcel;

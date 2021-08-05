@@ -1,10 +1,10 @@
-package com.team9.deliverit.services;
+package com.team9.deliverit.repositories.contracts;
 
 import com.team9.deliverit.models.City;
 
 import java.util.List;
 
-public interface CityService {
+public interface CityRepository {
     List<City> getAll();
 
     City getById(int id);

@@ -3,7 +3,8 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Warehouse;
-import com.team9.deliverit.repositories.WarehouseRepository;
+import com.team9.deliverit.repositories.contracts.WarehouseRepository;
+import com.team9.deliverit.services.contracts.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
