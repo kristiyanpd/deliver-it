@@ -50,8 +50,8 @@ public class PersonalDetailsServiceImpl implements PersonalDetailsService {
         boolean duplicateExists = true;
 
         try {
-            PersonalDetails existingAddress = repository.getByEmail(details.getEmail());
-            if (existingAddress.getId() == details.getId()) {
+            PersonalDetails person = repository.getByEmail(details.getEmail());
+            if (person.getId() == details.getId()) {
                 duplicateExists = false;
             }
         } catch (EntityNotFoundException e) {

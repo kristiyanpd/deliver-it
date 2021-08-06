@@ -43,7 +43,6 @@ public class ParcelController {
     }
 
     //TODO SORTING IN ARRAY
-
     @GetMapping
     public List<Parcel> getAll() {
         return parcelService.getAll();

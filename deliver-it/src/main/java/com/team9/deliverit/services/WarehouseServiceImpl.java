@@ -2,6 +2,8 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
+import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.repositories.contracts.WarehouseRepository;
 import com.team9.deliverit.services.contracts.WarehouseService;
@@ -31,7 +33,11 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public void create(Warehouse warehouse) {
+    public void create(Warehouse warehouse, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can create a warehouse!");
+        }
+
         boolean duplicateExists = true;
         try {
             repository.getByAddressId(warehouse.getAddress().getId());
@@ -45,7 +51,11 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public void update(Warehouse warehouse) {
+    public void update(Warehouse warehouse, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can modify a warehouse!");
+        }
+
         boolean duplicateExists = true;
         try {
             Warehouse existingWarehouse = repository.getByAddressId(warehouse.getAddress().getId());
@@ -64,7 +74,11 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can modify a warehouse!");
+        }
+
         repository.delete(id);
     }
 }

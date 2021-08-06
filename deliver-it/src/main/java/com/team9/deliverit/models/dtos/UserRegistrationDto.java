@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
-public class CustomerRegistrationDto {
+public class UserRegistrationDto {
 
     @NotBlank(message = "First name can't be blank!")
     @Size(min = 2, max = 50, message = "Street name length should be between 2 and 50 symbols!")
@@ -24,8 +24,7 @@ public class CustomerRegistrationDto {
     @Positive(message = "City id must be positive")
     private int cityId;
 
-
-    public CustomerRegistrationDto() {
+    public UserRegistrationDto() {
 
     }
 
