@@ -31,9 +31,9 @@ public class ParcelController {
     }
 
     @GetMapping("/filter")
-    public List<Parcel> filter(@RequestParam(required = false) Optional<Double> weight, Optional<Integer> customerId,
+    public List<Parcel> filter(@RequestParam(required = false) Optional<Double> weight, Optional<Integer> userId,
                                Optional<Integer> warehouseId, Optional<Category> category) {
-        return parcelService.filter(weight,customerId,warehouseId,category);
+        return parcelService.filter(weight,userId,warehouseId,category);
 
     }
 

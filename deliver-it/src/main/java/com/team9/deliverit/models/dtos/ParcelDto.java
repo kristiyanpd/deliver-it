@@ -14,8 +14,8 @@ public class ParcelDto {
 
     private PickUpOption pickUpOption;
 
-    @Positive(message = "Customer id should be positive!")
-    private int customerId;
+    @Positive(message = "User id should be positive!")
+    private int userId;
 
     @Positive(message = "Shipment id should be positive!")
     private int shipmentId;
@@ -40,13 +40,12 @@ public class ParcelDto {
         this.category = category;
     }
 
-
-    public int getCustomerId() {
-        return customerId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getShipmentId() {

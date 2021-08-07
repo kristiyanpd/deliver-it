@@ -14,6 +14,10 @@ public interface ShipmentRepository {
 
     void update(Shipment shipment);
 
+    int countShipmentsOnTheWay();
+
+    Shipment nextShipmentToArrive(int warehouseId);
+
     void delete(int id);
 
     List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId);

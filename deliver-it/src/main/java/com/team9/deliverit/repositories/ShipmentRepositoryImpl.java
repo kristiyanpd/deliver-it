@@ -1,5 +1,6 @@
 package com.team9.deliverit.repositories;
 
+import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import org.hibernate.Session;
@@ -48,7 +49,29 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
     }
 
     @Override
-    public List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId) {
+    public Shipment nextShipmentToArrive(int warehouseId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Shipment> query = session.createQuery(
+                    "select s from Shipment s where s.destinationWarehouse.id = :warehouseId order by s.arrivalDate desc", Shipment.class);
+            query.setParameter("warehouseId", warehouseId);
+            if (query.list().size() == 0) {
+                throw new EntityNotFoundException("Shipment", "warehouseId", String.valueOf(warehouseId));
+            }
+            return query.list().get(0);
+        }
+    }
+
+
+    @Override
+    public int countShipmentsOnTheWay() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Shipment> query = session.createQuery("select s from Shipment s where s.status = 'ON_THE_WAY'", Shipment.class);
+            return query.list().size();
+        }
+    }
+
+    @Override
+    public List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> userId) {
         try (Session session = sessionFactory.openSession()) {
 /*            List<Shipment> output = new ArrayList<>();
             if (warehouseId.isPresent() && customerId.isEmpty()) {
@@ -65,21 +88,21 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
             return output;*/
 
             var baseQuery = "select s from Shipment s left join Parcel p on s.id = p.shipment.id ";
-            if (warehouseId.isPresent() && customerId.isEmpty()) {
+            if (warehouseId.isPresent() && userId.isEmpty()) {
                 baseQuery += " where s.destinationWarehouse.id = :warehouseId or s.originWarehouse.id = :warehouseId ";
             }
-            if (customerId.isPresent() && warehouseId.isEmpty()) {
-                baseQuery += " where p.customer.id = :customerId ";
+            if (userId.isPresent() && warehouseId.isEmpty()) {
+                baseQuery += " where p.user.id = :customerId ";
             }
 
             Query<Shipment> query = session.createQuery(baseQuery, Shipment.class);
 
-            if (warehouseId.isPresent() && customerId.isEmpty()) {
+            if (warehouseId.isPresent() && userId.isEmpty()) {
                 query.setParameter("warehouseId", warehouseId.get());
             }
 
-            if (customerId.isPresent() && warehouseId.isEmpty()) {
-                query.setParameter("customerId", customerId.get());
+            if (userId.isPresent() && warehouseId.isEmpty()) {
+                query.setParameter("userId", userId.get());
             }
 
             return query.list();

@@ -17,7 +17,7 @@ public interface ParcelService {
 
     void delete(int id);
 
-    List<Parcel> filter(Optional<Double> weight, Optional<Integer> customerId, Optional<Integer> warehouseId, Optional<Category> category);
+    List<Parcel> filter(Optional<Double> weight, Optional<Integer> userId, Optional<Integer> warehouseId, Optional<Category> category);
 
     List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate);
 }

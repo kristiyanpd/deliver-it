@@ -25,8 +25,8 @@ public class Parcel {
     private PickUpOption pickUpOption;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "shipment_id")
@@ -63,12 +63,12 @@ public class Parcel {
         this.weight = weight;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Shipment getShipment() {

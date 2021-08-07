@@ -2,8 +2,6 @@ package com.team9.deliverit.controllers;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.Customer;
-import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.UserRegistrationDto;
 import com.team9.deliverit.services.contracts.UserService;
@@ -15,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")

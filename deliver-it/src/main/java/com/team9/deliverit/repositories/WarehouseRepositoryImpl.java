@@ -47,6 +47,7 @@ public class WarehouseRepositoryImpl extends BaseRepositoryImpl<Warehouse> imple
         super.delete(Warehouse.class, id);
     }
 
+
     @Override
     public Warehouse getByAddressId(int id) {
         try (Session session = sessionFactory.openSession()) {
@@ -61,3 +62,4 @@ public class WarehouseRepositoryImpl extends BaseRepositoryImpl<Warehouse> imple
     }
 
 }
+

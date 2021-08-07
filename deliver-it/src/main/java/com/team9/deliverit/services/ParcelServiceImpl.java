@@ -46,8 +46,8 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public List<Parcel> filter(Optional<Double> weight, Optional<Integer> customerId, Optional<Integer> warehouseId, Optional<Category> category) {
-        return repository.filter(weight,customerId,warehouseId,category);
+    public List<Parcel> filter(Optional<Double> weight, Optional<Integer> userId, Optional<Integer> warehouseId, Optional<Category> category) {
+        return repository.filter(weight,userId,warehouseId,category);
     }
 
     @Override

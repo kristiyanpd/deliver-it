@@ -1,13 +1,12 @@
 package com.team9.deliverit.services.mappers;
 
-import com.team9.deliverit.models.Customer;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
+import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ParcelDto;
-import com.team9.deliverit.services.contracts.CustomerService;
 import com.team9.deliverit.services.contracts.ParcelService;
 import com.team9.deliverit.services.contracts.ShipmentService;
-import com.team9.deliverit.services.contracts.WarehouseService;
+import com.team9.deliverit.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,16 +14,14 @@ import org.springframework.stereotype.Component;
 public class ParcelModelMapper {
 
     private final ShipmentService shipmentService;
-    private final CustomerService customerService;
+    private final UserService userService;
     private final ParcelService parcelService;
-    private final WarehouseService warehouseService;
 
     @Autowired
-    public ParcelModelMapper(ShipmentService shipmentService, CustomerService customerService, ParcelService parcelService, WarehouseService warehouseService) {
+    public ParcelModelMapper(ShipmentService shipmentService, UserService userService, ParcelService parcelService) {
         this.shipmentService = shipmentService;
-        this.customerService = customerService;
+        this.userService = userService;
         this.parcelService = parcelService;
-        this.warehouseService = warehouseService;
     }
 
     public Parcel fromDto(ParcelDto parcelDto) {
@@ -41,12 +38,12 @@ public class ParcelModelMapper {
 
     private void dtoToObject(ParcelDto parcelDto, Parcel parcel) {
         Shipment shipment = shipmentService.getById(parcelDto.getShipmentId());
-        Customer customer = customerService.getById(parcelDto.getCustomerId());
+        User user = userService.getById(parcelDto.getUserId());
 
         parcel.setWeight(parcelDto.getWeight());
         parcel.setCategory(parcelDto.getCategory());
         parcel.setPickUpOption(parcelDto.getPickUpOption());
-        parcel.setCustomer(customer);
+        parcel.setUser(user);
         parcel.setShipment(shipment);
     }
 
