@@ -3,6 +3,7 @@ package com.team9.deliverit.repositories.contracts;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.PickUpOption;
+import com.team9.deliverit.models.enums.Status;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +25,12 @@ public interface ParcelRepository {
 
     String getStatusOfParcel(int parcelId);
 
-    List<Parcel> filter(Optional<Double> weight, Optional<Integer> userId,
-                        Optional<Integer> warehouseId, Optional<Category> category);
+    List<Parcel> filter(Optional<Double> weight,
+                        Optional<Integer> warehouseId,
+                        Optional<Category> category,
+                        Optional<Status> status,
+                        Optional<Integer> userId);
 
-    List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate);
+    List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId);
+
 }

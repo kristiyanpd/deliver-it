@@ -5,6 +5,7 @@ import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.PickUpOption;
+import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import com.team9.deliverit.services.contracts.ParcelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,27 +37,33 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public void create(Parcel parcel) {
-      repository.create(parcel);
+        repository.create(parcel);
     }
 
     @Override
     public void update(Parcel parcel) {
-     repository.update(parcel);
+        repository.update(parcel);
     }
 
     @Override
     public void delete(int id) {
-       repository.delete(id);
+        repository.delete(id);
     }
 
     @Override
-    public List<Parcel> filter(Optional<Double> weight, Optional<Integer> userId, Optional<Integer> warehouseId, Optional<Category> category) {
-        return repository.filter(weight,userId,warehouseId,category);
+    public List<Parcel> filter(Optional<Double> weight, Optional<Integer> warehouseId, Optional<Category> category, Optional<Status> status, Optional<Integer> userId, User user) {
+        if (!user.isEmployee()) {
+            return repository.filter(weight, warehouseId, category, status, Optional.of(user.getId()));
+        }
+        return repository.filter(weight, warehouseId, category, status, userId);
     }
 
     @Override
-    public List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate) {
-        return repository.sort(weight,arrivalDate);
+    public List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId, User user) {
+        if (!user.isEmployee()) {
+            return repository.sort(weight, arrivalDate, Optional.of(user.getId()));
+        }
+        return repository.sort(weight, arrivalDate, userId);
     }
 
     @Override

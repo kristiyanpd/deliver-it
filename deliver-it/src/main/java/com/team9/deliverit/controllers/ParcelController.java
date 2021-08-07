@@ -5,6 +5,7 @@ import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ParcelDto;
 import com.team9.deliverit.models.enums.Category;
+import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.services.contracts.ParcelService;
 import com.team9.deliverit.services.mappers.ParcelModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class ParcelController {
     @PutMapping("/{id}")
     public Parcel update(@PathVariable int id, @Valid @RequestBody ParcelDto parcelDto) {
         try {
-            Parcel parcel = modelMapper.fromDto(parcelDto,id);
+            Parcel parcel = modelMapper.fromDto(parcelDto, id);
             parcelService.update(parcel);
             return parcel;
         } catch (EntityNotFoundException e) {
@@ -86,15 +87,30 @@ public class ParcelController {
     }
 
     @GetMapping("/filter")
-    public List<Parcel> filter(@RequestParam(required = false) Optional<Double> weight, Optional<Integer> userId,
-                               Optional<Integer> warehouseId, Optional<Category> category) {
-        return parcelService.filter(weight,userId,warehouseId,category);
-
+    public List<Parcel> filter(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<Double> weight,
+                               Optional<Integer> warehouseId, Optional<Category> category,
+                               Optional<Status> status, Optional<Integer> userId) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return parcelService.filter(weight, warehouseId, category, status, userId, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
+    //TODO ?sortBy=weight,date,userId // split
     @GetMapping("/sort")
-    public List<Parcel> sort(@RequestParam(required = false) Optional<String> weight, Optional<String> date) {
-        return parcelService.sort(weight,date);
+    public List<Parcel> sort(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<String> weight, Optional<String> date, Optional<Integer> userId) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return parcelService.sort(weight, date, userId, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @GetMapping("/get-my-parcels")

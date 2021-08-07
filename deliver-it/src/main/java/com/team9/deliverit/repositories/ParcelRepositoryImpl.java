@@ -91,17 +91,15 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
     }
 
     @Override
-    public List<Parcel> filter(Optional<Double> weight, Optional<Integer> userId,
-                               Optional<Integer> warehouseId, Optional<Category> category) {
+    public List<Parcel> filter(Optional<Double> weight,
+                               Optional<Integer> warehouseId,
+                               Optional<Category> category,
+                               Optional<Status> status,
+                               Optional<Integer> userId) {
 
         try (Session session = sessionFactory.openSession()) {
             var baseQuery = "select p from Parcel p join Shipment s on p.shipment.id = s.id ";
             List<String> filters = new ArrayList<>();
-
-            //TODO Add filterByUser method so users can filter their own classes
-/*            if (!user.isEmployee()) {
-                filters.add("p.userId = userId.")
-            }*/
 
             if (warehouseId.isPresent()) {
                 filters.add("s.originWarehouse.id = :warehouseId or destinationWarehouse.id = :warehouseId");
@@ -111,6 +109,9 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
             }
             if (category.isPresent()) {
                 filters.add("p.category like :category");
+            }
+            if (status.isPresent()) {
+                filters.add("p.status like :status");
             }
             if (userId.isPresent()) {
                 filters.add("p.user.id = :userId");
@@ -125,6 +126,7 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
             warehouseId.ifPresent(integer -> query.setParameter("warehouseId", integer));
             weight.ifPresent(aDouble -> query.setParameter("weight", aDouble));
             category.ifPresent(value -> query.setParameter("category", value));
+            status.ifPresent(value -> query.setParameter("status", value));
             userId.ifPresent(integer -> query.setParameter("userId", integer));
 
             return query.list();
@@ -132,10 +134,13 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
     }
 
     @Override
-    public List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate) {
+    public List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId) {
         try (Session session = sessionFactory.openSession()) {
-
             var baseQuery = "select p from Parcel p join Shipment s on p.shipment.id = s.id ";
+
+            if (userId.isPresent()) {
+                baseQuery += " where p.user.id = :userId ";
+            }
             if (weight.isPresent() && arrivalDate.isEmpty()) {
                 baseQuery += " order by p.weight ";
             }
@@ -147,9 +152,9 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
             }
 
             Query<Parcel> query = session.createQuery(baseQuery, Parcel.class);
+            userId.ifPresent(integer -> query.setParameter("userId", integer));
 
             return query.list();
-
         }
 
     }
