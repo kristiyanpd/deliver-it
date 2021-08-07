@@ -18,6 +18,8 @@ public interface ShipmentRepository {
 
     Shipment nextShipmentToArrive(int warehouseId);
 
+    boolean hasFreeSpace(int shipmentId);
+
     void delete(int id);
 
     List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId);
