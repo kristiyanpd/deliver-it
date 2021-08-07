@@ -13,6 +13,8 @@ public class ShipmentDto {
 
     private Status status;
 
+    private boolean hasFreeSpace;
+
     @Positive(message = "Origin Warehouse ID should be positive!")
     private int originWarehouseId;
 
@@ -53,6 +55,14 @@ public class ShipmentDto {
 
     public void setOriginWarehouseId(int originWarehouseId) {
         this.originWarehouseId = originWarehouseId;
+    }
+
+    public boolean hasFreeSpace() {
+        return hasFreeSpace;
+    }
+
+    public void setHasFreeSpace(boolean hasFreeSpace) {
+        this.hasFreeSpace = hasFreeSpace;
     }
 
     public int getDestinationWarehouseId() {
