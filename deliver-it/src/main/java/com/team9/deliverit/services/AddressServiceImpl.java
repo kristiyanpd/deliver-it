@@ -67,8 +67,8 @@ public class AddressServiceImpl implements AddressService {
         repository.update(address);
     }
 
-    public List<Address> getDuplicates(String name,int cityId){
-       return repository.getDuplicates(name,cityId);
+    public List<Address> getDuplicates(String name, int cityId) {
+        return repository.getDuplicates(name, cityId);
     }
 
     @Override

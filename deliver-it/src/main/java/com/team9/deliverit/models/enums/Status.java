@@ -17,7 +17,7 @@ public enum Status {
             case COMPLETED:
                 return "Completed";
             default:
-                throw new StatusNotFoundException("Status must be Preparing, On the way or Completed!");
+                throw new StatusNotFoundException("Status must be PREPARING, ON_THE_WAY or COMPLETED!");
         }
     }
 }

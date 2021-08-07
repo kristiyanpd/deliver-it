@@ -63,15 +63,14 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
         }
     }
 
-    public String statusOfAGivenParcel(int parcelId) {
+    public String getStatusOfParcel(int parcelId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Shipment> query = session.createQuery(
-                    "select s.status  from Parcel p join Shipment s on p.shipment.id = s.id where p.id = :parcelId", Shipment.class);
+                    "select s from Parcel p join Shipment s on p.shipment.id = s.id where p.id = :parcelId", Shipment.class);
             query.setParameter("parcelId", parcelId);
             return query.list().get(0).getStatus().toString();
         }
     }
-    //TODO IF USER IS AUTHORISED AND USER.ID = PARCEL.USERg.ID IN SERVICE
 
     @Override
     public Parcel updatePickUpOption(int parcelId, PickUpOption pickUpOption) {
@@ -80,10 +79,13 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
             if (parcel.getShipment().getStatus() == Status.COMPLETED) {
                 throw new StatusCompletedException(parcel.getId());
             }
-                parcel.setPickUpOption(pickUpOption);
-                session.beginTransaction();
-                session.update(parcel);
-                session.getTransaction().commit();
+            if (parcel.getPickUpOption() == pickUpOption) {
+                throw new IllegalArgumentException(String.format("Parcel pick up option is already %s!", pickUpOption.toString().toLowerCase()));
+            }
+            session.beginTransaction();
+            parcel.setPickUpOption(pickUpOption);
+            session.update(parcel);
+            session.getTransaction().commit();
             return parcel;
         }
     }
@@ -95,6 +97,11 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
         try (Session session = sessionFactory.openSession()) {
             var baseQuery = "select p from Parcel p join Shipment s on p.shipment.id = s.id ";
             List<String> filters = new ArrayList<>();
+
+            //TODO Add filterByUser method so users can filter their own classes
+/*            if (!user.isEmployee()) {
+                filters.add("p.userId = userId.")
+            }*/
 
             if (warehouseId.isPresent()) {
                 filters.add("s.originWarehouse.id = :warehouseId or destinationWarehouse.id = :warehouseId");

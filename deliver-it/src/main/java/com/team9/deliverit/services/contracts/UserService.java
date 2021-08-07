@@ -17,4 +17,6 @@ public interface UserService {
     void delete(int id);
 
     User getByEmail(String email);
+
+    User registerEmployee(int id, User user);
 }

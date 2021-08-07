@@ -2,11 +2,13 @@ package com.team9.deliverit.controllers;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.UserRegistrationDto;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.mappers.UserModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,11 +22,13 @@ public class UserController {
 
     private final UserService userService;
     private final UserModelMapper userModelMapper;
+    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public UserController(UserService userService, UserModelMapper userModelMapper) {
+    public UserController(UserService userService, UserModelMapper userModelMapper, AuthenticationHelper authenticationHelper) {
         this.userService = userService;
         this.userModelMapper = userModelMapper;
+        this.authenticationHelper = authenticationHelper;
     }
 
     @GetMapping
@@ -75,6 +79,18 @@ public class UserController {
             userService.delete(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/registerEmployee")
+    public User registerEmployee(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return userService.registerEmployee(id, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

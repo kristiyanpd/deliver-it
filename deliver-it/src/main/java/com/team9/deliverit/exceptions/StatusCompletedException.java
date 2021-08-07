@@ -7,7 +7,7 @@ public class StatusCompletedException extends RuntimeException {
     }
 
     public StatusCompletedException(String value) {
-        super(String.format("Parcel with %s is already Completed !", value));
+        super(String.format("Parcel with id %s is already Completed!", value));
     }
 
 }

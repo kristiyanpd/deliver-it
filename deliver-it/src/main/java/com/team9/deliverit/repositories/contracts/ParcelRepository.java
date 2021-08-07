@@ -22,7 +22,7 @@ public interface ParcelRepository {
 
     Parcel updatePickUpOption(int parcelId, PickUpOption pickUpOption);
 
-    String statusOfAGivenParcel(int parcelId);
+    String getStatusOfParcel(int parcelId);
 
     List<Parcel> filter(Optional<Double> weight, Optional<Integer> userId,
                         Optional<Integer> warehouseId, Optional<Category> category);

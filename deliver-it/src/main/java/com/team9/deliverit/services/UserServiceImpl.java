@@ -2,6 +2,7 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.repositories.contracts.UserRepository;
 import com.team9.deliverit.services.contracts.UserService;
@@ -67,6 +68,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByEmail(@Email String email) {
         return repository.getByEmail(email);
+    }
+
+    @Override
+    public User registerEmployee(int id, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can register new employees!");
+        }
+        return repository.registerEmployee(id);
     }
 
 }

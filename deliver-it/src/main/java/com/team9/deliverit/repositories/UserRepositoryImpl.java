@@ -4,6 +4,7 @@ import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.repositories.contracts.UserRepository;
+import com.team9.deliverit.services.contracts.RoleService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -19,11 +20,13 @@ import java.util.Optional;
 public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements UserRepository {
 
     private final SessionFactory sessionFactory;
+    private final RoleService roleService;
 
     @Autowired
-    public UserRepositoryImpl(SessionFactory sessionFactory) {
+    public UserRepositoryImpl(SessionFactory sessionFactory, RoleService roleService) {
         super(sessionFactory);
         this.sessionFactory = sessionFactory;
+        this.roleService = roleService;
     }
 
     @Override
@@ -68,6 +71,18 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
                 throw new EntityNotFoundException("User", "email", email);
             }
             return query.list().get(0);
+        }
+    }
+
+    @Override
+    public User registerEmployee(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            User user = getById(id);
+            session.beginTransaction();
+            user.setRole(roleService.getById(2));
+            session.update(user);
+            session.getTransaction().commit();
+            return user;
         }
     }
 

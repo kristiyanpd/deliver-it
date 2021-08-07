@@ -21,6 +21,8 @@ public interface UserRepository {
 
     int countCustomers();
 
+    User registerEmployee(int id);
+
     List<Parcel> incomingParcels(int userId);
 
     List<User> searchEverywhere(String param);

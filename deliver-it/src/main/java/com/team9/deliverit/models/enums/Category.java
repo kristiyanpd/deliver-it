@@ -15,7 +15,7 @@ public enum Category {
             case ELECTRONICS:
                 return "Electronics";
             default:
-                throw new IllegalArgumentException("Category should be Electronics, Clothing or Medical");
+                throw new IllegalArgumentException("Category should be ELECTRONICS, CLOTHING or MEDICAL");
         }
     }
 }
