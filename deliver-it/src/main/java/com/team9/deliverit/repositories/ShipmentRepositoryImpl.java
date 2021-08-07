@@ -62,14 +62,14 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
     }
 
     @Override
-    public boolean hasFreeSpace(int shipmentId) {
+    public boolean isFull(int shipmentId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Shipment> query = session.createQuery("select s from Shipment s where s.id = :shipmentId", Shipment.class);
             query.setParameter("shipmentId", shipmentId);
             if (query.list().size() == 0){
                 throw new EntityNotFoundException("Shipment","id",String.valueOf(shipmentId));
             }
-            return query.list().get(0).hasFreeSpace();
+            return query.list().get(0).isFull();
         }
     }
 

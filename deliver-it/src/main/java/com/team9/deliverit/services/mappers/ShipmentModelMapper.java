@@ -40,7 +40,7 @@ public class ShipmentModelMapper {
         shipment.setStatus(shipmentDto.getStatus());
         shipment.setOriginWarehouse(originWarehouse);
         shipment.setDestinationWarehouse(destinationWarehouse);
-        shipment.setHasFreeSpace(shipmentDto.hasFreeSpace());
+        shipment.setFull(shipmentDto.isFull());
     }
 
 }

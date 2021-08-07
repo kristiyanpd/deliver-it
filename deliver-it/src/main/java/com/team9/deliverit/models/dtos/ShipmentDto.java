@@ -2,6 +2,7 @@ package com.team9.deliverit.models.dtos;
 
 import com.team9.deliverit.models.enums.Status;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.sql.Date;
 
@@ -13,7 +14,8 @@ public class ShipmentDto {
 
     private Status status;
 
-    private boolean hasFreeSpace;
+    @NotNull
+    private boolean isFull;
 
     @Positive(message = "Origin Warehouse ID should be positive!")
     private int originWarehouseId;
@@ -57,12 +59,12 @@ public class ShipmentDto {
         this.originWarehouseId = originWarehouseId;
     }
 
-    public boolean hasFreeSpace() {
-        return hasFreeSpace;
+    public boolean isFull() {
+        return isFull;
     }
 
-    public void setHasFreeSpace(boolean hasFreeSpace) {
-        this.hasFreeSpace = hasFreeSpace;
+    public void setFull(boolean isFull) {
+        this.isFull = isFull;
     }
 
     public int getDestinationWarehouseId() {

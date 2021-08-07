@@ -20,8 +20,8 @@ public class Shipment {
     @Column(name = "arrival_date")
     private Date arrivalDate;
 
-    @Column(name = "has_free_space")
-    private boolean hasFreeSpace;
+    @Column(name = "is_full")
+    private boolean isFull;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -70,12 +70,12 @@ public class Shipment {
         this.status = status;
     }
 
-    public boolean hasFreeSpace() {
-        return hasFreeSpace;
+    public boolean isFull() {
+        return isFull;
     }
 
-    public void setHasFreeSpace(boolean hasFreeSpace) {
-        this.hasFreeSpace = hasFreeSpace;
+    public void setFull(boolean isFull) {
+        this.isFull = isFull;
     }
 
     public Warehouse getOriginWarehouse() {

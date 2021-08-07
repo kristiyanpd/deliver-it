@@ -18,7 +18,7 @@ public interface ShipmentRepository {
 
     Shipment nextShipmentToArrive(int warehouseId);
 
-    boolean hasFreeSpace(int shipmentId);
+    boolean isFull(int shipmentId);
 
     void delete(int id);
 
