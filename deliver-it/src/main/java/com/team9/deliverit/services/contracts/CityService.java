@@ -1,6 +1,7 @@
 package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.City;
+import com.team9.deliverit.models.User;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface CityService {
 
     City getByName(String name);
 
-    void create(City city);
+    void create(City city, User user);
 
-    void update(City city);
+    void update(City city, User user);
 
-    void delete(int id);
+    void delete(int id, User user);
 }

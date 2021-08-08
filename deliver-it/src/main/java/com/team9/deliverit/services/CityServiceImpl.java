@@ -2,7 +2,9 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.City;
+import com.team9.deliverit.models.User;
 import com.team9.deliverit.repositories.contracts.CityRepository;
 import com.team9.deliverit.services.contracts.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,10 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void create(City city) {
+    public void create(City city, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can create cities");
+        }
         boolean duplicateExists = true;
 
         try {
@@ -53,7 +58,11 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void update(City city) {
+    public void update(City city, User user) {
+
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can update cities");
+        }
         boolean duplicateExists = true;
 
         try {
@@ -73,7 +82,11 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id, User user) {
+
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can delete cities");
+        }
         repository.delete(id);
     }
 }

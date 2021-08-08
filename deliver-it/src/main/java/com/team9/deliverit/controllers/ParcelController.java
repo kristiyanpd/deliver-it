@@ -33,56 +33,69 @@ public class ParcelController {
         this.authenticationHelper = authenticationHelper;
     }
 
-    //TODO SORTING IN ARRAY
     @GetMapping
-    public List<Parcel> getAll() {
-        return parcelService.getAll();
+    public List<Parcel> getAll(@RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return parcelService.getAll(user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public Parcel getById(@PathVariable int id) {
+    public Parcel getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            return parcelService.getById(id);
+            User user = authenticationHelper.tryGetUser(headers);
+            return parcelService.getById(id, user);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @PostMapping
-    public Parcel create(@Valid @RequestBody ParcelDto parcelDto) {
+    public Parcel create(@RequestHeader HttpHeaders headers, @Valid @RequestBody ParcelDto parcelDto) {
         try {
+            User user = authenticationHelper.tryGetUser(headers);
             Parcel parcel = modelMapper.fromDto(parcelDto);
-            parcelService.create(parcel);
+            parcelService.create(parcel, user);
             return parcel;
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (EntityNotFoundException | StatusNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public Parcel update(@PathVariable int id, @Valid @RequestBody ParcelDto parcelDto) {
+    public Parcel update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody ParcelDto parcelDto) {
         try {
-            Parcel parcel = modelMapper.fromDto(parcelDto, id);
-            parcelService.update(parcel);
+            User user = authenticationHelper.tryGetUser(headers);
+            Parcel parcel = modelMapper.fromDto(parcelDto, id, user);
+            parcelService.update(parcel, user);
             return parcel;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            parcelService.delete(id);
+            User user = authenticationHelper.tryGetUser(headers);
+            parcelService.delete(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

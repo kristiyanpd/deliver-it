@@ -30,8 +30,8 @@ public class ParcelModelMapper {
         return parcel;
     }
 
-    public Parcel fromDto(ParcelDto parcelDto, int id) {
-        Parcel parcel = parcelService.getById(id);
+    public Parcel fromDto(ParcelDto parcelDto, int id, User user) {
+        Parcel parcel = parcelService.getById(id, user);
         dtoToObject(parcelDto, parcel);
         return parcel;
     }

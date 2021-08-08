@@ -26,27 +26,42 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public List<Parcel> getAll() {
+    public List<Parcel> getAll(User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can view all parcels!");
+        }
         return repository.getAll();
     }
 
     @Override
-    public Parcel getById(int id) {
+    public Parcel getById(int id, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can view a given parcel!");
+        }
         return repository.getById(id);
     }
 
     @Override
-    public void create(Parcel parcel) {
+    public void create(Parcel parcel, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can create a parcel!");
+        }
         repository.create(parcel);
     }
 
     @Override
-    public void update(Parcel parcel) {
+    public void update(Parcel parcel, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can update parcels!");
+        }
         repository.update(parcel);
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can delete parcels!");
+        }
         repository.delete(id);
     }
 
