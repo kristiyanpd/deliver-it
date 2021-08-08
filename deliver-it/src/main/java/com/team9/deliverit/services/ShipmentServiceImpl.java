@@ -75,4 +75,20 @@ public class ShipmentServiceImpl implements ShipmentService {
                 .stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
     }
 
+    @Override
+    public int countShipmentsOnTheWay(User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("You are not authorised for this operation");
+        }
+        return repository.countShipmentsOnTheWay();
+    }
+
+    @Override
+    public ShipmentDisplayDto nextShipmentToArrive(int warehouseId, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("You are not authorised for this operation");
+        }
+        return ShipmentModelMapper.toShipmentDto(repository.nextShipmentToArrive(warehouseId));
+    }
+
 }

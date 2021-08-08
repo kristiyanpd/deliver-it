@@ -20,4 +20,8 @@ public interface ShipmentService {
 
     List<ShipmentDisplayDto> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId);
 
+    int countShipmentsOnTheWay(User user);
+
+    ShipmentDisplayDto nextShipmentToArrive(int warehouseId, User user);
+
 }

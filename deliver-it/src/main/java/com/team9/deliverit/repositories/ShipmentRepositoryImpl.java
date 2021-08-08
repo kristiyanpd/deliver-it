@@ -9,6 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,10 +53,10 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
     public Shipment nextShipmentToArrive(int warehouseId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Shipment> query = session.createQuery(
-                    "select s from Shipment s where s.destinationWarehouse.id = :warehouseId order by s.arrivalDate desc", Shipment.class);
+                    "select s from Shipment s where s.destinationWarehouse.id = :warehouseId and s.status != 'COMPLETED' order by s.arrivalDate desc", Shipment.class);
             query.setParameter("warehouseId", warehouseId);
             if (query.list().size() == 0) {
-                throw new EntityNotFoundException("Shipment", "warehouseId", String.valueOf(warehouseId));
+                throw new EntityNotFoundException("Shipment", "Destination warehouseId", String.valueOf(warehouseId));
             }
             return query.list().get(0);
         }
@@ -66,8 +67,8 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
         try (Session session = sessionFactory.openSession()) {
             Query<Shipment> query = session.createQuery("select s from Shipment s where s.id = :shipmentId", Shipment.class);
             query.setParameter("shipmentId", shipmentId);
-            if (query.list().size() == 0){
-                throw new EntityNotFoundException("Shipment","id",String.valueOf(shipmentId));
+            if (query.list().size() == 0) {
+                throw new EntityNotFoundException("Shipment", "id", String.valueOf(shipmentId));
             }
             return query.list().get(0).isFull();
         }
@@ -99,12 +100,17 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
             }
             return output;*/
 
-            var baseQuery = "select s from Shipment s left join Parcel p on s.id = p.shipment.id ";
+            var baseQuery = "select distinct s from Shipment s left join Parcel p on s.id = p.shipment.id ";
+
             if (warehouseId.isPresent() && userId.isEmpty()) {
                 baseQuery += " where s.destinationWarehouse.id = :warehouseId or s.originWarehouse.id = :warehouseId ";
             }
             if (userId.isPresent() && warehouseId.isEmpty()) {
-                baseQuery += " where p.user.id = :customerId ";
+                baseQuery += " where p.user.id = :userId ";
+            }
+
+            if (userId.isPresent() && warehouseId.isPresent()){
+                throw new IllegalArgumentException("You can filter only by warehouseId or customerId separately");
             }
 
             Query<Shipment> query = session.createQuery(baseQuery, Shipment.class);

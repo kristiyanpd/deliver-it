@@ -59,10 +59,12 @@ public class ShipmentController {
 
     @GetMapping("/filter")
     public List<ShipmentDisplayDto> filter(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<Integer> warehouseId,
-                                 Optional<Integer> customerId){
+                                           Optional<Integer> userId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.filter(user, warehouseId, customerId);
+            return service.filter(user, warehouseId, userId);
+        }catch (IllegalArgumentException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -112,4 +114,26 @@ public class ShipmentController {
         }
     }
 
+    @GetMapping("/on-the-way")
+    public int countShipmentsOnTheWay(@RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.countShipmentsOnTheWay(user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @GetMapping("/for-warehouse")
+    public ShipmentDisplayDto nextShipmentToArrive(@RequestHeader HttpHeaders headers, @RequestParam int warehouseId) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.nextShipmentToArrive(warehouseId, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
 }
