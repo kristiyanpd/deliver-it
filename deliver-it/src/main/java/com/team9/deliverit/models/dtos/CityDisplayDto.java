@@ -2,27 +2,27 @@ package com.team9.deliverit.models.dtos;
 
 public class CityDisplayDto {
 
-    private String cityName;
+    private String name;
 
-    private String countryName;
+    private String country;
 
     public CityDisplayDto() {
 
     }
 
-    public String getCityName() {
-        return cityName;
+    public String getName() {
+        return name;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCountryName() {
-        return countryName;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

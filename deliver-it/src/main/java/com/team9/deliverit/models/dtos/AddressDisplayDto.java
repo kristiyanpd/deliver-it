@@ -5,7 +5,7 @@ public class AddressDisplayDto {
 
     private String streetName;
 
-    private CityDisplayDto cityDisplayDto;
+    private CityDisplayDto city;
 
     public AddressDisplayDto() {
 
@@ -19,11 +19,11 @@ public class AddressDisplayDto {
         this.streetName = streetName;
     }
 
-    public CityDisplayDto getCityDisplayDto() {
-        return cityDisplayDto;
+    public CityDisplayDto getCity() {
+        return city;
     }
 
-    public void setCityDisplayDto(CityDisplayDto cityDisplayDto) {
-        this.cityDisplayDto = cityDisplayDto;
+    public void setCity(CityDisplayDto city) {
+        this.city = city;
     }
 }

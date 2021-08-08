@@ -6,6 +6,7 @@ import com.team9.deliverit.exceptions.StatusNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 import com.team9.deliverit.models.dtos.ShipmentDto;
 import com.team9.deliverit.services.contracts.ShipmentService;
 import com.team9.deliverit.services.mappers.ShipmentModelMapper;
@@ -35,7 +36,7 @@ public class ShipmentController {
     }
 
     @GetMapping
-    public List<Shipment> getAll(@RequestHeader HttpHeaders headers) {
+    public List<ShipmentDisplayDto> getAll(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.getAll(user);
@@ -45,7 +46,7 @@ public class ShipmentController {
     }
 
     @GetMapping("/{id}")
-    public Shipment getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    public ShipmentDisplayDto getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.getById(user, id);
@@ -57,7 +58,7 @@ public class ShipmentController {
     }
 
     @GetMapping("/filter")
-    public List<Shipment> filter(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<Integer> warehouseId,
+    public List<ShipmentDisplayDto> filter(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<Integer> warehouseId,
                                  Optional<Integer> customerId){
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -68,12 +69,12 @@ public class ShipmentController {
     }
 
     @PostMapping
-    public Shipment create(@RequestHeader HttpHeaders headers, @Valid @RequestBody ShipmentDto shipmentDto) {
+    public ShipmentDisplayDto create(@RequestHeader HttpHeaders headers, @Valid @RequestBody ShipmentDto shipmentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Shipment shipment = modelMapper.fromDto(shipmentDto);
             service.create(user, shipment);
-            return shipment;
+            return ShipmentModelMapper.toShipmentDto(shipment);
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (EntityNotFoundException | StatusNotFoundException e) {
@@ -84,12 +85,12 @@ public class ShipmentController {
     }
 
     @PutMapping("/{id}")
-    public Shipment update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody ShipmentDto shipmentDto) {
+    public ShipmentDisplayDto update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody ShipmentDto shipmentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Shipment shipment = modelMapper.fromDto(shipmentDto, id);
             service.update(user, shipment);
-            return shipment;
+            return ShipmentModelMapper.toShipmentDto(shipment);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {

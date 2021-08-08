@@ -2,6 +2,8 @@ package com.team9.deliverit.services.mappers;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.models.*;
+import com.team9.deliverit.models.dtos.CityDisplayDto;
+import com.team9.deliverit.models.dtos.UserDisplayDto;
 import com.team9.deliverit.models.dtos.UserRegistrationDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import com.team9.deliverit.repositories.contracts.CityRepository;
@@ -27,6 +29,15 @@ public class UserModelMapper {
         this.roleRepository = roleRepository;
         this.cityRepository = cityRepository;
         this.addressRepository = addressRepository;
+    }
+
+    public static UserDisplayDto toUserDto(User user){
+       UserDisplayDto userDisplayDto = new UserDisplayDto();
+       String fullName = user.getFirstName()+" "+user.getLastName();
+       userDisplayDto.setId(user.getId());
+       userDisplayDto.setFullName(fullName);
+
+        return userDisplayDto;
     }
 
     public User fromDto(UserRegistrationDto userDto) {

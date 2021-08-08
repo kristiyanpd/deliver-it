@@ -6,7 +6,6 @@ import com.team9.deliverit.models.dtos.CityDisplayDto;
 import com.team9.deliverit.models.dtos.CityDto;
 import com.team9.deliverit.repositories.contracts.CityRepository;
 import com.team9.deliverit.repositories.contracts.CountryRepository;
-import com.team9.deliverit.services.contracts.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +23,8 @@ public class CityModelMapper {
 
     public static CityDisplayDto toDto(City city) {
         CityDisplayDto cityDisplayDto = new CityDisplayDto();
-        cityDisplayDto.setCityName(city.getName());
-        cityDisplayDto.setCountryName(city.getCountry().getName());
+        cityDisplayDto.setName(city.getName());
+        cityDisplayDto.setCountry(city.getCountry().getName());
 
         return cityDisplayDto;
     }

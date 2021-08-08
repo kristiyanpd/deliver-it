@@ -3,7 +3,9 @@ package com.team9.deliverit.services.mappers;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.dtos.ParcelDto;
+import com.team9.deliverit.models.dtos.UserDisplayDto;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import com.team9.deliverit.repositories.contracts.UserRepository;
@@ -22,6 +24,20 @@ public class ParcelModelMapper {
         this.shipmentRepository = shipmentRepository;
         this.userRepository = userRepository;
         this.parcelRepository = parcelRepository;
+    }
+
+    public static ParcelDisplayDto toParcelDto(Parcel parcel){
+        ParcelDisplayDto parcelDisplayDto = new ParcelDisplayDto();
+        parcelDisplayDto.setId(parcel.getId());
+        parcelDisplayDto.setWeight(parcel.getWeight());
+        parcelDisplayDto.setCategory(parcel.getCategory());
+        parcelDisplayDto.setPickUpOption(parcel.getPickUpOption());
+
+        parcelDisplayDto.setUser(UserModelMapper.toUserDto(parcel.getUser()));
+        parcelDisplayDto.setDestinationAddress(AddressModelMapper.toAddressDto(
+                parcel.getShipment().getDestinationWarehouse().getAddress()));
+
+        return parcelDisplayDto;
     }
 
     public Parcel fromDto(ParcelDto parcelDto) {

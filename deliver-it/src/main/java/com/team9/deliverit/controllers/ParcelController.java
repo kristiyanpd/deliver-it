@@ -3,6 +3,7 @@ package com.team9.deliverit.controllers;
 import com.team9.deliverit.exceptions.*;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.dtos.ParcelDto;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.Status;
@@ -34,7 +35,7 @@ public class ParcelController {
     }
 
     @GetMapping
-    public List<Parcel> getAll(@RequestHeader HttpHeaders headers) {
+    public List<ParcelDisplayDto> getAll(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.getAll(user);
@@ -44,7 +45,7 @@ public class ParcelController {
     }
 
     @GetMapping("/{id}")
-    public Parcel getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    public ParcelDisplayDto getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.getById(id, user);
@@ -100,7 +101,7 @@ public class ParcelController {
     }
 
     @GetMapping("/filter")
-    public List<Parcel> filter(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<Double> weight,
+    public List<ParcelDisplayDto> filter(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<Double> weight,
                                Optional<Integer> warehouseId, Optional<Category> category,
                                Optional<Status> status, Optional<Integer> userId) {
         try {
@@ -115,7 +116,7 @@ public class ParcelController {
 
     //TODO ?sortBy=weight,date,userId // split
     @GetMapping("/sort")
-    public List<Parcel> sort(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<String> weight, Optional<String> date, Optional<Integer> userId) {
+    public List<ParcelDisplayDto> sort(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<String> weight, Optional<String> date, Optional<Integer> userId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.sort(weight, date, userId, user);
@@ -127,7 +128,7 @@ public class ParcelController {
     }
 
     @GetMapping("/get-my-parcels")
-    public List<Parcel> getAllUserParcels(@RequestHeader HttpHeaders headers) {
+    public List<ParcelDisplayDto> getAllUserParcels(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.getAllUserParcels(user);
@@ -151,7 +152,7 @@ public class ParcelController {
     }
 
     @PutMapping("/{id}/update-pick-up-option")
-    public Parcel updatePickUpOption(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestParam String pickUpOption) {
+    public ParcelDisplayDto updatePickUpOption(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestParam String pickUpOption) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.updatePickUpOption(user, id, pickUpOption);

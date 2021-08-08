@@ -3,13 +3,16 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import com.team9.deliverit.services.contracts.ShipmentService;
+import com.team9.deliverit.services.mappers.ShipmentModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
@@ -23,19 +26,20 @@ public class ShipmentServiceImpl implements ShipmentService {
 
 
     @Override
-    public List<Shipment> getAll(User user) {
+    public List<ShipmentDisplayDto> getAll(User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException("Only employees can view all shipments!");
         }
-        return repository.getAll();
+        return repository.getAll()
+                .stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
     }
 
     @Override
-    public Shipment getById(User user, int id) {
+    public ShipmentDisplayDto getById(User user, int id) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException("Only employees can view shipments by ID!");
         }
-        return repository.getById(id);
+        return ShipmentModelMapper.toShipmentDto(repository.getById(id));
     }
 
     @Override
@@ -63,11 +67,12 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public List<Shipment> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId) {
+    public List<ShipmentDisplayDto> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException("Only employees can filter shipments!");
         }
-        return repository.filter(warehouseId, customerId);
+        return repository.filter(warehouseId, customerId)
+                .stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
     }
 
 }
