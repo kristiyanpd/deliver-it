@@ -20,5 +20,4 @@ public interface AddressService {
 
     void delete(User user, int id);
 
-    List<Address> getDuplicates(String name, int cityId);
 }

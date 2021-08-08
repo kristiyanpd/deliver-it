@@ -53,8 +53,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User userExecuting, User user) {
-        if (!userExecuting.isEmployee() && !userExecuting.getEmail().equals(user.getEmail())) {
+    public void update(User userExecuting, User user, int id) {
+        if (!userExecuting.isEmployee() && userExecuting.getId() != id) {
             throw new UnauthorizedOperationException("Users can only modify their own credentials!");
         }
 

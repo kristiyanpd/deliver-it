@@ -1,5 +1,6 @@
 package com.team9.deliverit.repositories;
 
+import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Address;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
@@ -34,11 +35,31 @@ public class AddressRepositoryImpl extends BaseRepositoryImpl<Address> implement
 
     @Override
     public void create(Address address) {
+        boolean duplicateExists = true;
+        try {
+            getDuplicates(address.getStreetName(), address.getCity().getId());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
+        }
+
         super.create(Address.class, address);
     }
 
     @Override
     public void update(Address address) {
+        boolean duplicateExists = true;
+        try {
+            getDuplicates(address.getStreetName(), address.getCity().getId());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
+        }
+
         super.update(Address.class, address);
     }
 
@@ -61,14 +82,14 @@ public class AddressRepositoryImpl extends BaseRepositoryImpl<Address> implement
     }
 
     @Override
-    public List <Address> getDuplicates (String name, int cityId) {
+    public List<Address> getDuplicates(String name, int cityId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Address> query = session.createQuery("from Address where streetName = :name and city.id = :cityId", Address.class);
             query.setParameter("name", name);
             query.setParameter("cityId", cityId);
             List<Address> result = query.list();
             if (result.size() == 0) {
-                throw new EntityNotFoundException("Address","street name",name);
+                throw new EntityNotFoundException("Address", "street name", name);
             }
             return result;
         }

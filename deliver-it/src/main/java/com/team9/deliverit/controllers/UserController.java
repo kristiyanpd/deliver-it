@@ -71,7 +71,7 @@ public class UserController {
         try {
             User userExecuting = authenticationHelper.tryGetUser(headers);
             User user = modelMapper.fromDto(userDto, id);
-            service.update(userExecuting, user);
+            service.update(userExecuting, user, id);
             return user;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

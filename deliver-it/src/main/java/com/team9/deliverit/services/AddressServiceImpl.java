@@ -55,17 +55,6 @@ public class AddressServiceImpl implements AddressService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException("Only employees can create addresses!");
         }
-        boolean duplicateExists = true;
-        try {
-            repository.getDuplicates(address.getStreetName(), address.getCity().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-
-        if (duplicateExists) {
-            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
-        }
-
         repository.create(address);
     }
 
@@ -74,22 +63,7 @@ public class AddressServiceImpl implements AddressService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException("Only employees can modify addresses!");
         }
-        boolean duplicateExists = true;
-        try {
-            repository.getDuplicates(address.getStreetName(), address.getCity().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-
-        if (duplicateExists) {
-            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
-        }
-
         repository.update(address);
-    }
-
-    public List<Address> getDuplicates(String name, int cityId) {
-        return repository.getDuplicates(name, cityId);
     }
 
     @Override
