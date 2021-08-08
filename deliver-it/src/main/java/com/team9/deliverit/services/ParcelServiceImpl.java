@@ -36,7 +36,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public Parcel getById(int id, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view a given parcel!");
+            throw new UnauthorizedOperationException("Only employees can view parcels by ID!");
         }
         return repository.getById(id);
     }
@@ -44,7 +44,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public void create(Parcel parcel, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create a parcel!");
+            throw new UnauthorizedOperationException("Only employees can create parcels!");
         }
         repository.create(parcel);
     }
@@ -52,7 +52,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public void update(Parcel parcel, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can update parcels!");
+            throw new UnauthorizedOperationException("Only employees can modify parcels!");
         }
         repository.update(parcel);
     }

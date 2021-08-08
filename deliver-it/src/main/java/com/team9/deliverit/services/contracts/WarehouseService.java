@@ -6,9 +6,9 @@ import com.team9.deliverit.models.Warehouse;
 import java.util.List;
 
 public interface WarehouseService {
-    List<Warehouse> getAll();
+    List<Warehouse> getAll(User user);
 
-    Warehouse getById(int id);
+    Warehouse getById(User user, int id);
 
     void create(Warehouse warehouse, User user);
 

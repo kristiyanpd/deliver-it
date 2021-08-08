@@ -1,21 +1,22 @@
 package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.Shipment;
+import com.team9.deliverit.models.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ShipmentService {
-    List<Shipment> getAll();
+    List<Shipment> getAll(User user);
 
-    Shipment getById(int id);
+    Shipment getById(User user, int id);
 
-    void create(Shipment shipment);
+    void create(User user, Shipment shipment);
 
-    void update(Shipment shipment);
+    void update(User user, Shipment shipment);
 
-    void delete(int id);
+    void delete(User user, int id);
 
-    List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId);
+    List<Shipment> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId);
 
 }

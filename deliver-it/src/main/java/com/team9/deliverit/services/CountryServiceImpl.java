@@ -2,7 +2,9 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Country;
+import com.team9.deliverit.models.User;
 import com.team9.deliverit.repositories.contracts.CountryRepository;
 import com.team9.deliverit.services.contracts.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,10 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public void create(Country country) {
+    public void create(User user, Country country) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can create countries!");
+        }
         boolean duplicateExists = true;
 
         try {
@@ -53,7 +58,10 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public void update(Country country) {
+    public void update(User user, Country country) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can modify countries!");
+        }
         boolean duplicateExists = true;
 
         try {
@@ -73,7 +81,10 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(User user, int id) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can delete countries!");
+        }
         repository.delete(id);
     }
 }

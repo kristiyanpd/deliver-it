@@ -20,65 +20,77 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
-    private final UserModelMapper userModelMapper;
+    private final UserService service;
+    private final UserModelMapper modelMapper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public UserController(UserService userService, UserModelMapper userModelMapper, AuthenticationHelper authenticationHelper) {
-        this.userService = userService;
-        this.userModelMapper = userModelMapper;
+    public UserController(UserService service, UserModelMapper modelMapper, AuthenticationHelper authenticationHelper) {
+        this.service = service;
+        this.modelMapper = modelMapper;
         this.authenticationHelper = authenticationHelper;
     }
 
     @GetMapping
-    public List<User> getAll() {
-        return userService.getAll();
+    public List<User> getAll(@RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.getAll(user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable int id) {
+    public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            return userService.getById(id);
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.getById(user, id);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @PostMapping
     public User create(@Valid @RequestBody UserRegistrationDto userDto) {
         try {
-            User user = userModelMapper.fromDto(userDto);
-            userService.create(user);
+            User user = modelMapper.fromDto(userDto);
+            service.create(user);
             return user;
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public User update(@PathVariable int id, @Valid @RequestBody UserRegistrationDto userDto) {
+    public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserRegistrationDto userDto) {
         try {
-            User user = userModelMapper.fromDto(userDto, id);
-            userService.update(user);
+            User userExecuting = authenticationHelper.tryGetUser(headers);
+            User user = modelMapper.fromDto(userDto, id);
+            service.update(userExecuting, user);
             return user;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            userService.delete(id);
+            User user = authenticationHelper.tryGetUser(headers);
+            service.delete(user, id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
@@ -86,7 +98,7 @@ public class UserController {
     public User registerEmployee(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return userService.registerEmployee(id, user);
+            return service.registerEmployee(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

@@ -1,6 +1,7 @@
 package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.Country;
+import com.team9.deliverit.models.User;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface CountryService {
 
     Country getByName(String name);
 
-    void create(Country country);
+    void create(User user, Country country);
 
-    void update(Country country);
+    void update(User user, Country country);
 
-    void delete(int id);
+    void delete(User user, int id);
 }

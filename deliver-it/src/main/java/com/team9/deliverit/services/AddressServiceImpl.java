@@ -2,7 +2,9 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Address;
+import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.AddressDisplayDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import com.team9.deliverit.services.contracts.AddressService;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -25,23 +26,35 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<AddressDisplayDto> getAll() {
+    public List<AddressDisplayDto> getAll(User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can get all addresses!");
+        }
         return repository.getAll().stream().map(AddressModelMapper::toAddressDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Address getById(int id) {
+    public Address getById(User user, int id) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can get addresses by ID!");
+        }
         return repository.getById(id);
     }
 
     @Override
-    public Address getByName(String name) {
+    public Address getByName(User user, String name) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can get addresses by name!");
+        }
         return repository.getByName(name);
     }
 
     @Override
-    public void create(Address address) {
+    public void create(User user, Address address) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can create addresses!");
+        }
         boolean duplicateExists = true;
         try {
             repository.getDuplicates(address.getStreetName(), address.getCity().getId());
@@ -57,7 +70,10 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void update(Address address) {
+    public void update(User user, Address address) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can modify addresses!");
+        }
         boolean duplicateExists = true;
         try {
             repository.getDuplicates(address.getStreetName(), address.getCity().getId());
@@ -77,7 +93,10 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(User user, int id) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can delete addresses!");
+        }
         repository.delete(id);
     }
 }

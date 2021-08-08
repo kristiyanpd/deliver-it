@@ -1,24 +1,19 @@
 package com.team9.deliverit.services.contracts;
 
-import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.enums.Category;
-import com.team9.deliverit.models.enums.Status;
 
-import javax.validation.constraints.Email;
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
-    List<User> getAll();
+    List<User> getAll(User user);
 
-    User getById(int id);
+    User getById(User user, int id);
 
     void create(User user);
 
-    void update(User user);
+    void update(User userExecuting, User user);
 
-    void delete(int id);
+    void delete(User userExecuting, int id);
 
     User getByEmail(String email);
 

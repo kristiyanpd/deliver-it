@@ -1,23 +1,24 @@
 package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.Address;
+import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.AddressDisplayDto;
 
 import java.util.List;
 
 public interface AddressService {
 
-    List<AddressDisplayDto> getAll();
+    List<AddressDisplayDto> getAll(User user);
 
-    Address getById(int id);
+    Address getById(User user, int id);
 
-    Address getByName(String name);
+    Address getByName(User user, String name);
 
-    void create(Address address);
+    void create(User user, Address address);
 
-    void update(Address address);
+    void update(User user, Address address);
 
-    void delete(int id);
+    void delete(User user, int id);
 
-    List<Address> getDuplicates(String name,int cityId);
+    List<Address> getDuplicates(String name, int cityId);
 }

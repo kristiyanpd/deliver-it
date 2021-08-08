@@ -42,10 +42,7 @@ public class CityController {
         try {
             return service.getById(id);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -54,10 +51,7 @@ public class CityController {
         try {
             return service.getByName(name);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -93,7 +87,6 @@ public class CityController {
 
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-
         try {
             User user = authenticationHelper.tryGetUser(headers);
             service.delete(id, user);

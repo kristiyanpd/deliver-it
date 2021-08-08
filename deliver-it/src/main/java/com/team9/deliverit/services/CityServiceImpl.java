@@ -40,7 +40,7 @@ public class CityServiceImpl implements CityService {
     @Override
     public void create(City city, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create cities");
+            throw new UnauthorizedOperationException("Only employees can create cities!");
         }
         boolean duplicateExists = true;
 
@@ -59,9 +59,8 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public void update(City city, User user) {
-
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can update cities");
+            throw new UnauthorizedOperationException("Only employees can modify cities!");
         }
         boolean duplicateExists = true;
 
@@ -83,9 +82,8 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public void delete(int id, User user) {
-
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can delete cities");
+            throw new UnauthorizedOperationException("Only employees can delete cities!");
         }
         repository.delete(id);
     }

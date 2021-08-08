@@ -22,13 +22,13 @@ import java.util.Optional;
 @RequestMapping("/api/parcels")
 public class ParcelController {
 
-    private final ParcelService parcelService;
+    private final ParcelService service;
     private final ParcelModelMapper modelMapper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public ParcelController(ParcelService parcelService, ParcelModelMapper modelMapper, AuthenticationHelper authenticationHelper) {
-        this.parcelService = parcelService;
+    public ParcelController(ParcelService service, ParcelModelMapper modelMapper, AuthenticationHelper authenticationHelper) {
+        this.service = service;
         this.modelMapper = modelMapper;
         this.authenticationHelper = authenticationHelper;
     }
@@ -37,7 +37,7 @@ public class ParcelController {
     public List<Parcel> getAll(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return parcelService.getAll(user);
+            return service.getAll(user);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -47,7 +47,7 @@ public class ParcelController {
     public Parcel getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return parcelService.getById(id, user);
+            return service.getById(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -60,7 +60,7 @@ public class ParcelController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Parcel parcel = modelMapper.fromDto(parcelDto);
-            parcelService.create(parcel, user);
+            service.create(parcel, user);
             return parcel;
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
@@ -76,7 +76,7 @@ public class ParcelController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Parcel parcel = modelMapper.fromDto(parcelDto, id);
-            parcelService.update(parcel, user);
+            service.update(parcel, user);
             return parcel;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -91,7 +91,7 @@ public class ParcelController {
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            parcelService.delete(id, user);
+            service.delete(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -105,7 +105,7 @@ public class ParcelController {
                                Optional<Status> status, Optional<Integer> userId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return parcelService.filter(weight, warehouseId, category, status, userId, user);
+            return service.filter(weight, warehouseId, category, status, userId, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -118,7 +118,7 @@ public class ParcelController {
     public List<Parcel> sort(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<String> weight, Optional<String> date, Optional<Integer> userId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return parcelService.sort(weight, date, userId, user);
+            return service.sort(weight, date, userId, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -130,7 +130,7 @@ public class ParcelController {
     public List<Parcel> getAllUserParcels(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return parcelService.getAllUserParcels(user);
+            return service.getAllUserParcels(user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -142,7 +142,7 @@ public class ParcelController {
     public String getStatusOfParcel(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return parcelService.getStatusOfParcel(user, id);
+            return service.getStatusOfParcel(user, id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -154,7 +154,7 @@ public class ParcelController {
     public Parcel updatePickUpOption(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestParam String pickUpOption) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return parcelService.updatePickUpOption(user, id, pickUpOption);
+            return service.updatePickUpOption(user, id, pickUpOption);
         } catch (EntityNotFoundException | IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

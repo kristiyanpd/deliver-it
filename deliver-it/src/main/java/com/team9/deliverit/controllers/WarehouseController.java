@@ -35,19 +35,24 @@ public class WarehouseController {
     }
 
     @GetMapping
-    public List<Warehouse> getAll() {
-        return service.getAll();
+    public List<Warehouse> getAll(@RequestHeader HttpHeaders headers) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.getAll(user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public Warehouse getById(@PathVariable int id) {
+    public Warehouse getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            return service.getById(id);
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.getById(user, id);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage()
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

@@ -23,12 +23,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll(User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can view all users!");
+        }
         return repository.getAll();
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(User user, int id) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can view users by ID!");
+        }
         return repository.getById(id);
     }
 
@@ -47,21 +53,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
+    public void update(User userExecuting, User user) {
+        if (!userExecuting.isEmployee() && !userExecuting.getEmail().equals(user.getEmail())) {
+            throw new UnauthorizedOperationException("Users can only modify their own credentials!");
+        }
+
         boolean duplicateExists = true;
         try {
             repository.getByEmail(user.getEmail());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
-        if (duplicateExists) {
+        if (duplicateExists && !userExecuting.getEmail().equals(user.getEmail())) {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
         repository.update(user);
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(User userExecuting, int id) {
+        if (!userExecuting.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can delete users!");
+        }
         repository.delete(id);
     }
 

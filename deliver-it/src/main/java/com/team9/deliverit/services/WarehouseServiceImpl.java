@@ -23,19 +23,25 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<Warehouse> getAll() {
+    public List<Warehouse> getAll(User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can view all warehouses!");
+        }
         return repository.getAll();
     }
 
     @Override
-    public Warehouse getById(int id) {
+    public Warehouse getById(User user, int id) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can view warehouses by ID!");
+        }
         return repository.getById(id);
     }
 
     @Override
     public void create(Warehouse warehouse, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create a warehouse!");
+            throw new UnauthorizedOperationException("Only employees can create warehouses!");
         }
 
         boolean duplicateExists = true;
@@ -53,7 +59,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public void update(Warehouse warehouse, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can modify a warehouse!");
+            throw new UnauthorizedOperationException("Only employees can modify warehouses!");
         }
 
         boolean duplicateExists = true;
@@ -76,7 +82,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public void delete(int id, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can modify a warehouse!");
+            throw new UnauthorizedOperationException("Only employees can delete warehouses!");
         }
 
         repository.delete(id);
