@@ -2,6 +2,7 @@ package com.team9.deliverit.services.mappers;
 
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Country;
+import com.team9.deliverit.models.dtos.CityDisplayDto;
 import com.team9.deliverit.models.dtos.CityDto;
 import com.team9.deliverit.repositories.contracts.CountryRepository;
 import com.team9.deliverit.services.contracts.CityService;
@@ -18,6 +19,14 @@ public class CityModelMapper {
     public CityModelMapper(CityService cityService, CountryRepository styleRepository) {
         this.cityService = cityService;
         this.countryRepository = styleRepository;
+    }
+
+    public static CityDisplayDto toDto(City city) {
+        CityDisplayDto cityDisplayDto = new CityDisplayDto();
+        cityDisplayDto.setCityName(city.getName());
+        cityDisplayDto.setCountryName(city.getCountry().getName());
+
+        return cityDisplayDto;
     }
 
     public City fromDto(CityDto cityDto) {

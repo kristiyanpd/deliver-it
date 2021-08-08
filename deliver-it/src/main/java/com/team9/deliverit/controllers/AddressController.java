@@ -3,6 +3,7 @@ package com.team9.deliverit.controllers;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Address;
+import com.team9.deliverit.models.dtos.AddressDisplayDto;
 import com.team9.deliverit.models.dtos.AddressDto;
 import com.team9.deliverit.services.contracts.AddressService;
 import com.team9.deliverit.services.mappers.AddressModelMapper;
@@ -28,7 +29,7 @@ public class AddressController {
     }
 
     @GetMapping
-    public List<Address> getAll() {
+    public List<AddressDisplayDto> getAll() {
         return service.getAll();
     }
 

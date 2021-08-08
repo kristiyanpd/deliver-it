@@ -1,11 +1,13 @@
 package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.Address;
+import com.team9.deliverit.models.dtos.AddressDisplayDto;
 
 import java.util.List;
 
 public interface AddressService {
-    List<Address> getAll();
+
+    List<AddressDisplayDto> getAll();
 
     Address getById(int id);
 

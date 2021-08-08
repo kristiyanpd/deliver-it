@@ -3,12 +3,16 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Address;
+import com.team9.deliverit.models.dtos.AddressDisplayDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import com.team9.deliverit.services.contracts.AddressService;
+import com.team9.deliverit.services.mappers.AddressModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -21,8 +25,9 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> getAll() {
-        return repository.getAll();
+    public List<AddressDisplayDto> getAll() {
+        return repository.getAll().stream().map(AddressModelMapper::toAddressDto)
+                .collect(Collectors.toList());
     }
 
     @Override
