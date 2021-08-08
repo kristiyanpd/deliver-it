@@ -4,19 +4,19 @@ import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.models.dtos.WarehouseDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
-import com.team9.deliverit.services.contracts.WarehouseService;
+import com.team9.deliverit.repositories.contracts.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class WarehouseModelMapper {
 
-    private final WarehouseService warehouseService;
+    private final WarehouseRepository warehouseRepository;
     private final AddressRepository addressRepository;
 
     @Autowired
-    public WarehouseModelMapper(WarehouseService warehouseService, AddressRepository addressRepository) {
-        this.warehouseService = warehouseService;
+    public WarehouseModelMapper(WarehouseRepository warehouseRepository, AddressRepository addressRepository) {
+        this.warehouseRepository = warehouseRepository;
         this.addressRepository = addressRepository;
     }
 
@@ -27,7 +27,7 @@ public class WarehouseModelMapper {
     }
 
     public Warehouse fromDto(WarehouseDto cityDto, int id) {
-        Warehouse city = warehouseService.getById(id);
+        Warehouse city = warehouseRepository.getById(id);
         dtoToObject(cityDto, city);
         return city;
     }

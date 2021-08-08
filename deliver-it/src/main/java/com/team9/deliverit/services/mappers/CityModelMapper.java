@@ -4,6 +4,7 @@ import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Country;
 import com.team9.deliverit.models.dtos.CityDisplayDto;
 import com.team9.deliverit.models.dtos.CityDto;
+import com.team9.deliverit.repositories.contracts.CityRepository;
 import com.team9.deliverit.repositories.contracts.CountryRepository;
 import com.team9.deliverit.services.contracts.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class CityModelMapper {
 
-    private final CityService cityService;
+    private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
 
     @Autowired
-    public CityModelMapper(CityService cityService, CountryRepository styleRepository) {
-        this.cityService = cityService;
+    public CityModelMapper(CityRepository cityRepository, CountryRepository styleRepository) {
+        this.cityRepository = cityRepository;
         this.countryRepository = styleRepository;
     }
 
@@ -36,7 +37,7 @@ public class CityModelMapper {
     }
 
     public City fromDto(CityDto cityDto, int id) {
-        City city = cityService.getById(id);
+        City city = cityRepository.getById(id);
         dtoToObject(cityDto, city);
         return city;
     }

@@ -3,6 +3,7 @@ package com.team9.deliverit.services.mappers;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.models.dtos.ShipmentDto;
+import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import com.team9.deliverit.repositories.contracts.WarehouseRepository;
 import com.team9.deliverit.services.contracts.ShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShipmentModelMapper {
 
-    private final ShipmentService shipmentService;
+    private final ShipmentRepository shipmentRepository;
     private final WarehouseRepository warehouseRepository;
 
     @Autowired
-    public ShipmentModelMapper(ShipmentService shipmentService, WarehouseRepository warehouseRepository) {
-        this.shipmentService = shipmentService;
+    public ShipmentModelMapper(ShipmentRepository shipmentRepository, WarehouseRepository warehouseRepository) {
+        this.shipmentRepository = shipmentRepository;
         this.warehouseRepository = warehouseRepository;
     }
 
@@ -27,7 +28,7 @@ public class ShipmentModelMapper {
     }
 
     public Shipment fromDto(ShipmentDto shipmentDto, int id) {
-        Shipment shipment = shipmentService.getById(id);
+        Shipment shipment = shipmentRepository.getById(id);
         dtoToObject(shipmentDto, shipment);
         return shipment;
     }

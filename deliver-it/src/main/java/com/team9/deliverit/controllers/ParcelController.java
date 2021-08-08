@@ -75,7 +75,7 @@ public class ParcelController {
     public Parcel update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody ParcelDto parcelDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Parcel parcel = modelMapper.fromDto(parcelDto, id, user);
+            Parcel parcel = modelMapper.fromDto(parcelDto, id);
             parcelService.update(parcel, user);
             return parcel;
         } catch (EntityNotFoundException e) {
