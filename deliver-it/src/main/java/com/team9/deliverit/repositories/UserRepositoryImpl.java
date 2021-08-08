@@ -131,12 +131,11 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
     @Override
     public List<User> searchEverywhere(String param) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("select u from User u where u.email like concat('%',:param,'%') or u.firstName like :param or u.lastName like :param", User.class);
+            Query<User> query = session.createQuery("from User where email like concat('%',:param,'%') or firstName like :param or lastName like :param", User.class);
             query.setParameter("param", param);
 
             return query.list();
         }
     }
-    //TODO SEARCH AND FILTERS NOT TESTED
 
 }

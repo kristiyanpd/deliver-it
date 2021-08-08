@@ -4,13 +4,17 @@ import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.repositories.contracts.UserRepository;
 import com.team9.deliverit.services.contracts.UserService;
+import com.team9.deliverit.services.mappers.ParcelModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Email;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -89,6 +93,37 @@ public class UserServiceImpl implements UserService {
             throw new UnauthorizedOperationException("Only employees can register new employees!");
         }
         return repository.registerEmployee(id);
+    }
+
+    @Override
+    public int countCustomers() {
+        return repository.countCustomers();
+    }
+
+    @Override
+    public List<User> search(Optional<String> email, Optional<String> firstName, Optional<String> lastName, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException("Only employees can search for users");
+        }
+        return repository.search(email, firstName, lastName);
+    }
+
+    @Override
+    public List<ParcelDisplayDto> incomingParcels(int userId, User user) {
+        if (!user.isEmployee()) {
+            return repository.incomingParcels(user.getId())
+                    .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        }
+        return repository.incomingParcels(userId)
+                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> searchEverywhere(String param, User user) {
+        if (!user.isEmployee()){
+            throw new UnauthorizedOperationException("Only employees can search for users");
+        }
+        return repository.searchEverywhere(param);
     }
 
 }

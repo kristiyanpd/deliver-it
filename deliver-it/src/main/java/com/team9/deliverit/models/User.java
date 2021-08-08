@@ -1,5 +1,7 @@
 package com.team9.deliverit.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -25,6 +27,7 @@ public class User {
     private Address address;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -79,6 +82,7 @@ public class User {
         this.role = role;
     }
 
+    @JsonIgnore
     public boolean isEmployee() {
         return role.getName().equals("Employee");
     }

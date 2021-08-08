@@ -37,6 +37,7 @@ public class UserModelMapper {
        String fullName = user.getFirstName()+" "+user.getLastName();
        userDisplayDto.setId(user.getId());
        userDisplayDto.setFullName(fullName);
+       userDisplayDto.setEmail(user.getEmail());
 
         return userDisplayDto;
     }

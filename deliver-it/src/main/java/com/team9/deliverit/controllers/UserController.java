@@ -4,6 +4,8 @@ import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.ParcelDisplayDto;
+import com.team9.deliverit.models.dtos.UserDisplayDto;
 import com.team9.deliverit.models.dtos.UserRegistrationDto;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.mappers.UserModelMapper;
@@ -15,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -54,11 +57,11 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody UserRegistrationDto userDto) {
+    public UserDisplayDto create(@Valid @RequestBody UserRegistrationDto userDto) {
         try {
             User user = modelMapper.fromDto(userDto);
             service.create(user);
-            return user;
+            return UserModelMapper.toUserDto(user);
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -106,20 +109,42 @@ public class UserController {
         }
     }
 
-/*    @GetMapping("/search")
-    public List<User> search(
-            @RequestParam(required = false) Optional<String> email, Optional<String> firstName, Optional<String> lastName) {
-        return userService.search(email, firstName, lastName);
-    }
-
     @GetMapping("/{id}/incoming-parcels")
-    public List<Parcel> incomingParcels(@PathVariable int id) {
-        return userService.incomingParcels(id);
+    public List<ParcelDisplayDto> incomingParcels(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.incomingParcels(id, user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
-    @GetMapping("search?everywhere")
-    public List<Customer> searchEverywhere(@RequestParam String value){
-        return userService.searchEverywhere(value);
-    }*/
+    @GetMapping("/optional-search")
+    public List<User> search(@RequestHeader HttpHeaders headers,
+                             @RequestParam(required = false) Optional<String> email,
+                             Optional<String> firstName,
+                             Optional<String> lastName) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.search(email, firstName, lastName, user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @GetMapping("/search")
+    public List<User> searchEverywhere(@RequestHeader HttpHeaders headers,@RequestParam String param) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.searchEverywhere(param, user);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @GetMapping("/customers-count")
+    public int countCustomers() {
+        return service.countCustomers();
+    }
 
 }
