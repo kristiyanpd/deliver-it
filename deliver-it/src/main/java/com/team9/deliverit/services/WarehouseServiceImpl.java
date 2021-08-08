@@ -5,12 +5,15 @@ import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
+import com.team9.deliverit.models.dtos.WarehouseDisplayDto;
 import com.team9.deliverit.repositories.contracts.WarehouseRepository;
 import com.team9.deliverit.services.contracts.WarehouseService;
+import com.team9.deliverit.services.mappers.WarehouseModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WarehouseServiceImpl implements WarehouseService {
@@ -23,11 +26,12 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<Warehouse> getAll(User user) {
-        if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view all warehouses!");
-        }
-        return repository.getAll();
+    public List<WarehouseDisplayDto> getAll() {
+        return repository
+                .getAll()
+                .stream()
+                .map(WarehouseModelMapper::toWarehouseDto).
+                collect(Collectors.toList());
     }
 
     @Override

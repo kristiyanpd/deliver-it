@@ -5,6 +5,7 @@ import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
+import com.team9.deliverit.models.dtos.WarehouseDisplayDto;
 import com.team9.deliverit.models.dtos.WarehouseDto;
 import com.team9.deliverit.services.contracts.WarehouseService;
 import com.team9.deliverit.services.mappers.WarehouseModelMapper;
@@ -35,13 +36,8 @@ public class WarehouseController {
     }
 
     @GetMapping
-    public List<Warehouse> getAll(@RequestHeader HttpHeaders headers) {
-        try {
-            User user = authenticationHelper.tryGetUser(headers);
-            return service.getAll(user);
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
+    public List<WarehouseDisplayDto> getAll() {
+            return service.getAll();
     }
 
     @GetMapping("/{id}")
