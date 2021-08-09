@@ -35,31 +35,11 @@ public class AddressRepositoryImpl extends BaseRepositoryImpl<Address> implement
 
     @Override
     public void create(Address address) {
-        boolean duplicateExists = true;
-        try {
-            getDuplicates(address.getStreetName(), address.getCity().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-        if (duplicateExists) {
-            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
-        }
-
         super.create(Address.class, address);
     }
 
     @Override
     public void update(Address address) {
-        boolean duplicateExists = true;
-        try {
-            getDuplicates(address.getStreetName(), address.getCity().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-        if (duplicateExists) {
-            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
-        }
-
         super.update(Address.class, address);
     }
 

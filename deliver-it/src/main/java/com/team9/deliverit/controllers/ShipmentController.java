@@ -23,7 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/shipments")
 public class ShipmentController {
-
+    
     private final ShipmentService service;
     private final ShipmentModelMapper modelMapper;
     private final AuthenticationHelper authenticationHelper;
@@ -63,7 +63,7 @@ public class ShipmentController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.filter(user, warehouseId, userId);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
