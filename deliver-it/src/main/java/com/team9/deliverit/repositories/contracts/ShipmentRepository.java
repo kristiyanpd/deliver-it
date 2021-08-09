@@ -20,6 +20,8 @@ public interface ShipmentRepository {
 
     boolean isFull(int shipmentId);
 
+    boolean isEmpty(int shipmentId);
+
     void delete(int id);
 
     List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> customerId);

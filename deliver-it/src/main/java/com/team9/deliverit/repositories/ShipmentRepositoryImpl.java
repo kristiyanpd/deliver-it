@@ -1,6 +1,7 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import org.hibernate.Session;
@@ -71,6 +72,15 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
                 throw new EntityNotFoundException("Shipment", "id", String.valueOf(shipmentId));
             }
             return query.list().get(0).isFull();
+        }
+    }
+
+    @Override
+    public boolean isEmpty(int shipmentId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Parcel> query = session.createQuery("select s from Parcel s where s.shipment.id = :shipmentId", Parcel.class);
+            query.setParameter("shipmentId", shipmentId);
+            return query.list().size() == 0;
         }
     }
 

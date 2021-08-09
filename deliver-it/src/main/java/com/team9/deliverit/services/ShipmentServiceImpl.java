@@ -52,8 +52,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public void update(User user, Shipment shipment) {
+        Shipment shipmentToEdit = repository.getById(shipment.getId());
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException("Only employees can modify shipments!");
+        }
+        if (repository.isEmpty(shipment.getId()) && shipmentToEdit.getStatus() != shipment.getStatus()) {
+            throw new IllegalArgumentException("You can only modify the status of a shipment that has parcels!");
         }
         repository.update(shipment);
     }
