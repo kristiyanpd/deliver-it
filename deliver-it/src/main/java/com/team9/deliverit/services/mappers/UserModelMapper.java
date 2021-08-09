@@ -1,9 +1,7 @@
 package com.team9.deliverit.services.mappers;
 
-import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.*;
-import com.team9.deliverit.models.dtos.CityDisplayDto;
 import com.team9.deliverit.models.dtos.UserDisplayDto;
 import com.team9.deliverit.models.dtos.UserRegistrationDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
@@ -32,12 +30,12 @@ public class UserModelMapper {
         this.addressRepository = addressRepository;
     }
 
-    public static UserDisplayDto toUserDto(User user){
-       UserDisplayDto userDisplayDto = new UserDisplayDto();
-       String fullName = user.getFirstName()+" "+user.getLastName();
-       userDisplayDto.setId(user.getId());
-       userDisplayDto.setFullName(fullName);
-       userDisplayDto.setEmail(user.getEmail());
+    public static UserDisplayDto toUserDto(User user) {
+        UserDisplayDto userDisplayDto = new UserDisplayDto();
+        String fullName = user.getFirstName() + " " + user.getLastName();
+        userDisplayDto.setId(user.getId());
+        userDisplayDto.setFullName(fullName);
+        userDisplayDto.setEmail(user.getEmail());
 
         return userDisplayDto;
     }
@@ -65,11 +63,11 @@ public class UserModelMapper {
         City city = cityRepository.getById(userRegistrationDto.getCityId());
 
         try {
+            address = addressRepository.getDuplicates(streetName, city.getId()).get(0);
+        } catch (EntityNotFoundException e) {
             address.setStreetName(streetName);
             address.setCity(city);
             addressRepository.create(address);
-        } catch (DuplicateEntityException e) {
-            address = addressRepository.getDuplicates(streetName, city.getId()).get(0);
         }
         user.setAddress(address);
 
