@@ -55,9 +55,6 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void create(User user, Address address) {
-        if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "addresses"));
-        }
         boolean duplicateExists = true;
         try {
             repository.getDuplicates(address.getStreetName(), address.getCity().getId());
