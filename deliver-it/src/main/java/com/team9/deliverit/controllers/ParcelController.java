@@ -65,7 +65,7 @@ public class ParcelController {
             return parcel;
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (EntityNotFoundException | StatusNotFoundException e) {
+        } catch (EntityNotFoundException | StatusNotFoundException | IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

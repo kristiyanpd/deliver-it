@@ -47,6 +47,9 @@ public class ShipmentServiceImpl implements ShipmentService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException("Only employees can create shipments!");
         }
+        if (shipment.getOriginWarehouse().getId() == shipment.getDestinationWarehouse().getId()) {
+            throw new IllegalArgumentException("Shipments can't have same origin and destination warehouse!");
+        }
         repository.create(shipment);
     }
 
@@ -55,6 +58,9 @@ public class ShipmentServiceImpl implements ShipmentService {
         Shipment shipmentToEdit = repository.getById(shipment.getId());
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException("Only employees can modify shipments!");
+        }
+        if (shipment.getOriginWarehouse().getId() == shipment.getDestinationWarehouse().getId()) {
+            throw new IllegalArgumentException("Shipments can't have same origin and destination warehouse!");
         }
         if (repository.isEmpty(shipment.getId()) && shipmentToEdit.getStatus() != shipment.getStatus()) {
             throw new IllegalArgumentException("You can only modify the status of a shipment that has parcels!");

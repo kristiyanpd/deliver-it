@@ -1,5 +1,7 @@
 package com.team9.deliverit.models.enums;
 
+import com.team9.deliverit.exceptions.StatusNotFoundException;
+
 public enum Status {
 
     PREPARING("PREPARING"),
@@ -28,14 +30,14 @@ public enum Status {
             case COMPLETED:
                 return "Completed";
             default:
-                throw new IllegalArgumentException(INVALID_STATUS);
+                throw new StatusNotFoundException(INVALID_STATUS);
         }
     }
 
     public static Status getEnum(String value) {
         for(Status v : values())
             if(v.getValue().equalsIgnoreCase(value)) return v;
-        throw new IllegalArgumentException(INVALID_STATUS);
+        throw new StatusNotFoundException(INVALID_STATUS);
     }
 
 }
