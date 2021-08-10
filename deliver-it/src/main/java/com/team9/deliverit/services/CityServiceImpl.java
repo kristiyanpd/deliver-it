@@ -58,7 +58,7 @@ public class CityServiceImpl implements CityService {
         if (repository.isDuplicate(city.getName(), city.getCountry().getId())) {
             throw new DuplicateEntityException("City", "name", city.getName());
         }
-        repository.create(city);
+        repository.update(city);
     }
 
     @Override

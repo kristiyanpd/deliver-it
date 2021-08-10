@@ -1,7 +1,6 @@
 package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
-import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.models.dtos.WarehouseDisplayDto;
@@ -70,7 +69,7 @@ public class WarehouseServiceImplTests {
         Warehouse warehouse = createMockWarehouse();
 
         Mockito.when(mockRepository.isDuplicate(anyInt()))
-                .thenReturn(warehouse);
+                .thenReturn(true);
 
 
         Assertions.assertThrows(DuplicateEntityException.class,
@@ -83,7 +82,7 @@ public class WarehouseServiceImplTests {
         var mockWarehouse = createMockWarehouse();
 
         Mockito.when(mockRepository.isDuplicate(anyInt()))
-                .thenThrow(new EntityNotFoundException("Warehouse", "address", mockWarehouse.getAddress().getStreetName()));
+                .thenReturn(false);
 
         // Act
         service.create(mockWarehouse, createMockEmployee());
@@ -103,16 +102,12 @@ public class WarehouseServiceImplTests {
     @Test
     public void update_Should_Throw_When_DuplicateExits() {
 
-        Warehouse warehouse = createMockWarehouse();
-        Warehouse warehouse1 = createMockWarehouse();
-        warehouse1.setId(2);
-
         Mockito.when(mockRepository.isDuplicate(anyInt()))
-                .thenReturn(warehouse);
+                .thenReturn(true);
 
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> service.update(warehouse1, createMockEmployee()));
+                () -> service.update(createMockWarehouse(), createMockEmployee()));
     }
 
     @Test
@@ -121,7 +116,7 @@ public class WarehouseServiceImplTests {
         var mockWarehouse = createMockWarehouse();
 
         Mockito.when(mockRepository.isDuplicate(anyInt()))
-                .thenThrow(new EntityNotFoundException("Warehouse", "address", mockWarehouse.getAddress().getStreetName()));
+                .thenReturn(false);
 
         // Act
         service.update(mockWarehouse, createMockEmployee());

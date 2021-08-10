@@ -2,8 +2,8 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
-import com.team9.deliverit.models.Country;
-import com.team9.deliverit.repositories.contracts.CountryRepository;
+import com.team9.deliverit.models.City;
+import com.team9.deliverit.repositories.contracts.CityRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,137 +20,138 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
-public class CountryServiceImplTests {
+public class CityServiceImplTests {
 
     @Mock
-    CountryRepository mockRepository;
+    CityRepository mockRepository;
 
     @InjectMocks
-    CountryServiceImpl service;
+    CityServiceImpl service;
 
     @Test
-    public void getById_Should_ReturnCountry_When_MatchExist() {
+    public void getById_Should_ReturnCity_When_MatchExist() {
         // Arrange
-        Country mockCountry = createMockCountry();
+        City mockCity = createMockCity();
         Mockito.when(mockRepository.getById(anyInt()))
-                .thenReturn(mockCountry);
+                .thenReturn(mockCity);
         // Act
-        Country result = service.getById(1);
+        City result = service.getById(1);
 
         // Assert
         Assertions.assertEquals(1, result.getId());
-        Assertions.assertEquals(mockCountry.getName(), result.getName());
+        Assertions.assertEquals(mockCity.getName(), result.getName());
     }
 
     @Test
     public void getAll_Should_ReturnEmptyList_When_RepositoryEmpty() {
         // Arrange
-        List<Country> list = new ArrayList<>();
+        List<City> list = new ArrayList<>();
 
         Mockito.when(mockRepository.getAll())
                 .thenReturn(list);
         // Act
-        List<Country> result = service.getAll();
+        List<City> result = service.getAll();
 
         // Assert
         Assertions.assertEquals(0, result.size());
     }
 
     @Test
-    public void getByName_Should_ReturnCountry_When_MatchExist() {
+    public void getByName_Should_ReturnCity_When_MatchExist() {
         // Arrange
 
-        Country mockCountry = createMockCountry();
+        List<City> list = new ArrayList<>();
+        City mockCity = createMockCity();
+        list.add(mockCity);
 
         Mockito.when(mockRepository.getByName(anyString()))
-                .thenReturn(mockCountry);
+                .thenReturn(list);
         // Act
-        Country result = service.getByName("Bulgaria");
+        List<City> result = service.getByName("Bulgaria");
 
         // Assert
-        Assertions.assertEquals(1, result.getId());
-        Assertions.assertEquals(mockCountry.getName(), result.getName());
+        Assertions.assertEquals(1, result.get(0).getId());
+        Assertions.assertEquals(mockCity.getName(), result.get(0).getName());
     }
 
     @Test
     public void create_Should_Throw_When_UserNotEmployee() {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.create(createMockCustomer(), createMockCountry()));
+                () -> service.create(createMockCity(), createMockCustomer()));
     }
 
     @Test
     public void create_Should_Throw_When_DuplicateExits() {
 
-
-        Mockito.when(mockRepository.isDuplicate(anyString()))
+        Mockito.when(mockRepository.isDuplicate(anyString(), anyInt()))
                 .thenReturn(true);
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> service.create(createMockEmployee(), createMockCountry()));
+                () -> service.create(createMockCity(), createMockEmployee()));
     }
 
     @Test
-    public void create_Should_Call_Repository_When_CountryIsValid() {
+    public void create_Should_Call_Repository_When_CityIsValid() {
 
-        Country mockCountry = createMockCountry();
+        City mockCity = createMockCity();
 
-        Mockito.when(mockRepository.isDuplicate(anyString()))
+        Mockito.when(mockRepository.isDuplicate(anyString(), anyInt()))
                 .thenReturn(false);
 
         // Act
-        service.create(createMockEmployee(), mockCountry);
+        service.create(mockCity, createMockEmployee());
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
-                .create(Mockito.any(Country.class));
+                .create(Mockito.any(City.class));
     }
 
     @Test
     public void update_Should_Throw_When_UserNotEmployee() {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.update(createMockCustomer(), createMockCountry()));
+                () -> service.update(createMockCity(), createMockCustomer()));
     }
 
     @Test
     public void update_Should_Throw_When_DuplicateExits() {
 
-        Mockito.when(mockRepository.isDuplicate(anyString()))
+        Mockito.when(mockRepository.isDuplicate(anyString(), anyInt()))
                 .thenReturn(true);
 
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                () -> service.update(createMockEmployee(), createMockCountry()));
+                () -> service.update(createMockCity(), createMockEmployee()));
     }
 
     @Test
-    public void update_Should_Call_Repository_When_CountryIsValid() {
+    public void update_Should_Call_Repository_When_CityIsValid() {
 
-        Country mockCountry = createMockCountry();
+        City mockCity = createMockCity();
 
-        Mockito.when(mockRepository.isDuplicate(anyString()))
+        Mockito.when(mockRepository.isDuplicate(anyString(), anyInt()))
                 .thenReturn(false);
 
         // Act
-        service.update(createMockEmployee(), mockCountry);
+        service.update(mockCity, createMockEmployee());
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
-                .update(Mockito.any(Country.class));
+                .update(Mockito.any(City.class));
     }
 
     @Test
     public void delete_Should_Throw_When_UserNotEmployee() {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.delete(createMockCustomer(), 1));
+                () -> service.delete(1, createMockCustomer()));
     }
 
     @Test
     public void delete_Should_Call_Repository_When_UserValid() {
 
-        service.delete(createMockEmployee(), 1);
+        service.delete(1, createMockEmployee());
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
