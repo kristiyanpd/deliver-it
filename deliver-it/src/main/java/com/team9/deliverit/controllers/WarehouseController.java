@@ -57,21 +57,15 @@ public class WarehouseController {
     public Warehouse create(@RequestHeader HttpHeaders headers, @Valid @RequestBody WarehouseDto warehouseDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-
-            //TODO Ask if exception is better to be thrown here
-            if (!user.isEmployee()) {
-                throw new UnauthorizedOperationException("Action can be done only be employee!");
-            }
-
             Warehouse warehouse = modelMapper.fromDto(warehouseDto);
             service.create(warehouse, user);
             return warehouse;
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

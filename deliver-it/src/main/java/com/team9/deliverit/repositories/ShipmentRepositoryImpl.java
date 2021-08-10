@@ -96,19 +96,6 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
     @Override
     public List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> userId) {
         try (Session session = sessionFactory.openSession()) {
-/*            List<Shipment> output = new ArrayList<>();
-            if (warehouseId.isPresent() && customerId.isEmpty()) {
-                Query<Shipment> query = session.createQuery("from Shipment where destinationWarehouse.id = :warehouseId", Shipment.class);
-                query.setParameter("warehouseId", warehouseId.get());
-                output = query.list();
-            }
-            if (customerId.isPresent() && warehouseId.isEmpty()) {
-                Query<Shipment> query = session.createQuery(
-                        "select s from Shipment s left join Parcel p on s.id = p.shipment.id where p.customer.id = :customerId", Shipment.class);
-                query.setParameter("customerId", customerId.get());
-                output = query.list();
-            }
-            return output;*/
 
             var baseQuery = "select distinct s from Shipment s left join Parcel p on s.id = p.shipment.id ";
 
@@ -125,18 +112,13 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
 
             Query<Shipment> query = session.createQuery(baseQuery, Shipment.class);
 
-            if (warehouseId.isPresent() && userId.isEmpty()) {
-                query.setParameter("warehouseId", warehouseId.get());
-            }
-
-            if (userId.isPresent() && warehouseId.isEmpty()) {
-                query.setParameter("userId", userId.get());
-            }
+            warehouseId.ifPresent(integer -> query.setParameter("warehouseId", integer));
+            userId.ifPresent(integer -> query.setParameter("userId", integer));
 
             return query.list();
 
         }
 
     }
-    //TODO VERIFY IF THAT WORKS
+
 }
