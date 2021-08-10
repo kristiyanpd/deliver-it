@@ -49,15 +49,15 @@ public class AddressRepositoryImpl extends BaseRepositoryImpl<Address> implement
     }
 
     @Override
-    public Address getByName(String name) {
+    public List<Address> getByName(String name) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Address> query = session.createQuery("from Address where streetName = :name", Address.class);
-            query.setParameter("name", name);
+            Query<Address> query = session.createQuery("from Address where streetName like :name", Address.class);
+            query.setParameter("name", "%" + name + "%");
             List<Address> result = query.list();
             if (result.size() == 0) {
                 throw new EntityNotFoundException("Address", "street name", name);
             }
-            return result.get(0);
+            return result;
         }
     }
 

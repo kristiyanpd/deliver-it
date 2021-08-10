@@ -45,7 +45,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address getByName(User user, String name) {
+    public List<Address> getByName(User user, String name) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "addresses"));
         }

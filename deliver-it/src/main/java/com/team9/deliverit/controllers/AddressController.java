@@ -57,7 +57,7 @@ public class AddressController {
     }
 
     @GetMapping("/search")
-    public Address getByName(@RequestHeader HttpHeaders headers, @RequestParam String name) {
+    public List<Address> getByName(@RequestHeader HttpHeaders headers, @RequestParam String name) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             return service.getByName(user, name);

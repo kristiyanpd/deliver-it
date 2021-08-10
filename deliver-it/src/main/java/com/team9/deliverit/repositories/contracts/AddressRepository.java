@@ -9,7 +9,7 @@ public interface AddressRepository {
 
     Address getById(int id);
 
-    Address getByName(String name);
+    List<Address> getByName(String name);
 
     void create(Address address);
 

@@ -12,7 +12,7 @@ public interface AddressService {
 
     Address getById(User user, int id);
 
-    Address getByName(User user, String name);
+    List<Address> getByName(User user, String name);
 
     void create(User user, Address address);
 
