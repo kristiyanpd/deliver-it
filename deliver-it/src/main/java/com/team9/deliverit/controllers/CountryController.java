@@ -5,7 +5,9 @@ import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Country;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.CountryDto;
 import com.team9.deliverit.services.contracts.CountryService;
+import com.team9.deliverit.services.mappers.CountryModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,11 +22,13 @@ import java.util.List;
 public class CountryController {
 
     private final CountryService service;
+    private final CountryModelMapper modelMapper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public CountryController(CountryService service, AuthenticationHelper authenticationHelper) {
+    public CountryController(CountryService service, CountryModelMapper modelMapper, AuthenticationHelper authenticationHelper) {
         this.service = service;
+        this.modelMapper = modelMapper;
         this.authenticationHelper = authenticationHelper;
     }
 
@@ -43,7 +47,7 @@ public class CountryController {
     }
 
     @GetMapping("/search")
-    public Country getByName(@RequestParam String name) {
+    public List<Country> getByName(@RequestParam String name) {
         try {
             return service.getByName(name);
         } catch (EntityNotFoundException e) {
@@ -52,9 +56,10 @@ public class CountryController {
     }
 
     @PostMapping
-    public Country create(@RequestHeader HttpHeaders headers, @Valid @RequestBody Country country) {
+    public Country create(@RequestHeader HttpHeaders headers, @Valid @RequestBody CountryDto countryDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
+            Country country = modelMapper.fromDto(countryDto);
             service.create(user, country);
             return country;
         } catch (EntityNotFoundException e) {
@@ -64,11 +69,11 @@ public class CountryController {
         }
     }
 
-    //TODO Fix this
     @PutMapping("/{id}")
-    public Country update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody Country country) {
+    public Country update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody CountryDto countryDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
+            Country country = modelMapper.fromDto(countryDto, id);
             service.update(user, country);
             return country;
         } catch (EntityNotFoundException e) {

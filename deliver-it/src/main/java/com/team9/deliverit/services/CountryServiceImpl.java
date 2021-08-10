@@ -35,7 +35,7 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public Country getByName(String name) {
+    public List<Country> getByName(String name) {
         return repository.getByName(name);
     }
 
@@ -45,9 +45,8 @@ public class CountryServiceImpl implements CountryService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "countries"));
         }
         boolean duplicateExists = true;
-
         try {
-            repository.getByName(country.getName());
+            repository.getDuplicates(country.getName());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
@@ -55,7 +54,6 @@ public class CountryServiceImpl implements CountryService {
         if (duplicateExists) {
             throw new DuplicateEntityException("Country", "name", country.getName());
         }
-
         repository.create(country);
     }
 
@@ -65,20 +63,14 @@ public class CountryServiceImpl implements CountryService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "countries"));
         }
         boolean duplicateExists = true;
-
         try {
-            Country existingCountry = repository.getByName(country.getName());
-            if (existingCountry.getId() == country.getId()) {
-                duplicateExists = false;
-            }
+            repository.getDuplicates(country.getName());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
-
         if (duplicateExists) {
             throw new DuplicateEntityException("Country", "name", country.getName());
         }
-
         repository.update(country);
     }
 
