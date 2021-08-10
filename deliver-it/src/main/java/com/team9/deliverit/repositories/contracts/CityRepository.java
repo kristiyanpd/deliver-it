@@ -9,7 +9,9 @@ public interface CityRepository {
 
     City getById(int id);
 
-    City getByName(String name);
+    List<City> getByName(String name);
+
+    List<City> getDuplicates(String name, int countryId);
 
     void create(City city);
 

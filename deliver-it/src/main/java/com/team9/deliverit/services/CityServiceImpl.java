@@ -35,7 +35,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City getByName(String name) {
+    public List<City> getByName(String name) {
         return repository.getByName(name);
     }
 
@@ -45,17 +45,14 @@ public class CityServiceImpl implements CityService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "cities"));
         }
         boolean duplicateExists = true;
-
         try {
-            repository.getByName(city.getName());
+            repository.getDuplicates(city.getName(), city.getCountry().getId());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
-
         if (duplicateExists) {
             throw new DuplicateEntityException("City", "name", city.getName());
         }
-
         repository.create(city);
     }
 
@@ -65,20 +62,14 @@ public class CityServiceImpl implements CityService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "cities"));
         }
         boolean duplicateExists = true;
-
         try {
-            City existingCity = repository.getByName(city.getName());
-            if (existingCity.getId() == city.getId()) {
-                duplicateExists = false;
-            }
+            repository.getDuplicates(city.getName(), city.getCountry().getId());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
-
         if (duplicateExists) {
             throw new DuplicateEntityException("City", "name", city.getName());
         }
-
         repository.update(city);
     }
 

@@ -48,15 +48,28 @@ public class CityRepositoryImpl extends BaseRepositoryImpl<City> implements City
     }
 
     @Override
-    public City getByName(String name) {
+    public List<City> getByName(String name) {
         try (Session session = sessionFactory.openSession()) {
-            Query<City> query = session.createQuery("from City where name = :name", City.class);
-            query.setParameter("name", name);
+            Query<City> query = session.createQuery("from City where name like :name", City.class);
+            query.setParameter("name", "%" + name + "%");
             List<City> result = query.list();
             if (result.size() == 0) {
                 throw new EntityNotFoundException("City", "name", name);
             }
-            return result.get(0);
+            return result;
+        }
+    }
+
+    public List<City> getDuplicates(String name, int countryId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<City> query = session.createQuery("from City where name = :name and country.id = :countryId", City.class);
+            query.setParameter("name", name);
+            query.setParameter("countryId", countryId);
+            List<City> result = query.list();
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("City", "name", name);
+            }
+            return result;
         }
     }
 

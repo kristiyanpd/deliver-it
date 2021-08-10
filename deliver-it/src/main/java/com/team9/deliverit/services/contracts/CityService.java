@@ -10,7 +10,7 @@ public interface CityService {
 
     City getById(int id);
 
-    City getByName(String name);
+    List<City> getByName(String name);
 
     void create(City city, User user);
 

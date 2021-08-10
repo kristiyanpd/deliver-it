@@ -48,7 +48,7 @@ public class CityController {
     }
 
     @GetMapping("/search")
-    public City getByName(@RequestParam String name) {
+    public List<City> getByName(@RequestParam String name) {
         try {
             return service.getByName(name);
         } catch (EntityNotFoundException e) {
@@ -63,6 +63,8 @@ public class CityController {
             City city = modelMapper.fromDto(cityDto);
             service.create(city, user);
             return city;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
