@@ -40,8 +40,8 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public ParcelDisplayDto getById(int id, User user) {
-        if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "parcels"));
+        if (!user.isEmployee() && repository.getById(id).getUser().getId() != user.getId()) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_NOT_OWNER);
         }
         return ParcelModelMapper.toParcelDto(repository.getById(id));
     }

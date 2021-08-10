@@ -1,5 +1,6 @@
 package com.team9.deliverit.repositories;
 
+import com.team9.deliverit.exceptions.StatusAlreadySameException;
 import com.team9.deliverit.exceptions.StatusCompletedException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
@@ -80,7 +81,7 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
                 throw new StatusCompletedException(parcel.getId());
             }
             if (parcel.getPickUpOption() == pickUpOption) {
-                throw new IllegalArgumentException(String.format("Parcel pick up option is already %s!", pickUpOption.toString().toLowerCase()));
+                throw new StatusAlreadySameException(pickUpOption.toString().toLowerCase());
             }
             session.beginTransaction();
             parcel.setPickUpOption(pickUpOption);
