@@ -49,7 +49,7 @@ public class CountryRepositoryImpl extends BaseRepositoryImpl<Country> implement
     }
 
     @Override
-    public List<Country> getByName(String name) {
+    public List<Country> searchByName(String name) {
         try (Session session = sessionFactory.openSession()) {
             Query<Country> query = session.createQuery("from Country where name like :name", Country.class);
             query.setParameter("name", "%" + name + "%");
@@ -58,6 +58,19 @@ public class CountryRepositoryImpl extends BaseRepositoryImpl<Country> implement
                 throw new EntityNotFoundException("Country", "name", name);
             }
             return result;
+        }
+    }
+
+    @Override
+    public Country getByName(String name) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Country> query = session.createQuery("from Country where name = :name", Country.class);
+            query.setParameter("name", name);
+            List<Country> result = query.list();
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Country", "name", name);
+            }
+            return result.get(0);
         }
     }
 

@@ -35,8 +35,13 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public List<Country> getByName(String name) {
+    public Country getByName(String name) {
         return repository.getByName(name);
+    }
+
+    @Override
+    public List<Country> searchByName(String name) {
+        return repository.searchByName(name);
     }
 
     @Override

@@ -9,7 +9,9 @@ public interface CountryRepository {
 
     Country getById(int id);
 
-    List<Country> getByName(String name);
+    Country getByName(String name);
+
+    List<Country> searchByName(String name);
 
     void create(Country Country);
 

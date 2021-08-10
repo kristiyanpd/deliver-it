@@ -10,7 +10,9 @@ public interface CountryService {
 
     Country getById(int id);
 
-    List<Country> getByName(String name);
+    Country getByName(String name);
+
+    List<Country> searchByName(String name);
 
     void create(User user, Country country);
 

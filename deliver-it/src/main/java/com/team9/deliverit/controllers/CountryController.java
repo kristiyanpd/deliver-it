@@ -47,9 +47,9 @@ public class CountryController {
     }
 
     @GetMapping("/search")
-    public List<Country> getByName(@RequestParam String name) {
+    public List<Country> searchByName(@RequestParam String name) {
         try {
-            return service.getByName(name);
+            return service.searchByName(name);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
