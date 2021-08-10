@@ -1,5 +1,6 @@
 package com.team9.deliverit.controllers;
 
+import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;

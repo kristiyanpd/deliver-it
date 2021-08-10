@@ -1,5 +1,6 @@
 package com.team9.deliverit.controllers;
 
+import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.exceptions.*;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;

@@ -9,7 +9,6 @@ import com.team9.deliverit.models.dtos.AddressDisplayDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import com.team9.deliverit.services.contracts.AddressService;
 import com.team9.deliverit.services.mappers.AddressModelMapper;
-import com.team9.deliverit.services.utils.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

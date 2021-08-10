@@ -1,4 +1,4 @@
-package com.team9.deliverit.controllers;
+package com.team9.deliverit.controllers.utils;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.User;
