@@ -54,13 +54,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void create(User user, Address address) {
-        boolean duplicateExists = true;
-        try {
-            repository.getDuplicates(address.getStreetName(), address.getCity().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-        if (duplicateExists) {
+        if (repository.isDuplicate(address.getStreetName(), address.getCity().getId())) {
             throw new DuplicateEntityException("Address", "street name", address.getStreetName());
         }
         repository.create(address);
@@ -71,13 +65,7 @@ public class AddressServiceImpl implements AddressService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "addresses"));
         }
-        boolean duplicateExists = true;
-        try {
-            repository.getDuplicates(address.getStreetName(), address.getCity().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-        if (duplicateExists) {
+        if (repository.isDuplicate(address.getStreetName(), address.getCity().getId())) {
             throw new DuplicateEntityException("Address", "street name", address.getStreetName());
         }
         repository.update(address);

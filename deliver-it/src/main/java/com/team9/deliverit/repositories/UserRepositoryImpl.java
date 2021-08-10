@@ -1,10 +1,12 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.repositories.contracts.UserRepository;
 import com.team9.deliverit.services.contracts.RoleService;
+import jdk.jfr.Enabled;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -63,7 +65,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
     }
 
     @Override
-    public User getByEmail(@Email String email) {
+    public User getByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("from User where email = :email", User.class);
             query.setParameter("email", email);
@@ -71,6 +73,15 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
                 throw new EntityNotFoundException("User", "email", email);
             }
             return query.list().get(0);
+        }
+    }
+
+    public boolean isDuplicate(String email) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("from User where email = :email", User.class);
+            query.setParameter("email", email);
+            List<User> result = query.list();
+            return result.size() > 0;
         }
     }
 

@@ -46,15 +46,8 @@ public class WarehouseServiceImpl implements WarehouseService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "warehouses"));
         }
-
-        boolean duplicateExists = true;
-        try {
-            repository.getByAddressId(warehouse.getAddress().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-        if (duplicateExists) {
-            throw new DuplicateEntityException("Warehouse", "address_id", String.valueOf(warehouse.getAddress().getId()));
+        if (repository.isDuplicate(warehouse.getAddress().getId())) {
+            throw new DuplicateEntityException("Warehouse", "address ID", String.valueOf(warehouse.getAddress().getId()));
         }
         repository.create(warehouse);
     }
@@ -64,21 +57,9 @@ public class WarehouseServiceImpl implements WarehouseService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "warehouses"));
         }
-
-        boolean duplicateExists = true;
-        try {
-            Warehouse existingWarehouse = repository.getByAddressId(warehouse.getAddress().getId());
-            if (existingWarehouse.getId() == warehouse.getId()) {
-                duplicateExists = false;
-            }
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
+        if (repository.isDuplicate(warehouse.getAddress().getId())) {
+            throw new DuplicateEntityException("Warehouse", "address ID", String.valueOf(warehouse.getAddress().getId()));
         }
-
-        if (duplicateExists) {
-            throw new DuplicateEntityException("Warehouse", "address_id", String.valueOf(warehouse.getId()));
-        }
-
         repository.update(warehouse);
     }
 

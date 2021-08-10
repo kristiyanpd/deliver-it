@@ -73,4 +73,14 @@ public class CityRepositoryImpl extends BaseRepositoryImpl<City> implements City
         }
     }
 
+    public boolean isDuplicate(String name, int countryId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<City> query = session.createQuery("from City where name = :name and country.id = :countryId", City.class);
+            query.setParameter("name", name);
+            query.setParameter("countryId", countryId);
+            List<City> result = query.list();
+            return result.size() > 0;
+        }
+    }
+
 }

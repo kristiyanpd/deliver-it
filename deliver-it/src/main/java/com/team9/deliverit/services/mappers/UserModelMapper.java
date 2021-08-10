@@ -1,7 +1,8 @@
 package com.team9.deliverit.services.mappers;
 
-import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.*;
+import com.team9.deliverit.models.Address;
+import com.team9.deliverit.models.City;
+import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.UserDisplayDto;
 import com.team9.deliverit.models.dtos.UserRegistrationDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
@@ -62,13 +63,14 @@ public class UserModelMapper {
         String streetName = userRegistrationDto.getStreetName();
         City city = cityRepository.getById(userRegistrationDto.getCityId());
 
-        try {
+        if (addressRepository.isDuplicate(streetName, city.getId())) {
             address = addressRepository.getDuplicates(streetName, city.getId()).get(0);
-        } catch (EntityNotFoundException e) {
+        } else {
             address.setStreetName(streetName);
             address.setCity(city);
             addressRepository.create(address);
         }
+
         user.setAddress(address);
 
     }

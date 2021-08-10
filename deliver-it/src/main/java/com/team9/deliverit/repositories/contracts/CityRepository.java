@@ -13,6 +13,8 @@ public interface CityRepository {
 
     List<City> getDuplicates(String name, int countryId);
 
+    boolean isDuplicate(String name, int countryId);
+
     void create(City city);
 
     void update(City city);

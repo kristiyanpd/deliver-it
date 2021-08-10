@@ -44,13 +44,7 @@ public class CityServiceImpl implements CityService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "cities"));
         }
-        boolean duplicateExists = true;
-        try {
-            repository.getDuplicates(city.getName(), city.getCountry().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-        if (duplicateExists) {
+        if (repository.isDuplicate(city.getName(), city.getCountry().getId())) {
             throw new DuplicateEntityException("City", "name", city.getName());
         }
         repository.create(city);
@@ -61,16 +55,10 @@ public class CityServiceImpl implements CityService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "cities"));
         }
-        boolean duplicateExists = true;
-        try {
-            repository.getDuplicates(city.getName(), city.getCountry().getId());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-        if (duplicateExists) {
+        if (repository.isDuplicate(city.getName(), city.getCountry().getId())) {
             throw new DuplicateEntityException("City", "name", city.getName());
         }
-        repository.update(city);
+        repository.create(city);
     }
 
     @Override

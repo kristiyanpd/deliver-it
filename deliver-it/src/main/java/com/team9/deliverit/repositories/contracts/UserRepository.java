@@ -3,6 +3,7 @@ package com.team9.deliverit.repositories.contracts;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,8 @@ public interface UserRepository {
     void delete(int id);
 
     User getByEmail(String email);
+
+    boolean isDuplicate(String email);
 
     int countCustomers();
 

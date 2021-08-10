@@ -49,14 +49,7 @@ public class CountryServiceImpl implements CountryService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "countries"));
         }
-        boolean duplicateExists = true;
-        try {
-            repository.getDuplicates(country.getName());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-
-        if (duplicateExists) {
+        if (repository.isDuplicate(country.getName())) {
             throw new DuplicateEntityException("Country", "name", country.getName());
         }
         repository.create(country);
@@ -67,13 +60,7 @@ public class CountryServiceImpl implements CountryService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "countries"));
         }
-        boolean duplicateExists = true;
-        try {
-            repository.getDuplicates(country.getName());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-        if (duplicateExists) {
+        if (repository.isDuplicate(country.getName())) {
             throw new DuplicateEntityException("Country", "name", country.getName());
         }
         repository.update(country);

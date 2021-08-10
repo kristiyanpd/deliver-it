@@ -15,5 +15,5 @@ public interface WarehouseRepository {
 
     void delete(int id);
 
-    Warehouse getByAddressId(int id);
+    boolean isDuplicate(int addressId);
 }

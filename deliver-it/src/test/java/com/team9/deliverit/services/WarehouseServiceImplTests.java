@@ -69,7 +69,7 @@ public class WarehouseServiceImplTests {
 
         Warehouse warehouse = createMockWarehouse();
 
-        Mockito.when(mockRepository.getByAddressId(anyInt()))
+        Mockito.when(mockRepository.isDuplicate(anyInt()))
                 .thenReturn(warehouse);
 
 
@@ -82,7 +82,7 @@ public class WarehouseServiceImplTests {
 
         var mockWarehouse = createMockWarehouse();
 
-        Mockito.when(mockRepository.getByAddressId(anyInt()))
+        Mockito.when(mockRepository.isDuplicate(anyInt()))
                 .thenThrow(new EntityNotFoundException("Warehouse", "address", mockWarehouse.getAddress().getStreetName()));
 
         // Act
@@ -107,7 +107,7 @@ public class WarehouseServiceImplTests {
         Warehouse warehouse1 = createMockWarehouse();
         warehouse1.setId(2);
 
-        Mockito.when(mockRepository.getByAddressId(anyInt()))
+        Mockito.when(mockRepository.isDuplicate(anyInt()))
                 .thenReturn(warehouse);
 
 
@@ -120,7 +120,7 @@ public class WarehouseServiceImplTests {
 
         var mockWarehouse = createMockWarehouse();
 
-        Mockito.when(mockRepository.getByAddressId(anyInt()))
+        Mockito.when(mockRepository.isDuplicate(anyInt()))
                 .thenThrow(new EntityNotFoundException("Warehouse", "address", mockWarehouse.getAddress().getStreetName()));
 
         // Act

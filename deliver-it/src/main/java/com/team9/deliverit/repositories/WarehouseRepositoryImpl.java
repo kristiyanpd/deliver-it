@@ -47,17 +47,13 @@ public class WarehouseRepositoryImpl extends BaseRepositoryImpl<Warehouse> imple
         super.delete(Warehouse.class, id);
     }
 
-
     @Override
-    public Warehouse getByAddressId(int id) {
+    public boolean isDuplicate(int addressId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Warehouse> query = session.createQuery("from Warehouse where address.id = :id", Warehouse.class);
-            query.setParameter("id", id);
+            query.setParameter("id", addressId);
             List<Warehouse> result = query.list();
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("Warehouse", id);
-            }
-            return result.get(0);
+            return result.size() > 0;
         }
     }
 
