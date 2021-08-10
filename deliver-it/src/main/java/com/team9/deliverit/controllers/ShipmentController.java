@@ -94,7 +94,7 @@ public class ShipmentController {
             Shipment shipment = modelMapper.fromDto(shipmentDto, id);
             service.update(user, shipment);
             return ShipmentModelMapper.toShipmentDto(shipment);
-        } catch (EntityNotFoundException | IllegalArgumentException e) {
+        } catch (EntityNotFoundException | IllegalArgumentException | StatusNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());

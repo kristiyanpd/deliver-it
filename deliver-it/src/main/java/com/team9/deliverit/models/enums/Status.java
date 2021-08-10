@@ -8,7 +8,7 @@ public enum Status {
     ON_THE_WAY("ON_THE_WAY"),
     COMPLETED("COMPLETED");
 
-    public static final String INVALID_STATUS = "Pick up option should be PREPARING, ON_THE_WAY or COMPLETED";
+    public static final String INVALID_STATUS = "Status should be PREPARING, ON_THE_WAY or COMPLETED";
 
     private final String value;
 

@@ -1,8 +1,5 @@
 package com.team9.deliverit.models.dtos;
 
-import com.team9.deliverit.models.enums.Category;
-import com.team9.deliverit.models.enums.PickUpOption;
-
 import javax.validation.constraints.Positive;
 
 public class ParcelDto {
@@ -10,9 +7,9 @@ public class ParcelDto {
     @Positive(message = "Weight should be positive!")
     private double weight;
 
-    private Category category;
+    private String category;
 
-    private PickUpOption pickUpOption;
+    private String pickUpOption;
 
     @Positive(message = "User id should be positive!")
     private int userId;
@@ -32,12 +29,20 @@ public class ParcelDto {
         this.weight = weight;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getPickUpOption() {
+        return pickUpOption;
+    }
+
+    public void setPickUpOption(String pickUpOption) {
+        this.pickUpOption = pickUpOption;
     }
 
     public int getUserId() {
@@ -54,13 +59,5 @@ public class ParcelDto {
 
     public void setShipmentId(int shipmentId) {
         this.shipmentId = shipmentId;
-    }
-
-    public PickUpOption getPickUpOption() {
-        return pickUpOption;
-    }
-
-    public void setPickUpOption(PickUpOption pickUpOption) {
-        this.pickUpOption = pickUpOption;
     }
 }

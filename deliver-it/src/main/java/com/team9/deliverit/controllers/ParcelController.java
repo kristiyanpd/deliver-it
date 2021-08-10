@@ -66,7 +66,7 @@ public class ParcelController {
             return parcel;
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (EntityNotFoundException | StatusNotFoundException | IllegalArgumentException e) {
+        } catch (EntityNotFoundException | StatusNotFoundException | IllegalArgumentException | CategoryNotFoundException | PickUpOptionNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -80,7 +80,7 @@ public class ParcelController {
             Parcel parcel = modelMapper.fromDto(parcelDto, id);
             service.update(parcel, user);
             return parcel;
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | CategoryNotFoundException | PickUpOptionNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());

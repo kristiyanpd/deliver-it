@@ -6,6 +6,8 @@ import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.dtos.ParcelDto;
 import com.team9.deliverit.models.dtos.UserDisplayDto;
+import com.team9.deliverit.models.enums.Category;
+import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import com.team9.deliverit.repositories.contracts.UserRepository;
@@ -57,8 +59,8 @@ public class ParcelModelMapper {
         User user = userRepository.getById(parcelDto.getUserId());
 
         parcel.setWeight(parcelDto.getWeight());
-        parcel.setCategory(parcelDto.getCategory());
-        parcel.setPickUpOption(parcelDto.getPickUpOption());
+        parcel.setCategory(Category.getEnum(parcelDto.getCategory()));
+        parcel.setPickUpOption(PickUpOption.getEnum(parcelDto.getPickUpOption()));
         parcel.setUser(user);
         parcel.setShipment(shipment);
     }

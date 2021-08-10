@@ -1,7 +1,5 @@
 package com.team9.deliverit.models.dtos;
 
-import com.team9.deliverit.models.enums.Status;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.sql.Date;
@@ -12,7 +10,7 @@ public class ShipmentDto {
 
     private Date arrivalDate;
 
-    private Status status;
+    private String status;
 
     @NotNull
     private boolean isFull;
@@ -43,12 +41,12 @@ public class ShipmentDto {
         this.arrivalDate = arrivalDate;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
-        this.status = Status.valueOf(status);
+        this.status = status;
     }
 
     public int getOriginWarehouseId() {

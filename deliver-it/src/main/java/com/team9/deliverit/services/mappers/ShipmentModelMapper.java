@@ -6,6 +6,7 @@ import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 import com.team9.deliverit.models.dtos.ShipmentDto;
+import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import com.team9.deliverit.repositories.contracts.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class ShipmentModelMapper {
         Warehouse destinationWarehouse = warehouseRepository.getById(shipmentDto.getDestinationWarehouseId());
         shipment.setDepartureDate(shipmentDto.getDepartureDate());
         shipment.setArrivalDate(shipmentDto.getArrivalDate());
-        shipment.setStatus(shipmentDto.getStatus());
+        shipment.setStatus(Status.getEnum(shipmentDto.getStatus()));
         shipment.setOriginWarehouse(originWarehouse);
         shipment.setDestinationWarehouse(destinationWarehouse);
         shipment.setFull(shipmentDto.isFull());

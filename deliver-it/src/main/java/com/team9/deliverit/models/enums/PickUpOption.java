@@ -1,5 +1,7 @@
 package com.team9.deliverit.models.enums;
 
+import com.team9.deliverit.exceptions.PickUpOptionNotFoundException;
+
 public enum PickUpOption {
 
     PICK_UP_FROM_WAREHOUSE("PICK_UP_FROM_WAREHOUSE"),
@@ -25,14 +27,14 @@ public enum PickUpOption {
             case DELIVER_TO_ADDRESS:
                 return "Deliver to address";
             default:
-                throw new IllegalArgumentException(INVALID_PICKUP_OPTION);
+                throw new PickUpOptionNotFoundException(INVALID_PICKUP_OPTION);
         }
     }
 
     public static PickUpOption getEnum(String value) {
         for(PickUpOption v : values())
             if(v.getValue().equalsIgnoreCase(value)) return v;
-        throw new IllegalArgumentException(INVALID_PICKUP_OPTION);
+        throw new PickUpOptionNotFoundException(INVALID_PICKUP_OPTION);
     }
 
 }
