@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
+
 @Service
 public class CountryServiceImpl implements CountryService {
 
@@ -40,7 +42,7 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public void create(User user, Country country) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create countries!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "countries"));
         }
         boolean duplicateExists = true;
 
@@ -60,7 +62,7 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public void update(User user, Country country) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can modify countries!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "countries"));
         }
         boolean duplicateExists = true;
 
@@ -83,7 +85,7 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public void delete(User user, int id) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can delete countries!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "countries"));
         }
         repository.delete(id);
     }

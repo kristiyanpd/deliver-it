@@ -2,7 +2,6 @@ package com.team9.deliverit.models.dtos;
 
 public class WarehouseDisplayDto {
 
-
     private int id;
 
     private AddressDisplayDto address;

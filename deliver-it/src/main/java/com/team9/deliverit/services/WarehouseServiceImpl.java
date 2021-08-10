@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
+
 @Service
 public class WarehouseServiceImpl implements WarehouseService {
 
@@ -45,7 +47,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public void create(Warehouse warehouse, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create warehouses!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "warehouses"));
         }
 
         boolean duplicateExists = true;
@@ -63,7 +65,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public void update(Warehouse warehouse, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can modify warehouses!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "warehouses"));
         }
 
         boolean duplicateExists = true;
@@ -86,7 +88,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public void delete(int id, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can delete warehouses!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "warehouses"));
         }
 
         repository.delete(id);

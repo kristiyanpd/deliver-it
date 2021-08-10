@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
+
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
 
@@ -28,7 +30,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public List<ShipmentDisplayDto> getAll(User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view all shipments!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view all", "shipments"));
         }
         return repository.getAll()
                 .stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
@@ -37,7 +39,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public ShipmentDisplayDto getById(User user, int id) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view shipments by ID!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "shipments"));
         }
         return ShipmentModelMapper.toShipmentDto(repository.getById(id));
     }
@@ -45,7 +47,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public void create(User user, Shipment shipment) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create shipments!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "shipments"));
         }
         if (shipment.getOriginWarehouse().getId() == shipment.getDestinationWarehouse().getId()) {
             throw new IllegalArgumentException("Shipments can't have same origin and destination warehouse!");
@@ -57,7 +59,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     public void update(User user, Shipment shipment) {
         Shipment shipmentToEdit = repository.getById(shipment.getId());
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can modify shipments!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "shipments"));
         }
         if (shipment.getOriginWarehouse().getId() == shipment.getDestinationWarehouse().getId()) {
             throw new IllegalArgumentException("Shipments can't have same origin and destination warehouse!");
@@ -71,7 +73,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public void delete(User user, int id) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can delete shipments!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "shipments"));
         }
         repository.delete(id);
     }
@@ -79,7 +81,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public List<ShipmentDisplayDto> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can filter shipments!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "filter", "shipments"));
         }
         return repository.filter(warehouseId, customerId)
                 .stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
@@ -88,7 +90,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public int countShipmentsOnTheWay(User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("You are not authorised for this operation");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "count incoming", "shipments!"));
         }
         return repository.countShipmentsOnTheWay();
     }
@@ -96,7 +98,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public ShipmentDisplayDto nextShipmentToArrive(int warehouseId, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("You are not authorised for this operation");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view the next arriving", "shipment"));
         }
         return ShipmentModelMapper.toShipmentDto(repository.nextShipmentToArrive(warehouseId));
     }

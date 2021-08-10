@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
+
 @Service
 public class ParcelServiceImpl implements ParcelService {
 
@@ -31,7 +33,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public List<ParcelDisplayDto> getAll(User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view all parcels!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view all", "parcels"));
         }
         return repository.getAll().stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
     }
@@ -39,7 +41,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public ParcelDisplayDto getById(int id, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view parcels by ID!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "parcels"));
         }
         return ParcelModelMapper.toParcelDto(repository.getById(id));
     }
@@ -47,7 +49,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public void create(Parcel parcel, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create parcels!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "parcels"));
         }
         repository.create(parcel);
     }
@@ -55,7 +57,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public void update(Parcel parcel, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can modify parcels!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "update", "parcels"));
         }
         repository.update(parcel);
     }
@@ -63,7 +65,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public void delete(int id, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can delete parcels!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "parcels"));
         }
         repository.delete(id);
     }

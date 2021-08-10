@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
+
 @Service
 public class CityServiceImpl implements CityService {
 
@@ -40,7 +42,7 @@ public class CityServiceImpl implements CityService {
     @Override
     public void create(City city, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create cities!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "cities"));
         }
         boolean duplicateExists = true;
 
@@ -60,7 +62,7 @@ public class CityServiceImpl implements CityService {
     @Override
     public void update(City city, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can modify cities!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "cities"));
         }
         boolean duplicateExists = true;
 
@@ -83,7 +85,7 @@ public class CityServiceImpl implements CityService {
     @Override
     public void delete(int id, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can delete cities!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "cities"));
         }
         repository.delete(id);
     }

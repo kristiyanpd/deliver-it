@@ -9,11 +9,14 @@ import com.team9.deliverit.models.dtos.AddressDisplayDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import com.team9.deliverit.services.contracts.AddressService;
 import com.team9.deliverit.services.mappers.AddressModelMapper;
+import com.team9.deliverit.services.utils.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -28,7 +31,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public List<AddressDisplayDto> getAll(User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can get all addresses!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view all", "addresses"));
         }
         return repository.getAll().stream().map(AddressModelMapper::toAddressDto)
                 .collect(Collectors.toList());
@@ -37,7 +40,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address getById(User user, int id) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can get addresses by ID!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "addresses"));
         }
         return repository.getById(id);
     }
@@ -45,7 +48,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address getByName(User user, String name) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can get addresses by name!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "addresses"));
         }
         return repository.getByName(name);
     }
@@ -53,7 +56,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void create(User user, Address address) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can create addresses!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "addresses"));
         }
         boolean duplicateExists = true;
         try {
@@ -70,7 +73,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void update(User user, Address address) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can modify addresses!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "addresses"));
         }
         boolean duplicateExists = true;
         try {
@@ -87,7 +90,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void delete(User user, int id) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can delete addresses!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "addresses"));
         }
         repository.delete(id);
     }

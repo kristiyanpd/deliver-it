@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll(User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view all users!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view all", "users"));
         }
         return repository.getAll();
     }
@@ -37,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(User user, int id) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view users by ID!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "users"));
         }
         return repository.getById(id);
     }
@@ -78,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User userExecuting, int id) {
         if (!userExecuting.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can delete users!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "users"));
         }
         repository.delete(id);
     }
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerEmployee(int id, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can register new employees!");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "register new", "employees"));
         }
         return repository.registerEmployee(id);
     }
@@ -104,7 +106,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> search(Optional<String> email, Optional<String> firstName, Optional<String> lastName, User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can search for users");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "search for", "users"));
         }
         return repository.search(email, firstName, lastName);
     }
@@ -122,7 +124,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> searchEverywhere(String param, User user) {
         if (!user.isEmployee()){
-            throw new UnauthorizedOperationException("Only employees can search for users");
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "search for", "users"));
         }
         return repository.searchEverywhere(param);
     }
