@@ -38,9 +38,6 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public Warehouse getById(User user, int id) {
-        if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException("Only employees can view warehouses by ID!");
-        }
         return repository.getById(id);
     }
 
