@@ -50,7 +50,7 @@ public class WarehouseServiceImplTests {
         Mockito.when(mockRepository.getAll())
                 .thenReturn(list);
         // Act
-        List<WarehouseDisplayDto> result = service.getAll();
+        List<Warehouse> result = service.getAll();
 
         // Assert
         Assertions.assertEquals(0, result.size());

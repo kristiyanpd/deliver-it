@@ -39,7 +39,7 @@ public class ParcelServiceImplTests {
                 .thenReturn(list);
 
         // Act
-        List<ParcelDisplayDto> result = service.getAll(createMockEmployee());
+        List<Parcel> result = service.getAll(createMockEmployee());
 
         // Assert
         Assertions.assertEquals(0, result.size());
@@ -55,7 +55,7 @@ public class ParcelServiceImplTests {
                 .thenReturn(list);
 
         // Act
-        List<ParcelDisplayDto> result = service.getAll(createMockEmployee());
+        List<Parcel> result = service.getAll(createMockEmployee());
 
         // Assert
         Assertions.assertEquals(1, result.size());

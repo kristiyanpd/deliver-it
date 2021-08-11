@@ -2,6 +2,7 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.repositories.contracts.UserRepository;
@@ -98,13 +99,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ParcelDisplayDto> incomingParcels(int userId, User user) {
+    public List<Parcel> incomingParcels(int userId, User user) {
         if (!user.isEmployee()) {
-            return repository.incomingParcels(user.getId())
-                    .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+            return repository.incomingParcels(user.getId());
         }
-        return repository.incomingParcels(userId)
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        return repository.incomingParcels(userId);
     }
 
     @Override

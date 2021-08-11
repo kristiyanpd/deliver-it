@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/warehouses")
@@ -38,7 +39,8 @@ public class WarehouseController {
 
     @GetMapping
     public List<WarehouseDisplayDto> getAll() {
-            return service.getAll();
+            return service.getAll()
+                    .stream().map(WarehouseModelMapper::toWarehouseDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")

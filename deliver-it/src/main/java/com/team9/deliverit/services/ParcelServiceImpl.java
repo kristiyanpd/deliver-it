@@ -31,19 +31,19 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public List<ParcelDisplayDto> getAll(User user) {
+    public List<Parcel> getAll(User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view all", "parcels"));
         }
-        return repository.getAll().stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        return repository.getAll();
     }
 
     @Override
-    public ParcelDisplayDto getById(int id, User user) {
+    public Parcel getById(int id, User user) {
         if (!user.isEmployee() && repository.getById(id).getUser().getId() != user.getId()) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_NOT_OWNER);
         }
-        return ParcelModelMapper.toParcelDto(repository.getById(id));
+        return repository.getById(id);
     }
 
     @Override
@@ -71,30 +71,24 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public List<ParcelDisplayDto> filter(Optional<Double> weight, Optional<Integer> warehouseId, Optional<Category> category, Optional<Status> status, Optional<Integer> userId, User user) {
+    public List<Parcel> filter(Optional<Double> weight, Optional<Integer> warehouseId, Optional<Category> category, Optional<Status> status, Optional<Integer> userId, User user) {
         if (!user.isEmployee()) {
-            return repository
-                    .filter(weight, warehouseId, category, status, Optional.of(user.getId()))
-                    .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+            return repository.filter(weight, warehouseId, category, status, Optional.of(user.getId()));
         }
-        return repository.filter(weight, warehouseId, category, status, userId)
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        return repository.filter(weight, warehouseId, category, status, userId);
     }
 
     @Override
-    public List<ParcelDisplayDto> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId, User user) {
+    public List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId, User user) {
         if (!user.isEmployee()) {
-            return repository.sort(weight, arrivalDate, Optional.of(user.getId()))
-                    .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+            return repository.sort(weight, arrivalDate, Optional.of(user.getId()));
         }
-        return repository.sort(weight, arrivalDate, userId)
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        return repository.sort(weight, arrivalDate, userId);
     }
 
     @Override
-    public List<ParcelDisplayDto> getAllUserParcels(User user) {
-        return repository.getAllUserParcels(user.getId())
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+    public List<Parcel> getAllUserParcels(User user) {
+        return repository.getAllUserParcels(user.getId());
     }
 
     @Override
@@ -106,11 +100,11 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public ParcelDisplayDto updatePickUpOption(User user, int parcelId, String pickUpOption) {
+    public Parcel updatePickUpOption(User user, int parcelId, String pickUpOption) {
         if (repository.getById(parcelId).getUser().getId() != user.getId()) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_NOT_OWNER);
         }
         PickUpOption pick = PickUpOption.getEnum(pickUpOption);
-        return ParcelModelMapper.toParcelDto(repository.updatePickUpOption(parcelId, pick));
+        return repository.updatePickUpOption(parcelId, pick);
     }
 }

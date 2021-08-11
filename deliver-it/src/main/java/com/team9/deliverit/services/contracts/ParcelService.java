@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ParcelService {
-    List<ParcelDisplayDto> getAll(User user);
+    List<Parcel> getAll(User user);
 
-    ParcelDisplayDto getById(int id, User user);
+    Parcel getById(int id, User user);
 
     void create(Parcel parcel, User user);
 
@@ -20,13 +20,13 @@ public interface ParcelService {
 
     void delete(int id, User user);
 
-    List<ParcelDisplayDto> filter(Optional<Double> weight, Optional<Integer> warehouseId, Optional<Category> category, Optional<Status> status, Optional<Integer> userId, User user);
+    List<Parcel> filter(Optional<Double> weight, Optional<Integer> warehouseId, Optional<Category> category, Optional<Status> status, Optional<Integer> userId, User user);
 
-    List<ParcelDisplayDto> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId, User user);
+    List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId, User user);
 
-    List<ParcelDisplayDto> getAllUserParcels(User user);
+    List<Parcel> getAllUserParcels(User user);
 
     String getStatusOfParcel(User user, int parcelId);
 
-    ParcelDisplayDto updatePickUpOption(User user, int parcelId, String pickUpOption);
+    Parcel updatePickUpOption(User user, int parcelId, String pickUpOption);
 }

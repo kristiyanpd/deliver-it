@@ -58,7 +58,7 @@ public class ShipmentServiceImplTests {
         Mockito.when(mockRepository.getAll())
                 .thenReturn(list);
         // Act
-        List<ShipmentDisplayDto> result = service.getAll(createMockEmployee());
+        List<Shipment> result = service.getAll(createMockEmployee());
 
         // Assert
         Assertions.assertEquals(0, result.size());

@@ -28,20 +28,19 @@ public class ShipmentServiceImpl implements ShipmentService {
 
 
     @Override
-    public List<ShipmentDisplayDto> getAll(User user) {
+    public List<Shipment> getAll(User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view all", "shipments"));
         }
-        return repository.getAll()
-                .stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
+        return repository.getAll();
     }
 
     @Override
-    public ShipmentDisplayDto getById(User user, int id) {
+    public Shipment getById(User user, int id) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "shipments"));
         }
-        return ShipmentModelMapper.toShipmentDto(repository.getById(id));
+        return repository.getById(id);
     }
 
     @Override
@@ -79,12 +78,11 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public List<ShipmentDisplayDto> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId) {
+    public List<Shipment> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "filter", "shipments"));
         }
-        return repository.filter(warehouseId, customerId)
-                .stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
+        return repository.filter(warehouseId, customerId);
     }
 
     @Override
@@ -96,11 +94,11 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public ShipmentDisplayDto nextShipmentToArrive(int warehouseId, User user) {
+    public Shipment nextShipmentToArrive(int warehouseId, User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view the next arriving", "shipment"));
         }
-        return ShipmentModelMapper.toShipmentDto(repository.nextShipmentToArrive(warehouseId));
+        return repository.nextShipmentToArrive(warehouseId);
     }
 
 }

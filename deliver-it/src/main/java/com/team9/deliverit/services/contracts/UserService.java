@@ -1,5 +1,6 @@
 package com.team9.deliverit.services.contracts;
 
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 
@@ -25,7 +26,7 @@ public interface UserService {
 
     List<User> search(Optional<String> email, Optional<String> firstName, Optional<String> lastName, User user);
 
-    List<ParcelDisplayDto> incomingParcels(int userId, User user);
+    List<Parcel> incomingParcels(int userId, User user);
 
     List<User> searchEverywhere(String param, User user);
 }

@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/shipments")
@@ -40,7 +41,7 @@ public class ShipmentController {
     public List<ShipmentDisplayDto> getAll(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.getAll(user);
+            return service.getAll(user).stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -50,7 +51,7 @@ public class ShipmentController {
     public ShipmentDisplayDto getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.getById(user, id);
+            return ShipmentModelMapper.toShipmentDto(service.getById(user, id));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -63,7 +64,8 @@ public class ShipmentController {
                                            Optional<Integer> userId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.filter(user, warehouseId, userId);
+            return service.filter(user, warehouseId, userId)
+                    .stream().map(ShipmentModelMapper::toShipmentDto).collect(Collectors.toList());
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -115,7 +117,7 @@ public class ShipmentController {
         }
     }
 
-    @GetMapping("/on-the-way")
+    @GetMapping("/incoming/count")
     public int countShipmentsOnTheWay(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -125,11 +127,11 @@ public class ShipmentController {
         }
     }
 
-    @GetMapping("/for-warehouse")
+    @GetMapping("/incoming/next")
     public ShipmentDisplayDto nextShipmentToArrive(@RequestHeader HttpHeaders headers, @RequestParam int warehouseId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.nextShipmentToArrive(warehouseId, user);
+            return ShipmentModelMapper.toShipmentDto(service.nextShipmentToArrive(warehouseId, user));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 

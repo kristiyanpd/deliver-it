@@ -7,7 +7,7 @@ import com.team9.deliverit.models.dtos.WarehouseDisplayDto;
 import java.util.List;
 
 public interface WarehouseService {
-    List<WarehouseDisplayDto> getAll();
+    List<Warehouse> getAll();
 
     Warehouse getById(User user, int id);
 

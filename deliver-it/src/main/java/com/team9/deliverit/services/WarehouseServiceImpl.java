@@ -27,12 +27,8 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<WarehouseDisplayDto> getAll() {
-        return repository
-                .getAll()
-                .stream()
-                .map(WarehouseModelMapper::toWarehouseDto).
-                collect(Collectors.toList());
+    public List<Warehouse> getAll() {
+        return repository.getAll();
     }
 
     @Override

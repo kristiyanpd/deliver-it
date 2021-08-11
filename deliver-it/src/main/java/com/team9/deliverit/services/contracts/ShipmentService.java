@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShipmentService {
-    List<ShipmentDisplayDto> getAll(User user);
+    List<Shipment> getAll(User user);
 
-    ShipmentDisplayDto getById(User user, int id);
+    Shipment getById(User user, int id);
 
     void create(User user, Shipment shipment);
 
@@ -18,10 +18,10 @@ public interface ShipmentService {
 
     void delete(User user, int id);
 
-    List<ShipmentDisplayDto> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId);
+    List<Shipment> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId);
 
     int countShipmentsOnTheWay(User user);
 
-    ShipmentDisplayDto nextShipmentToArrive(int warehouseId, User user);
+    Shipment nextShipmentToArrive(int warehouseId, User user);
 
 }

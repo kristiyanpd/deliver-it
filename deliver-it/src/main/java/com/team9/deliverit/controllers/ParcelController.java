@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/parcels")
@@ -39,7 +40,7 @@ public class ParcelController {
     public List<ParcelDisplayDto> getAll(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.getAll(user);
+            return service.getAll(user).stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
@@ -49,7 +50,7 @@ public class ParcelController {
     public ParcelDisplayDto getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.getById(id, user);
+            return ParcelModelMapper.toParcelDto(service.getById(id, user));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -107,7 +108,8 @@ public class ParcelController {
                                Optional<Status> status, Optional<Integer> userId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.filter(weight, warehouseId, category, status, userId, user);
+            return service.filter(weight, warehouseId, category, status, userId, user)
+                    .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -115,12 +117,12 @@ public class ParcelController {
         }
     }
 
-    //TODO ?sortBy=weight,date,userId // split
     @GetMapping("/sort")
     public List<ParcelDisplayDto> sort(@RequestHeader HttpHeaders headers, @RequestParam(required = false) Optional<String> weight, Optional<String> date, Optional<Integer> userId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.sort(weight, date, userId, user);
+            return service.sort(weight, date, userId, user).
+                    stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -128,11 +130,12 @@ public class ParcelController {
         }
     }
 
-    @GetMapping("/get-my-parcels")
+    @GetMapping("/mine")
     public List<ParcelDisplayDto> getAllUserParcels(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.getAllUserParcels(user);
+            return service.getAllUserParcels(user)
+                    .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -152,11 +155,11 @@ public class ParcelController {
         }
     }
 
-    @PutMapping("/{id}/update-pick-up-option")
+    @PutMapping("/{id}/pick-up-option")
     public ParcelDisplayDto updatePickUpOption(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestParam String pickUpOption) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return service.updatePickUpOption(user, id, pickUpOption);
+            return ParcelModelMapper.toParcelDto(service.updatePickUpOption(user, id, pickUpOption));
         } catch (EntityNotFoundException | IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
