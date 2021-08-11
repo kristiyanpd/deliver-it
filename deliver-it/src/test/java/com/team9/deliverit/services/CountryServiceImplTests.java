@@ -73,6 +73,26 @@ public class CountryServiceImplTests {
     }
 
     @Test
+    public void SearchByName_Should_ReturnListOfCountry_When_MatchExist() {
+
+        List<Country> mockList = new ArrayList<>();
+        var mockCountry = createMockCountry();
+
+        mockList.add(mockCountry);
+
+        Mockito.when(mockRepository.searchByName(anyString()))
+                .thenReturn(mockList);
+
+        List<Country> result = service.searchByName("Bulgaria");
+
+        // Assert
+        Assertions.assertEquals(1, result.get(0).getId());
+        Assertions.assertEquals(mockCountry.getName(), result.get(0).getName());
+
+
+    }
+
+    @Test
     public void create_Should_Throw_When_UserNotEmployee() {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
