@@ -1,7 +1,6 @@
 package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
-import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ParcelDisplayDto;
@@ -45,6 +44,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByEmail(@Email String email) {
+        return repository.getByEmail(email);
+    }
+
+    @Override
     public void create(User user) {
         if (repository.isDuplicate(user.getEmail())) {
             throw new DuplicateEntityException("User", "email", user.getEmail());
@@ -70,11 +74,6 @@ public class UserServiceImpl implements UserService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "users"));
         }
         repository.delete(id);
-    }
-
-    @Override
-    public User getByEmail(@Email String email) {
-        return repository.getByEmail(email);
     }
 
     @Override
@@ -110,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> searchEverywhere(String param, User user) {
-        if (!user.isEmployee()){
+        if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "search for", "users"));
         }
         return repository.searchEverywhere(param);
