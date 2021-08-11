@@ -255,21 +255,23 @@ public class ParcelServiceImplTests {
                 () -> service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS"));
     }
 
-    //TODO
-//    @Test
-//    public void updatePickUpOption_Should_ReturnStatus_When_UserIsOwner() {
-//        var mockParcel = createMockParcel();
-//        var mockUser = createMockCustomer();
-//        mockParcel.setUser(mockUser);
-//
-//        Mockito.when(mockRepository.updatePickUpOption(anyInt(), PickUpOption.DELIVER_TO_ADDRESS))
-//                .thenReturn(mockParcel);
-//
-//        service.updatePickUpOption(mockUser, mockParcel.getId(), eq("DELIVER_TO_ADDRESS"));
-//
-//        // Assert
-//        Mockito.verify(mockRepository, Mockito.times(1))
-//                .updatePickUpOption(1, PickUpOption.DELIVER_TO_ADDRESS);
-//    }
+    @Test
+    public void updatePickUpOption_Should_ReturnPickUpOption_When_UserIsOwner() {
+        var mockParcel = createMockParcel();
+        var mockUser = createMockCustomer();
+        mockParcel.setUser(mockUser);
+
+        Mockito.when(mockRepository.getById(anyInt()))
+                        .thenReturn(mockParcel);
+
+        Mockito.when(mockRepository.updatePickUpOption(mockParcel.getId(), PickUpOption.DELIVER_TO_ADDRESS))
+                .thenReturn(mockParcel);
+
+        service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS");
+
+        // Assert
+        Mockito.verify(mockRepository, Mockito.times(1))
+                .updatePickUpOption(1, PickUpOption.DELIVER_TO_ADDRESS);
+    }
 
 }
