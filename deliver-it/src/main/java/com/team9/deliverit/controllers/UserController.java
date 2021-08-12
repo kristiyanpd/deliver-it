@@ -103,7 +103,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}/registerEmployee")
+    @PutMapping("/{id}/employee/register")
     public User registerEmployee(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
