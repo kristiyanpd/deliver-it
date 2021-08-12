@@ -8,20 +8,23 @@ import javax.validation.constraints.Size;
 public class UserRegistrationDto {
 
     @NotBlank(message = "First name can't be blank!")
-    @Size(min = 2, max = 50, message = "Street name length should be between 2 and 50 symbols!")
+    @Size(min = 2, max = 50, message = "Street name length must be between 2 and 50 symbols!")
     private String firstName;
 
     @NotBlank(message = "Last name can't be blank!")
-    @Size(min = 2, max = 50, message = "Last name length should be between 2 and 50 symbols!")
+    @Size(min = 2, max = 50, message = "Last name length must be between 2 and 50 symbols!")
     private String lastName;
 
     @Email
+    @NotBlank(message = "Email can't be blank!")
+    @Size(min = 2, max = 100, message = "Email length must be between 2 and 100 symbols!")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Street name can't be blank!")
+    @Size(min = 2, max = 100, message = "Street name length must be between 2 and 100 symbols!")
     private String streetName;
 
-    @Positive(message = "City id must be positive")
+    @Positive(message = "City ID must be positive")
     private int cityId;
 
     public UserRegistrationDto() {

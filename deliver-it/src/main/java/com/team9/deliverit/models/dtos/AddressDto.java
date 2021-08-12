@@ -7,10 +7,10 @@ import javax.validation.constraints.Size;
 public class AddressDto {
 
     @NotBlank(message = "Street name can't be blank!")
-    @Size(min = 2, max = 50, message = "Street name length should be between 2 and 50 symbols!")
+    @Size(min = 2, max = 100, message = "Street name length must be between 2 and 100 symbols!")
     private String streetName;
 
-    @Positive(message = "City ID should be positive!")
+    @Positive(message = "City ID must be positive!")
     private int cityId;
 
     public AddressDto() {

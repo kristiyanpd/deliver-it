@@ -4,7 +4,7 @@ import javax.validation.constraints.Positive;
 
 public class WarehouseDto {
 
-    @Positive(message = "Address ID should be positive!")
+    @Positive(message = "Address ID must be positive!")
     private int addressId;
 
     public WarehouseDto() {

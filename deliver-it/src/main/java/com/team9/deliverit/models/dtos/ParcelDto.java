@@ -1,20 +1,25 @@
 package com.team9.deliverit.models.dtos;
 
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 public class ParcelDto {
 
-    @Positive(message = "Weight should be positive!")
+    @Positive(message = "Weight must be positive!")
     private double weight;
 
+    @NotBlank(message = "Category can't be blank!")
     private String category;
 
+    @NotBlank(message = "Pick up option can't be blank!")
     private String pickUpOption;
 
-    @Positive(message = "User id should be positive!")
+    @Positive(message = "User ID must be positive!")
     private int userId;
 
-    @Positive(message = "Shipment id should be positive!")
+    @Positive(message = "Shipment ID must be positive!")
     private int shipmentId;
 
     public ParcelDto() {

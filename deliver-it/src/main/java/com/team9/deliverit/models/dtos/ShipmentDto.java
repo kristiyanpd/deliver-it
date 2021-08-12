@@ -15,10 +15,10 @@ public class ShipmentDto {
     @NotNull
     private boolean isFull;
 
-    @Positive(message = "Origin Warehouse ID should be positive!")
+    @Positive(message = "Origin Warehouse ID must be positive!")
     private int originWarehouseId;
 
-    @Positive(message = "Destination Warehouse ID should be positive!")
+    @Positive(message = "Destination Warehouse ID must be positive!")
     private int destinationWarehouseId;
 
     public ShipmentDto() {

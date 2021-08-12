@@ -13,8 +13,6 @@ public class Country {
     @Column(name = "country_id")
     private int id;
 
-    @NotBlank(message = "Country name can't be blank!")
-    @Size(min = 2, max = 50, message = "Country name length should be between 2 and 50 symbols!")
     @Column(name = "country_name")
     private String name;
 
