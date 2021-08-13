@@ -64,6 +64,16 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
         }
     }
 
+    @Override
+    public List<Parcel> incomingParcels(int userId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Parcel> query = session.createQuery(
+                    "select p from Parcel p join Shipment s on p.shipment.id = s.id where p.user.id = :userId and s.status != 'COMPLETED'", Parcel.class);
+            query.setParameter("userId", userId);
+            return query.list();
+        }
+    }
+
     public String getStatusOfParcel(int parcelId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Shipment> query = session.createQuery(

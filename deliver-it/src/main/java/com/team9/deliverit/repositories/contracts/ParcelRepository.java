@@ -21,6 +21,8 @@ public interface ParcelRepository {
 
     List<Parcel> getAllUserParcels(int userId);
 
+    List<Parcel> incomingParcels(int userId);
+
     Parcel updatePickUpOption(int parcelId, PickUpOption pickUpOption);
 
     String getStatusOfParcel(int parcelId);

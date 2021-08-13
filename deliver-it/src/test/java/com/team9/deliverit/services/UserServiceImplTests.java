@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.team9.deliverit.Helpers.*;
+import static com.team9.deliverit.Helpers.createMockCustomer;
+import static com.team9.deliverit.Helpers.createMockEmployee;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -220,30 +221,6 @@ public class UserServiceImplTests {
 
         Mockito.verify(mockRepository, Mockito.times(1))
                 .search(Optional.empty(), Optional.empty(), Optional.empty());
-    }
-
-    @Test
-    public void IncomingParcels_Should_Call_Repository_When_CustomersCalls() {
-
-        var mockCustomer = createMockCustomer();
-
-        service.incomingParcels(mockCustomer.getId(), mockCustomer);
-
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .incomingParcels(mockCustomer.getId());
-
-    }
-
-    @Test
-    public void IncomingParcels_Should_Call_Repository_When_EmployeeCalls() {
-
-        var mockEmployee = createMockEmployee();
-
-        service.incomingParcels(mockEmployee.getId(), mockEmployee);
-
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .incomingParcels(mockEmployee.getId());
-
     }
 
     @Test

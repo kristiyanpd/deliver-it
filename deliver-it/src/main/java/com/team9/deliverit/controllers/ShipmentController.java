@@ -134,7 +134,6 @@ public class ShipmentController {
             return ShipmentModelMapper.toShipmentDto(service.nextShipmentToArrive(warehouseId, user));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }

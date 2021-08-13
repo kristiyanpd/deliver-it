@@ -1,19 +1,15 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.City;
-import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.repositories.contracts.UserRepository;
 import com.team9.deliverit.services.contracts.RoleService;
-import jdk.jfr.Enabled;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -127,17 +123,6 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
             return query.list();
         }
     }
-
-    @Override
-    public List<Parcel> incomingParcels(int userId) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Parcel> query = session.createQuery(
-                    "select p from Parcel p join Shipment s on p.shipment.id = s.id where p.user.id = :userId and s.status != 'COMPLETED'", Parcel.class);
-            query.setParameter("userId", userId);
-            return query.list();
-        }
-    }
-
 
     @Override
     public List<User> searchEverywhere(String param) {

@@ -2,8 +2,6 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Parcel;
-import com.team9.deliverit.models.Shipment;
-import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.team9.deliverit.Helpers.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
 @ExtendWith(MockitoExtension.class)
 public class ParcelServiceImplTests {
@@ -272,6 +270,18 @@ public class ParcelServiceImplTests {
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
                 .updatePickUpOption(1, PickUpOption.DELIVER_TO_ADDRESS);
+    }
+
+    @Test
+    public void IncomingParcels_Should_Call_Repository_When_UserCalls() {
+
+        var mockCustomer = createMockCustomer();
+
+        service.incomingParcels(mockCustomer);
+
+        Mockito.verify(mockRepository, Mockito.times(1))
+                .incomingParcels(mockCustomer.getId());
+
     }
 
 }

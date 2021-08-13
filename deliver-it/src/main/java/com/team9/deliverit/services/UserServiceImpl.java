@@ -2,19 +2,15 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
-import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.repositories.contracts.UserRepository;
 import com.team9.deliverit.services.contracts.UserService;
-import com.team9.deliverit.services.mappers.ParcelModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
 
@@ -96,14 +92,6 @@ public class UserServiceImpl implements UserService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "search for", "users"));
         }
         return repository.search(email, firstName, lastName);
-    }
-
-    @Override
-    public List<Parcel> incomingParcels(int userId, User user) {
-        if (!user.isEmployee()) {
-            return repository.incomingParcels(user.getId());
-        }
-        return repository.incomingParcels(userId);
     }
 
     @Override

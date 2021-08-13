@@ -3,19 +3,16 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import com.team9.deliverit.services.contracts.ParcelService;
-import com.team9.deliverit.services.mappers.ParcelModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
 
@@ -89,6 +86,11 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public List<Parcel> getAllUserParcels(User user) {
         return repository.getAllUserParcels(user.getId());
+    }
+
+    @Override
+    public List<Parcel> incomingParcels(User user) {
+        return repository.incomingParcels(user.getId());
     }
 
     @Override

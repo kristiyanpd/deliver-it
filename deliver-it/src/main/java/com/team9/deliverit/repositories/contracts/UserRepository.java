@@ -1,9 +1,7 @@
 package com.team9.deliverit.repositories.contracts;
 
-import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 
-import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +23,6 @@ public interface UserRepository {
     int countCustomers();
 
     User registerEmployee(int id);
-
-    List<Parcel> incomingParcels(int userId);
 
     List<User> searchEverywhere(String param);
 

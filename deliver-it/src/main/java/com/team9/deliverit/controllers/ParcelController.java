@@ -143,6 +143,17 @@ public class ParcelController {
         }
     }
 
+    @GetMapping("/mine/incoming")
+    public List<ParcelDisplayDto> incomingParcels(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return service.incomingParcels(user)
+                    .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
     @GetMapping("/{id}/status")
     public String getStatusOfParcel(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {

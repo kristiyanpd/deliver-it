@@ -2,7 +2,6 @@ package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.Status;
 
@@ -25,6 +24,8 @@ public interface ParcelService {
     List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId, User user);
 
     List<Parcel> getAllUserParcels(User user);
+
+    List<Parcel> incomingParcels(User user);
 
     String getStatusOfParcel(User user, int parcelId);
 
