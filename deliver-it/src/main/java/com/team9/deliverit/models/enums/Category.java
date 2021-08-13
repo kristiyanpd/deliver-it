@@ -1,6 +1,6 @@
 package com.team9.deliverit.models.enums;
 
-import com.team9.deliverit.exceptions.CategoryNotFoundException;
+import com.team9.deliverit.exceptions.EnumNotFoundException;
 
 public enum Category {
 
@@ -30,14 +30,14 @@ public enum Category {
             case ELECTRONICS:
                 return "Electronics";
             default:
-                throw new CategoryNotFoundException(INVALID_CATEGORY);
+                throw new EnumNotFoundException(INVALID_CATEGORY);
         }
     }
 
     public static Category getEnum(String value) {
-        for(Category v : values())
-            if(v.getValue().equalsIgnoreCase(value)) return v;
-        throw new CategoryNotFoundException(INVALID_CATEGORY);
+        for (Category v : values())
+            if (v.getValue().equalsIgnoreCase(value)) return v;
+        throw new EnumNotFoundException(INVALID_CATEGORY);
     }
 
 }

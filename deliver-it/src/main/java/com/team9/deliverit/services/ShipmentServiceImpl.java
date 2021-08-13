@@ -3,21 +3,20 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import com.team9.deliverit.services.contracts.ShipmentService;
-import com.team9.deliverit.services.mappers.ShipmentModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_ACTION;
 
 @Service
 public class ShipmentServiceImpl implements ShipmentService {
+
+    private static final String SHIPMENT_INVALID_WAREHOUSE = "Shipments can't have same origin and destination warehouse!";
 
     private final ShipmentRepository repository;
 
@@ -49,7 +48,7 @@ public class ShipmentServiceImpl implements ShipmentService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "shipments"));
         }
         if (shipment.getOriginWarehouse().getId() == shipment.getDestinationWarehouse().getId()) {
-            throw new IllegalArgumentException("Shipments can't have same origin and destination warehouse!");
+            throw new IllegalArgumentException(SHIPMENT_INVALID_WAREHOUSE);
         }
         repository.create(shipment);
     }
@@ -61,7 +60,7 @@ public class ShipmentServiceImpl implements ShipmentService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "shipments"));
         }
         if (shipment.getOriginWarehouse().getId() == shipment.getDestinationWarehouse().getId()) {
-            throw new IllegalArgumentException("Shipments can't have same origin and destination warehouse!");
+            throw new IllegalArgumentException(SHIPMENT_INVALID_WAREHOUSE);
         }
         if (repository.isEmpty(shipment.getId()) && shipmentToEdit.getStatus() != shipment.getStatus()) {
             throw new IllegalArgumentException("You can only modify the status of a shipment that has parcels!");

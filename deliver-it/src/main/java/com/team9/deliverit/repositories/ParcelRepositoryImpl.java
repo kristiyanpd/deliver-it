@@ -1,7 +1,6 @@
 package com.team9.deliverit.repositories;
 
-import com.team9.deliverit.exceptions.StatusAlreadySameException;
-import com.team9.deliverit.exceptions.StatusCompletedException;
+import com.team9.deliverit.exceptions.EnumAlreadySameException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.enums.Category;
@@ -88,10 +87,10 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
         try (Session session = sessionFactory.openSession()) {
             Parcel parcel = getById(parcelId);
             if (parcel.getShipment().getStatus() == Status.COMPLETED) {
-                throw new StatusCompletedException(parcel.getId());
+                throw new EnumAlreadySameException(String.format("Parcel with ID %s is already %s!", parcel.getId(), parcel.getShipment().getStatus().toString()));
             }
             if (parcel.getPickUpOption() == pickUpOption) {
-                throw new StatusAlreadySameException(pickUpOption.toString().toLowerCase());
+                throw new EnumAlreadySameException(String.format("Parcel pick up option is already %s!", pickUpOption.toString().toLowerCase()));
             }
             session.beginTransaction();
             parcel.setPickUpOption(pickUpOption);

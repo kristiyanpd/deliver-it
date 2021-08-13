@@ -3,7 +3,7 @@ package com.team9.deliverit.exceptions;
 public class EntityNotFoundException extends RuntimeException {
 
     public EntityNotFoundException(String type, int id) {
-        this(type, "id", String.valueOf(id));
+        this(type, "ID", String.valueOf(id));
     }
 
     public EntityNotFoundException(String type, String attribute, String value) {

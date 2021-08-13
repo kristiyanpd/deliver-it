@@ -1,6 +1,7 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.InvalidFilterException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
@@ -10,7 +11,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,7 +107,7 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
             }
 
             if (userId.isPresent() && warehouseId.isPresent()){
-                throw new IllegalArgumentException("You can filter only by warehouseId or customerId separately");
+                throw new InvalidFilterException("You can filter only by warehouseId or customerId separately");
             }
 
             Query<Shipment> query = session.createQuery(baseQuery, Shipment.class);

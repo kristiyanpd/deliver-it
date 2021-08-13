@@ -1,6 +1,6 @@
 package com.team9.deliverit.models.enums;
 
-import com.team9.deliverit.exceptions.StatusNotFoundException;
+import com.team9.deliverit.exceptions.EnumNotFoundException;
 
 public enum Status {
 
@@ -30,14 +30,14 @@ public enum Status {
             case COMPLETED:
                 return "Completed";
             default:
-                throw new StatusNotFoundException(INVALID_STATUS);
+                throw new EnumNotFoundException(INVALID_STATUS);
         }
     }
 
     public static Status getEnum(String value) {
-        for(Status v : values())
-            if(v.getValue().equalsIgnoreCase(value)) return v;
-        throw new StatusNotFoundException(INVALID_STATUS);
+        for (Status v : values())
+            if (v.getValue().equalsIgnoreCase(value)) return v;
+        throw new EnumNotFoundException(INVALID_STATUS);
     }
 
 }
