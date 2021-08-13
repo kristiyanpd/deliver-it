@@ -19,7 +19,5 @@ public interface CountryRepository {
 
     void delete(int id);
 
-    List<Country> getDuplicates(String name);
-
     boolean isDuplicate(String name);
 }

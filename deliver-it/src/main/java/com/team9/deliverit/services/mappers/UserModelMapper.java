@@ -64,7 +64,7 @@ public class UserModelMapper {
         City city = cityRepository.getById(userRegistrationDto.getCityId());
 
         if (addressRepository.isDuplicate(streetName, city.getId())) {
-            address = addressRepository.getDuplicates(streetName, city.getId()).get(0);
+            address = addressRepository.getDuplicate(streetName, city.getId()).get(0);
         } else {
             address.setStreetName(streetName);
             address.setCity(city);

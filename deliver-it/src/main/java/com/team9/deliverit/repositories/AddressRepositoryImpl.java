@@ -2,7 +2,6 @@ package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Address;
-import com.team9.deliverit.models.City;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -62,7 +61,7 @@ public class AddressRepositoryImpl extends BaseRepositoryImpl<Address> implement
     }
 
     @Override
-    public List<Address> getDuplicates(String name, int cityId) {
+    public List<Address> getDuplicate(String name, int cityId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Address> query = session.createQuery("from Address where streetName = :name and city.id = :cityId", Address.class);
             query.setParameter("name", name);

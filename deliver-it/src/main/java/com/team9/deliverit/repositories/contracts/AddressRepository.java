@@ -17,7 +17,7 @@ public interface AddressRepository {
 
     void delete(int id);
 
-    List <Address> getDuplicates (String name, int cityId);
+    List<Address> getDuplicate(String name, int cityId);
 
     boolean isDuplicate(String name, int cityId);
 }

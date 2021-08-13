@@ -1,8 +1,6 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.Address;
-import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Country;
 import com.team9.deliverit.repositories.contracts.CountryRepository;
 import org.hibernate.Session;
@@ -72,19 +70,6 @@ public class CountryRepositoryImpl extends BaseRepositoryImpl<Country> implement
                 throw new EntityNotFoundException("Country", "name", name);
             }
             return result.get(0);
-        }
-    }
-
-    @Override
-    public List<Country> getDuplicates(String name) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Country> query = session.createQuery("from Country where name = :name", Country.class);
-            query.setParameter("name", name);
-            List<Country> result = query.list();
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("Country", "name", name);
-            }
-            return result;
         }
     }
 
