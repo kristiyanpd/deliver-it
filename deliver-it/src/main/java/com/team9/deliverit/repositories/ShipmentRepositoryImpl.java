@@ -104,19 +104,18 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
 
     @Override
     public List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> userId) {
+        if (userId.isPresent() && warehouseId.isPresent()) {
+            throw new InvalidFilterException("You can filter only by warehouseId or customerId separately");
+        }
         try (Session session = sessionFactory.openSession()) {
 
             var baseQuery = "select distinct s from Shipment s left join Parcel p on s.id = p.shipment.id ";
 
-            if (warehouseId.isPresent() && userId.isEmpty()) {
+            if (warehouseId.isPresent()) {
                 baseQuery += " where s.destinationWarehouse.id = :warehouseId or s.originWarehouse.id = :warehouseId ";
             }
-            if (userId.isPresent() && warehouseId.isEmpty()) {
+            if (userId.isPresent()) {
                 baseQuery += " where p.user.id = :userId ";
-            }
-
-            if (userId.isPresent() && warehouseId.isPresent()) {
-                throw new InvalidFilterException("You can filter only by warehouseId or customerId separately");
             }
 
             Query<Shipment> query = session.createQuery(baseQuery, Shipment.class);
