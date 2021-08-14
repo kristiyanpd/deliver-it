@@ -94,6 +94,15 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
     }
 
     @Override
+    public List<Parcel> getParcels(int shipmentId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Parcel> query = session.createQuery("from Parcel where shipment.id = :shipmentId", Parcel.class);
+            query.setParameter("shipmentId", shipmentId);
+            return query.list();
+        }
+    }
+
+    @Override
     public List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> userId) {
         try (Session session = sessionFactory.openSession()) {
 
@@ -106,7 +115,7 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
                 baseQuery += " where p.user.id = :userId ";
             }
 
-            if (userId.isPresent() && warehouseId.isPresent()){
+            if (userId.isPresent() && warehouseId.isPresent()) {
                 throw new InvalidFilterException("You can filter only by warehouseId or customerId separately");
             }
 

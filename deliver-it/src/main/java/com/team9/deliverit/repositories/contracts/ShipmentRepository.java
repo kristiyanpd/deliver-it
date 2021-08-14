@@ -1,5 +1,6 @@
 package com.team9.deliverit.repositories.contracts;
 
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public interface ShipmentRepository {
     boolean isFull(int shipmentId);
 
     boolean isEmpty(int shipmentId);
+
+    List<Parcel> getParcels(int shipmentId);
 
     void delete(int id);
 

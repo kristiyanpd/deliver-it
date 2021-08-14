@@ -1,6 +1,7 @@
 package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
@@ -90,6 +91,14 @@ public class ShipmentServiceImpl implements ShipmentService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "count incoming", "shipments!"));
         }
         return repository.countShipmentsOnTheWay();
+    }
+
+    @Override
+    public List<Parcel> getParcels(int shipmentId, User user) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "get all", "parcels from a shipment!"));
+        }
+        return repository.getParcels(shipmentId);
     }
 
     @Override

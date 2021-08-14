@@ -1,5 +1,6 @@
 package com.team9.deliverit.services.contracts;
 
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
@@ -19,6 +20,8 @@ public interface ShipmentService {
     void delete(User user, int id);
 
     List<Shipment> filter(User user, Optional<Integer> warehouseId, Optional<Integer> customerId);
+
+    List<Parcel> getParcels(int shipmentId, User user);
 
     int countShipmentsOnTheWay(User user);
 

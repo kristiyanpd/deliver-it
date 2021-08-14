@@ -3,9 +3,11 @@ package com.team9.deliverit.controllers;
 import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 import com.team9.deliverit.models.dtos.ShipmentDto;
 import com.team9.deliverit.services.contracts.ShipmentService;
+import com.team9.deliverit.services.mappers.ParcelModelMapper;
 import com.team9.deliverit.services.mappers.ShipmentModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -83,5 +85,12 @@ public class ShipmentController {
     public ShipmentDisplayDto nextShipmentToArrive(@RequestHeader HttpHeaders headers, @RequestParam int warehouseId) {
         User user = authenticationHelper.tryGetUser(headers);
         return ShipmentModelMapper.toShipmentDto(service.nextShipmentToArrive(warehouseId, user));
+    }
+
+    @GetMapping("/{id}/parcels")
+    public List<ParcelDisplayDto> getParcels(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return service.getParcels(id, user)
+                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
     }
 }
