@@ -39,17 +39,12 @@ create table users
     first_name varchar(50)  not null,
     last_name  varchar(50)  not null,
     email      varchar(100) not null,
-    address_id int          null
-);
-
-create table users_roles
-(
-    user_id int null,
-    role_id int null,
-    constraint users_roles_roles_role_id_fk
-        foreign key (role_id) references roles (role_id),
-    constraint users_roles_users_user_id_fk
-        foreign key (user_id) references users (user_id)
+    address_id int          null,
+    role_id    int          not null,
+    constraint users_addresses_fk
+        foreign key (address_id) references addresses (address_id),
+    constraint users_roles_fk
+        foreign key (role_id) references roles (role_id)
 );
 
 create table warehouses
@@ -63,6 +58,7 @@ create table warehouses
 
 create table shipments
 (
+    is_full                  tinyint(1)                                    not null,
     shipment_id              int auto_increment
         primary key,
     departure_date           date                                          not null,
@@ -99,4 +95,3 @@ create index parcels_customers_fk
 
 create index shipments_statuses_fk
     on shipments (status);
-

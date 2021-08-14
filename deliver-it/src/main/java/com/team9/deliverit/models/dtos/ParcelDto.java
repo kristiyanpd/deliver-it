@@ -13,7 +13,7 @@ public class ParcelDto {
     @NotBlank(message = "Category can't be blank!")
     private String category;
 
-    @NotBlank(message = "Pick up option can't be blank!")
+//    @NotBlank(message = "Pick up option can't be blank!")
     private String pickUpOption;
 
     @Positive(message = "User ID must be positive!")

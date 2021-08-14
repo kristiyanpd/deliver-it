@@ -60,7 +60,12 @@ public class ParcelModelMapper {
 
         parcel.setWeight(parcelDto.getWeight());
         parcel.setCategory(Category.getEnum(parcelDto.getCategory()));
-        parcel.setPickUpOption(PickUpOption.getEnum(parcelDto.getPickUpOption()));
+        if (parcelDto.getPickUpOption() == null) {
+            parcel.setPickUpOption(PickUpOption.PICK_UP_FROM_WAREHOUSE);
+        } else {
+            parcel.setPickUpOption(PickUpOption.getEnum(parcelDto.getPickUpOption()));
+        }
+
         parcel.setUser(user);
         parcel.setShipment(shipment);
     }
