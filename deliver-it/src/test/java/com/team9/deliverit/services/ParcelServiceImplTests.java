@@ -1,8 +1,10 @@
 package com.team9.deliverit.services;
 
+import com.team9.deliverit.exceptions.EnumAlreadySameException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.enums.PickUpOption;
+import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -75,7 +77,7 @@ public class ParcelServiceImplTests {
 
         // Act
         Mockito.when(mockRepository.getById(Mockito.anyInt()))
-                        .thenReturn(mockParcel);
+                .thenReturn(mockParcel);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> service.getById(1, mockCustomer));
@@ -217,7 +219,7 @@ public class ParcelServiceImplTests {
         mockUser.setId(3);
 
         Mockito.when(mockRepository.getById(Mockito.anyInt()))
-                        .thenReturn(mockParcel);
+                .thenReturn(mockParcel);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> service.getStatusOfParcel(mockUser, mockParcel.getId()));
@@ -254,22 +256,51 @@ public class ParcelServiceImplTests {
     }
 
     @Test
-    public void updatePickUpOption_Should_ReturnPickUpOption_When_UserIsOwner() {
+    public void updatePickUpOption_Should_Throw_When_StatusCompleted() {
         var mockParcel = createMockParcel();
         var mockUser = createMockCustomer();
+        mockParcel.getShipment().setStatus(Status.COMPLETED);
         mockParcel.setUser(mockUser);
 
         Mockito.when(mockRepository.getById(anyInt()))
-                        .thenReturn(mockParcel);
-
-        Mockito.when(mockRepository.updatePickUpOption(mockParcel.getId(), PickUpOption.DELIVER_TO_ADDRESS))
                 .thenReturn(mockParcel);
+
+        Assertions.assertThrows(EnumAlreadySameException.class,
+                () -> service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS"));
+
+    }
+
+    @Test
+    public void updatePickUpOption_Should_Throw_When_PickUpOptionSame() {
+        var mockParcel = createMockParcel();
+        var mockUser = createMockCustomer();
+        mockParcel.setUser(mockUser);
+        mockParcel.setPickUpOption(PickUpOption.DELIVER_TO_ADDRESS);
+
+        Mockito.when(mockRepository.getById(anyInt()))
+                .thenReturn(mockParcel);
+
+        Assertions.assertThrows(EnumAlreadySameException.class,
+                () -> service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS"));
+
+    }
+
+    @Test
+    public void updatePickUpOption_Call_Repository_When_Valid() {
+        var mockParcel = createMockParcel();
+        var mockUser = createMockCustomer();
+        mockParcel.setUser(mockUser);
+        mockParcel.setPickUpOption(PickUpOption.PICK_UP_FROM_WAREHOUSE);
+
+        Mockito.when(mockRepository.getById(anyInt()))
+                .thenReturn(mockParcel);
+
 
         service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS");
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
-                .updatePickUpOption(1, PickUpOption.DELIVER_TO_ADDRESS);
+                .updatePickUpOption(mockParcel, PickUpOption.DELIVER_TO_ADDRESS);
     }
 
     @Test
@@ -281,6 +312,18 @@ public class ParcelServiceImplTests {
 
         Mockito.verify(mockRepository, Mockito.times(1))
                 .incomingParcels(mockCustomer.getId());
+
+    }
+
+    @Test
+    public void PastParcels_Should_Call_Repository_When_UserCalls() {
+
+        var mockCustomer = createMockCustomer();
+
+        service.pastParcels(mockCustomer);
+
+        Mockito.verify(mockRepository, Mockito.times(1))
+                .pastParcels(mockCustomer.getId());
 
     }
 

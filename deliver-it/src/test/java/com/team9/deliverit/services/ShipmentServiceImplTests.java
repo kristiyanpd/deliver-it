@@ -244,4 +244,26 @@ public class ShipmentServiceImplTests {
         Mockito.verify(mockRepository, Mockito.times(1))
                 .nextShipmentToArrive(anyInt());
     }
+
+    @Test
+    public void getParcels_Should_Throw_When_UserNotEmployee(){
+
+        var mockCustomer = createMockCustomer();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> service.getParcels(1, mockCustomer));
+
+    }
+
+    @Test
+    public void getParcels_Should_Call_Repository_When_UserValid(){
+
+        var mockEmployee = createMockEmployee();
+
+        service.getParcels(1,mockEmployee);
+
+        Mockito.verify(mockRepository, Mockito.times(1))
+                .getParcels(anyInt());
+
+    }
 }
