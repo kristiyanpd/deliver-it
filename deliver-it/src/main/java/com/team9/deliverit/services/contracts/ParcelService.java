@@ -27,6 +27,8 @@ public interface ParcelService {
 
     List<Parcel> incomingParcels(User user);
 
+    List<Parcel> pastParcels(User user);
+
     String getStatusOfParcel(User user, int parcelId);
 
     Parcel updatePickUpOption(User user, int parcelId, String pickUpOption);

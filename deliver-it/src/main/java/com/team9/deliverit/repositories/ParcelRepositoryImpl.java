@@ -64,6 +64,16 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
     }
 
     @Override
+    public List<Parcel> pastParcels(int userId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Parcel> query = session.createQuery(
+                    "select p from Parcel p join Shipment s on p.shipment.id = s.id where p.user.id = :userId and s.status = 'COMPLETED'", Parcel.class);
+            query.setParameter("userId", userId);
+            return query.list();
+        }
+    }
+
+    @Override
     public List<Parcel> incomingParcels(int userId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Parcel> query = session.createQuery(
@@ -83,15 +93,8 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
     }
 
     @Override
-    public Parcel updatePickUpOption(int parcelId, PickUpOption pickUpOption) {
+    public Parcel updatePickUpOption(Parcel parcel, PickUpOption pickUpOption) {
         try (Session session = sessionFactory.openSession()) {
-            Parcel parcel = getById(parcelId);
-            if (parcel.getShipment().getStatus() == Status.COMPLETED) {
-                throw new EnumAlreadySameException(String.format("Parcel with ID %s is already %s!", parcel.getId(), parcel.getShipment().getStatus().toString()));
-            }
-            if (parcel.getPickUpOption() == pickUpOption) {
-                throw new EnumAlreadySameException(String.format("Parcel pick up option is already %s!", pickUpOption.toString().toLowerCase()));
-            }
             session.beginTransaction();
             parcel.setPickUpOption(pickUpOption);
             session.update(parcel);

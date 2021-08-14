@@ -1,5 +1,6 @@
 package com.team9.deliverit.services;
 
+import com.team9.deliverit.exceptions.EnumAlreadySameException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
@@ -94,6 +95,11 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
+    public List<Parcel> pastParcels(User user) {
+        return repository.pastParcels(user.getId());
+    }
+
+    @Override
     public String getStatusOfParcel(User user, int parcelId) {
         if (repository.getById(parcelId).getUser().getId() != user.getId()) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_NOT_OWNER);
@@ -107,6 +113,13 @@ public class ParcelServiceImpl implements ParcelService {
             throw new UnauthorizedOperationException(UNAUTHORIZED_NOT_OWNER);
         }
         PickUpOption pick = PickUpOption.getEnum(pickUpOption);
-        return repository.updatePickUpOption(parcelId, pick);
+        Parcel parcel = repository.getById(parcelId);
+        if (parcel.getShipment().getStatus() == Status.COMPLETED) {
+            throw new EnumAlreadySameException(String.format("Parcel with ID %s is already %s!", parcel.getId(), parcel.getShipment().getStatus().toString()));
+        }
+        if (parcel.getPickUpOption() == pick) {
+            throw new EnumAlreadySameException(String.format("Parcel pick up option is already %s!", pick.toString().toLowerCase()));
+        }
+        return repository.updatePickUpOption(parcel, pick);
     }
 }

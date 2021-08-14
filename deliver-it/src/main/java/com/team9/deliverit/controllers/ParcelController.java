@@ -102,6 +102,13 @@ public class ParcelController {
                 .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
     }
 
+    @GetMapping("/mine/past")
+    public List<ParcelDisplayDto> pastParcels(@RequestHeader HttpHeaders headers) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return service.pastParcels(user)
+                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+    }
+
     @GetMapping("/{id}/status")
     public String getStatusOfParcel(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
