@@ -121,4 +121,11 @@ public class ParcelController {
         User user = authenticationHelper.tryGetUser(headers);
         return ParcelModelMapper.toParcelDto(service.updatePickUpOption(user, id, option));
     }
+
+    @PutMapping("/{id}/shipment/{shipmentId}")
+    public ParcelDisplayDto updateShipment(@RequestHeader HttpHeaders headers,
+                                           @PathVariable int id, @PathVariable int shipmentId) {
+        User user = authenticationHelper.tryGetUser(headers);
+        return ParcelModelMapper.toParcelDto(service.updateShipment(user, id, shipmentId));
+    }
 }

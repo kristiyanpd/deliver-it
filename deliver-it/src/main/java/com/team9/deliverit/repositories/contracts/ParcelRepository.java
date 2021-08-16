@@ -1,6 +1,7 @@
 package com.team9.deliverit.repositories.contracts;
 
 import com.team9.deliverit.models.Parcel;
+import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.models.enums.Status;
@@ -26,6 +27,8 @@ public interface ParcelRepository {
     List<Parcel> pastParcels(int userId);
 
     Parcel updatePickUpOption(Parcel parcel, PickUpOption pickUpOption);
+
+    Parcel updateShipment(Parcel parcel, Shipment shipment);
 
     String getStatusOfParcel(int parcelId);
 

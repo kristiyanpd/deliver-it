@@ -1,9 +1,7 @@
 package com.team9.deliverit.models.dtos;
 
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 
 public class ParcelDto {
 
@@ -13,7 +11,6 @@ public class ParcelDto {
     @NotBlank(message = "Category can't be blank!")
     private String category;
 
-//    @NotBlank(message = "Pick up option can't be blank!")
     private String pickUpOption;
 
     @Positive(message = "User ID must be positive!")

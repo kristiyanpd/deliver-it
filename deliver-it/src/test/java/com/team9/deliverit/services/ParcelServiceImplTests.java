@@ -6,6 +6,7 @@ import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
+import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,9 @@ public class ParcelServiceImplTests {
 
     @Mock
     ParcelRepository mockRepository;
+
+    @Mock
+    ShipmentRepository shipmentMockRepository;
 
     @InjectMocks
     ParcelServiceImpl service;
@@ -328,6 +332,45 @@ public class ParcelServiceImplTests {
         Mockito.verify(mockRepository, Mockito.times(1))
                 .pastParcels(mockCustomer.getId());
 
+    }
+
+    @Test
+    public void updateShipment_Should_Throw_When_UserNotEmpoyee() {
+        var mockParcel = createMockParcel();
+        var mockUser = createMockCustomer();
+        mockUser.setId(3);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> service.updateShipment(mockUser, mockParcel.getId(), 3));
+    }
+
+    @Test
+    public void updateShipment_Should_Throw_When_Shipment_Is_Full() {
+        var mockParcel = createMockParcel();
+        var mockEmployee = createMockEmployee();
+        var mockShipment = createMockShipment();
+        mockShipment.setFull(true);
+
+        Mockito.when(mockRepository.getById(anyInt()))
+                .thenReturn(mockParcel);
+
+        Mockito.when(shipmentMockRepository.getById(anyInt()))
+                .thenReturn(mockShipment);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> service.updateShipment(mockEmployee, mockParcel.getId(), mockShipment.getId()));
+
+    }
+
+    @Test
+    public void updateShipment_Should_Call_Repository_When_Valid() {
+        var mockParcel = createMockParcel();
+        var mockShipment = createMockShipment();
+
+        mockRepository.updateShipment(mockParcel, mockShipment);
+
+        Mockito.verify(mockRepository, Mockito.times(1))
+                .updateShipment(mockParcel, mockShipment);
     }
 
 }

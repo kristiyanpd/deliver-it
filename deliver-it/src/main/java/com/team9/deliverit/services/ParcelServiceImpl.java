@@ -3,11 +3,13 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.EnumAlreadySameException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Parcel;
+import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
+import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import com.team9.deliverit.services.contracts.ParcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +24,14 @@ public class ParcelServiceImpl implements ParcelService {
 
     public static final String UNAUTHORIZED_NOT_OWNER = "You are not the owner of this parcel!";
     public static final String INVALID_SHIPMENT_FULL = "Parcel cannot be added to a shipment that is full!";
+
     private final ParcelRepository repository;
+    private final ShipmentRepository shipmentRepository;
 
     @Autowired
-    public ParcelServiceImpl(ParcelRepository repository) {
+    public ParcelServiceImpl(ParcelRepository repository, ShipmentRepository shipmentRepository) {
         this.repository = repository;
+        this.shipmentRepository = shipmentRepository;
     }
 
     @Override
@@ -125,5 +130,18 @@ public class ParcelServiceImpl implements ParcelService {
             throw new EnumAlreadySameException(String.format("Parcel with ID %s is already %s!", parcel.getId(), parcel.getShipment().getStatus().toString()));
         }
         return repository.updatePickUpOption(parcel, pick);
+    }
+
+    @Override
+    public Parcel updateShipment(User user, int parcelId, int shipmentId) {
+        if (!user.isEmployee()) {
+            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "update", "parcels"));
+        }
+        Parcel parcel = repository.getById(parcelId);
+        Shipment shipment = shipmentRepository.getById(shipmentId);
+        if (shipment.isFull()) {
+            throw new IllegalArgumentException(INVALID_SHIPMENT_FULL);
+        }
+        return repository.updateShipment(parcel, shipment);
     }
 }

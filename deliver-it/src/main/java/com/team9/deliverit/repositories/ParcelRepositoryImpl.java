@@ -107,6 +107,17 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
     }
 
     @Override
+    public Parcel updateShipment(Parcel parcel, Shipment shipment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            parcel.setShipment(shipment);
+            session.update(parcel);
+            session.getTransaction().commit();
+            return parcel;
+        }
+    }
+
+    @Override
     public List<Parcel> filter(Optional<Double> weight,
                                Optional<Integer> warehouseId,
                                Optional<Category> category,

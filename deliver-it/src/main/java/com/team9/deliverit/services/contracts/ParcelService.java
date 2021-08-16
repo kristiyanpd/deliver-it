@@ -32,4 +32,6 @@ public interface ParcelService {
     String getStatusOfParcel(User user, int parcelId);
 
     Parcel updatePickUpOption(User user, int parcelId, String pickUpOption);
+
+    Parcel updateShipment(User user, int parcelId, int shipmentId);
 }
