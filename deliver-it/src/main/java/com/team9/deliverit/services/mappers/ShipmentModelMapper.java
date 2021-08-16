@@ -1,9 +1,7 @@
 package com.team9.deliverit.services.mappers;
 
-import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.Warehouse;
-import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 import com.team9.deliverit.models.dtos.ShipmentDto;
 import com.team9.deliverit.models.enums.Status;

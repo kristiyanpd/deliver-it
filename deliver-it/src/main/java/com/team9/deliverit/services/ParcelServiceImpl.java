@@ -21,6 +21,7 @@ import static com.team9.deliverit.services.utils.MessageConstants.UNAUTHORIZED_A
 public class ParcelServiceImpl implements ParcelService {
 
     public static final String UNAUTHORIZED_NOT_OWNER = "You are not the owner of this parcel!";
+    public static final String INVALID_SHIPMENT_FULL = "Parcel cannot be added to a shipment that is full!";
     private final ParcelRepository repository;
 
     @Autowired
@@ -49,6 +50,9 @@ public class ParcelServiceImpl implements ParcelService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "create", "parcels"));
         }
+        if (parcel.getShipment().isFull()) {
+            throw new IllegalArgumentException(INVALID_SHIPMENT_FULL);
+        }
         repository.create(parcel);
     }
 
@@ -56,6 +60,9 @@ public class ParcelServiceImpl implements ParcelService {
     public void update(Parcel parcel, User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "update", "parcels"));
+        }
+        if (parcel.getShipment().isFull()) {
+            throw new IllegalArgumentException(INVALID_SHIPMENT_FULL);
         }
         repository.update(parcel);
     }

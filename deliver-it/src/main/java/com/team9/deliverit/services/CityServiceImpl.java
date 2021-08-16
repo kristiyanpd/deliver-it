@@ -1,7 +1,6 @@
 package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
-import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.User;

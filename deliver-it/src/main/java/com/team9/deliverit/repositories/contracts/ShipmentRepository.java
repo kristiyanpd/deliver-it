@@ -19,8 +19,6 @@ public interface ShipmentRepository {
 
     Shipment nextShipmentToArrive(int warehouseId);
 
-    boolean isFull(int shipmentId);
-
     boolean isEmpty(int shipmentId);
 
     List<Parcel> getParcels(int shipmentId);

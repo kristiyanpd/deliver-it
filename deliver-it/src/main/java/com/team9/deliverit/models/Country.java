@@ -1,8 +1,6 @@
 package com.team9.deliverit.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "countries")

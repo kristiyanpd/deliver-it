@@ -5,7 +5,6 @@ import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ParcelDisplayDto;
 import com.team9.deliverit.models.dtos.ParcelDto;
-import com.team9.deliverit.models.dtos.UserDisplayDto;
 import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;

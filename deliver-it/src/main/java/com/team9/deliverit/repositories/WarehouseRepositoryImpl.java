@@ -1,6 +1,5 @@
 package com.team9.deliverit.repositories;
 
-import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.repositories.contracts.WarehouseRepository;
 import org.hibernate.Session;

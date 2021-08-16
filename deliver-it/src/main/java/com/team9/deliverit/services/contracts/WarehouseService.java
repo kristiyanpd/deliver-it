@@ -2,7 +2,6 @@ package com.team9.deliverit.services.contracts;
 
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
-import com.team9.deliverit.models.dtos.WarehouseDisplayDto;
 
 import java.util.List;
 

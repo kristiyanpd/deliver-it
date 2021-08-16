@@ -3,7 +3,6 @@ package com.team9.deliverit.services.contracts;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 
 import java.util.List;
 import java.util.Optional;
