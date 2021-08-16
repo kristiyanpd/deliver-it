@@ -118,6 +118,15 @@ public class ParcelServiceImplTests {
     }
 
     @Test
+    public void create_Should_Throw_When_ShipmentIsFull() {
+        var mockParcel = createMockParcel();
+        mockParcel.getShipment().setFull(true);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> service.create(mockParcel, createMockEmployee()));
+    }
+
+    @Test
     public void update_Should_Call_Repository_When_ParcelIsValid() {
 
         var mockParcel = createMockParcel();
@@ -133,6 +142,15 @@ public class ParcelServiceImplTests {
         // Assert
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> service.update(createMockParcel(), createMockCustomer()));
+    }
+
+    @Test
+    public void update_Should_Throw_When_ShipmentIsFull() {
+        var mockParcel = createMockParcel();
+        mockParcel.getShipment().setFull(true);
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> service.update(mockParcel, createMockEmployee()));
     }
 
     @Test

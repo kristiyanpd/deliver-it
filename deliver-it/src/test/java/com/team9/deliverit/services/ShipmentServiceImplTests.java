@@ -2,7 +2,6 @@ package com.team9.deliverit.services;
 
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Shipment;
-import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
 import org.junit.jupiter.api.Assertions;

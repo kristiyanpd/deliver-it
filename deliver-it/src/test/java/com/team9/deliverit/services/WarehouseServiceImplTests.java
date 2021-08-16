@@ -3,7 +3,6 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Warehouse;
-import com.team9.deliverit.models.dtos.WarehouseDisplayDto;
 import com.team9.deliverit.repositories.contracts.WarehouseRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
