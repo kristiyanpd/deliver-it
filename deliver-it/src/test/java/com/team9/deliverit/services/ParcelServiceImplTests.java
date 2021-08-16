@@ -289,21 +289,6 @@ public class ParcelServiceImplTests {
     }
 
     @Test
-    public void updatePickUpOption_Should_Throw_When_PickUpOptionSame() {
-        var mockParcel = createMockParcel();
-        var mockUser = createMockCustomer();
-        mockParcel.setUser(mockUser);
-        mockParcel.setPickUpOption(PickUpOption.DELIVER_TO_ADDRESS);
-
-        Mockito.when(mockRepository.getById(anyInt()))
-                .thenReturn(mockParcel);
-
-        Assertions.assertThrows(EnumAlreadySameException.class,
-                () -> service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS"));
-
-    }
-
-    @Test
     public void updatePickUpOption_Call_Repository_When_Valid() {
         var mockParcel = createMockParcel();
         var mockUser = createMockCustomer();

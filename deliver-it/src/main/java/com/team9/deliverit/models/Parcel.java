@@ -4,7 +4,6 @@ import com.team9.deliverit.models.enums.Category;
 import com.team9.deliverit.models.enums.PickUpOption;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "parcels")
@@ -15,8 +14,6 @@ public class Parcel {
     @Column(name = "parcel_id")
     private int id;
 
-
-    @Positive(message = "Weight should be positive")
     @Column(name = "weight")
     private double weight;
 

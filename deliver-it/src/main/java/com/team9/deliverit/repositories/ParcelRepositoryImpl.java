@@ -1,5 +1,6 @@
 package com.team9.deliverit.repositories;
 
+import com.team9.deliverit.exceptions.EnumAlreadySameException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.enums.Category;
@@ -93,6 +94,9 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
 
     @Override
     public Parcel updatePickUpOption(Parcel parcel, PickUpOption pickUpOption) {
+        if (parcel.getPickUpOption() == pickUpOption) {
+            throw new EnumAlreadySameException(String.format("Parcel pick up option is already %s!", pickUpOption.toString().toLowerCase()));
+        }
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             parcel.setPickUpOption(pickUpOption);

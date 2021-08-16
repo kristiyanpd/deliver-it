@@ -124,9 +124,6 @@ public class ParcelServiceImpl implements ParcelService {
         if (parcel.getShipment().getStatus() == Status.COMPLETED) {
             throw new EnumAlreadySameException(String.format("Parcel with ID %s is already %s!", parcel.getId(), parcel.getShipment().getStatus().toString()));
         }
-        if (parcel.getPickUpOption() == pick) {
-            throw new EnumAlreadySameException(String.format("Parcel pick up option is already %s!", pick.toString().toLowerCase()));
-        }
         return repository.updatePickUpOption(parcel, pick);
     }
 }
