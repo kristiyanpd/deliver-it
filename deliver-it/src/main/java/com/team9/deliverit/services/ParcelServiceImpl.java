@@ -66,6 +66,7 @@ public class ParcelServiceImpl implements ParcelService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "update", "parcels"));
         }
+        //ToDo revise logic
         if (parcel.getShipment().isFull()) {
             throw new IllegalArgumentException(INVALID_SHIPMENT_FULL);
         }

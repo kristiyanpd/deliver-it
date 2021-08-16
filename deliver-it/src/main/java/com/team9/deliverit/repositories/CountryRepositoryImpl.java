@@ -23,28 +23,8 @@ public class CountryRepositoryImpl extends BaseRepositoryImpl<Country> implement
     }
 
     @Override
-    public List<Country> getAll() {
-        return super.getAll(Country.class);
-    }
-
-    @Override
-    public Country getById(int id) {
-        return super.getById(Country.class, id);
-    }
-
-    @Override
-    public void create(Country country) {
-        super.create(Country.class, country);
-    }
-
-    @Override
-    public void update(Country country) {
-        super.update(Country.class, country);
-    }
-
-    @Override
-    public void delete(int id) {
-        super.delete(Country.class, id);
+    protected Class<Country> getClazz() {
+        return Country.class;
     }
 
     @Override

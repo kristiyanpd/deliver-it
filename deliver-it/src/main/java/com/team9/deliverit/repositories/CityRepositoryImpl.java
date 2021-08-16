@@ -23,28 +23,8 @@ public class CityRepositoryImpl extends BaseRepositoryImpl<City> implements City
     }
 
     @Override
-    public List<City> getAll() {
-        return super.getAll(City.class);
-    }
-
-    @Override
-    public City getById(int id) {
-        return super.getById(City.class, id);
-    }
-
-    @Override
-    public void create(City city) {
-        super.create(City.class, city);
-    }
-
-    @Override
-    public void update(City city) {
-        super.update(City.class, city);
-    }
-
-    @Override
-    public void delete(int id) {
-        super.delete(City.class, id);
+    protected Class<City> getClazz() {
+        return City.class;
     }
 
     @Override

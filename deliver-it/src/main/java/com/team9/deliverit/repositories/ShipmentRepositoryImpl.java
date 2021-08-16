@@ -26,28 +26,8 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
     }
 
     @Override
-    public List<Shipment> getAll() {
-        return super.getAll(Shipment.class);
-    }
-
-    @Override
-    public Shipment getById(int id) {
-        return super.getById(Shipment.class, id);
-    }
-
-    @Override
-    public void create(Shipment shipment) {
-        super.create(Shipment.class, shipment);
-    }
-
-    @Override
-    public void update(Shipment shipment) {
-        super.update(Shipment.class, shipment);
-    }
-
-    @Override
-    public void delete(int id) {
-        super.delete(Shipment.class, id);
+    protected Class<Shipment> getClazz() {
+        return Shipment.class;
     }
 
     @Override

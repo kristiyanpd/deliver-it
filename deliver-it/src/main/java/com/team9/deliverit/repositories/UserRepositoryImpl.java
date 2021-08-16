@@ -28,28 +28,8 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
     }
 
     @Override
-    public List<User> getAll() {
-        return super.getAll(User.class);
-    }
-
-    @Override
-    public User getById(int id) {
-        return super.getById(User.class, id);
-    }
-
-    @Override
-    public void create(User user) {
-        super.create(User.class, user);
-    }
-
-    @Override
-    public void update(User user) {
-        super.update(User.class, user);
-    }
-
-    @Override
-    public void delete(int id) {
-        super.delete(User.class, id);
+    protected Class<User> getClazz() {
+        return User.class;
     }
 
     @Override

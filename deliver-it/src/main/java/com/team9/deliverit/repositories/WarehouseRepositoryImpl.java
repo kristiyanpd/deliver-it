@@ -22,28 +22,8 @@ public class WarehouseRepositoryImpl extends BaseRepositoryImpl<Warehouse> imple
     }
 
     @Override
-    public List<Warehouse> getAll() {
-        return super.getAll(Warehouse.class);
-    }
-
-    @Override
-    public Warehouse getById(int id) {
-        return super.getById(Warehouse.class, id);
-    }
-
-    @Override
-    public void create(Warehouse warehouse) {
-        super.create(Warehouse.class, warehouse);
-    }
-
-    @Override
-    public void update(Warehouse warehouse) {
-        super.update(Warehouse.class, warehouse);
-    }
-
-    @Override
-    public void delete(int id) {
-        super.delete(Warehouse.class, id);
+    protected Class<Warehouse> getClazz() {
+        return Warehouse.class;
     }
 
     @Override

@@ -14,8 +14,8 @@ public class RoleRepositoryImpl extends BaseRepositoryImpl<Role> implements com.
     }
 
     @Override
-    public Role getById(int id) {
-        return super.getById(Role.class, id);
+    protected Class<Role> getClazz() {
+        return Role.class;
     }
 
 }

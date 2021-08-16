@@ -29,28 +29,8 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
     }
 
     @Override
-    public List<Parcel> getAll() {
-        return super.getAll(Parcel.class);
-    }
-
-    @Override
-    public Parcel getById(int id) {
-        return super.getById(Parcel.class, id);
-    }
-
-    @Override
-    public void create(Parcel parcel) {
-        super.create(Parcel.class, parcel);
-    }
-
-    @Override
-    public void update(Parcel parcel) {
-        super.update(Parcel.class, parcel);
-    }
-
-    @Override
-    public void delete(int id) {
-        super.delete(Parcel.class, id);
+    protected Class<Parcel> getClazz() {
+        return Parcel.class;
     }
 
     @Override
@@ -83,6 +63,7 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
         }
     }
 
+    //ToDo use getById().getShipment().getStatus()
     public String getStatusOfParcel(int parcelId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Shipment> query = session.createQuery(
@@ -92,11 +73,9 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
         }
     }
 
+    //ToDo reuse update method (service handles the specific change)
     @Override
     public Parcel updatePickUpOption(Parcel parcel, PickUpOption pickUpOption) {
-        if (parcel.getPickUpOption() == pickUpOption) {
-            throw new EnumAlreadySameException(String.format("Parcel pick up option is already %s!", pickUpOption.toString().toLowerCase()));
-        }
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             parcel.setPickUpOption(pickUpOption);
@@ -106,6 +85,7 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
         }
     }
 
+    //ToDo reuse update method (service handles the specific change)
     @Override
     public Parcel updateShipment(Parcel parcel, Shipment shipment) {
         try (Session session = sessionFactory.openSession()) {

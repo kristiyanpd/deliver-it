@@ -8,7 +8,7 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class BaseRepositoryImpl<E> implements BaseRepository<E> {
+public abstract class BaseRepositoryImpl<E> implements BaseRepository<E> {
 
     private final SessionFactory sessionFactory;
 
@@ -16,27 +16,29 @@ public class BaseRepositoryImpl<E> implements BaseRepository<E> {
         this.sessionFactory = sessionFactory;
     }
 
+    protected abstract Class<E> getClazz();
+
     @Override
-    public List<E> getAll(Class<E> clazz) {
+    public List<E> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            Query<E> query = session.createQuery("from " + clazz.getSimpleName(), clazz);
+            Query<E> query = session.createQuery("from " + getClazz().getSimpleName(), getClazz());
             return query.list();
         }
     }
 
     @Override
-    public E getById(Class<E> clazz, int id) {
+    public E getById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            E obj = session.get(clazz, id);
+            E obj = session.get(getClazz(), id);
             if (obj == null) {
-                throw new EntityNotFoundException(clazz.getSimpleName(), id);
+                throw new EntityNotFoundException(getClazz().getSimpleName(), id);
             }
             return obj;
         }
     }
 
     @Override
-    public void create(Class<E> clazz, E obj) {
+    public void create(E obj) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.save(obj);
@@ -45,7 +47,7 @@ public class BaseRepositoryImpl<E> implements BaseRepository<E> {
     }
 
     @Override
-    public void update(Class<E> clazz, E obj) {
+    public void update(E obj) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(obj);
@@ -54,8 +56,8 @@ public class BaseRepositoryImpl<E> implements BaseRepository<E> {
     }
 
     @Override
-    public void delete(Class<E> clazz, int id) {
-        E obj = getById(clazz, id);
+    public void delete(int id) {
+        E obj = getById(id);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.delete(obj);

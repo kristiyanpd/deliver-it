@@ -23,28 +23,8 @@ public class AddressRepositoryImpl extends BaseRepositoryImpl<Address> implement
     }
 
     @Override
-    public List<Address> getAll() {
-        return super.getAll(Address.class);
-    }
-
-    @Override
-    public Address getById(int id) {
-        return super.getById(Address.class, id);
-    }
-
-    @Override
-    public void create(Address address) {
-        super.create(Address.class, address);
-    }
-
-    @Override
-    public void update(Address address) {
-        super.update(Address.class, address);
-    }
-
-    @Override
-    public void delete(int id) {
-        super.delete(Address.class, id);
+    protected Class<Address> getClazz() {
+        return Address.class;
     }
 
     @Override
