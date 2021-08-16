@@ -115,10 +115,10 @@ public class ParcelController {
         return service.getStatusOfParcel(user, id);
     }
 
-    @PutMapping("/{id}/pick-up-option")
+    @PutMapping("/{id}/pick-up")
     public ParcelDisplayDto updatePickUpOption(@RequestHeader HttpHeaders headers,
-                                               @PathVariable int id, @RequestParam String pickUpOption) {
+                                               @PathVariable int id, @RequestParam String option) {
         User user = authenticationHelper.tryGetUser(headers);
-        return ParcelModelMapper.toParcelDto(service.updatePickUpOption(user, id, pickUpOption));
+        return ParcelModelMapper.toParcelDto(service.updatePickUpOption(user, id, option));
     }
 }
