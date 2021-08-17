@@ -153,8 +153,18 @@ public class ParcelServiceImplTests {
         var mockParcel = createMockParcel();
         mockParcel.getShipment().setFull(true);
 
+        var mockParcel2 = createMockParcel();
+        var mockShipment = createMockShipment();
+        mockShipment.setFull(true);
+        mockShipment.setId(14);
+        mockParcel2.setShipment(mockShipment);
+
+        Mockito.when(mockRepository
+                .getById(anyInt())).thenReturn(mockParcel);
+
+
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> service.update(mockParcel, createMockEmployee()));
+                () -> service.update(mockParcel2, createMockEmployee()));
     }
 
     @Test
@@ -235,46 +245,13 @@ public class ParcelServiceImplTests {
     }
 
     @Test
-    public void getStatusOfParcel_Should_Throw_When_UserNotOwner() {
-        var mockParcel = createMockParcel();
-        var mockUser = createMockCustomer();
-        mockUser.setId(3);
-
-        Mockito.when(mockRepository.getById(Mockito.anyInt()))
-                .thenReturn(mockParcel);
-
-        Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.getStatusOfParcel(mockUser, mockParcel.getId()));
-    }
-
-    @Test
-    public void getStatusOfParcel_Should_ReturnStatus_When_UserIsOwner() {
-        var mockParcel = createMockParcel();
-        var mockUser = createMockCustomer();
-        mockParcel.setUser(mockUser);
-
-        Mockito.when(mockRepository.getById(anyInt()))
-                .thenReturn(mockParcel);
-
-        Mockito.when(mockRepository.getStatusOfParcel(anyInt()))
-                .thenReturn(mockParcel.getShipment().getStatus().toString());
-
-        var result = service.getStatusOfParcel(mockUser, mockParcel.getId());
-
-        Assertions.assertEquals(result, mockParcel.getShipment().getStatus().toString());
-    }
-
-    @Test
     public void updatePickUpOption_Should_Throw_When_UserNotOwner() {
         var mockParcel = createMockParcel();
         var mockUser = createMockCustomer();
         mockUser.setId(3);
 
-        Mockito.when(mockRepository.getById(Mockito.anyInt()))
-                .thenReturn(mockParcel);
-
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS"));
+                () -> service.updatePickUpOption(mockUser, mockParcel, "DELIVER_TO_ADDRESS"));
     }
 
     @Test
@@ -284,11 +261,8 @@ public class ParcelServiceImplTests {
         mockParcel.getShipment().setStatus(Status.COMPLETED);
         mockParcel.setUser(mockUser);
 
-        Mockito.when(mockRepository.getById(anyInt()))
-                .thenReturn(mockParcel);
-
         Assertions.assertThrows(EnumAlreadySameException.class,
-                () -> service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS"));
+                () -> service.updatePickUpOption(mockUser, mockParcel, "DELIVER_TO_ADDRESS"));
 
     }
 
@@ -299,15 +273,11 @@ public class ParcelServiceImplTests {
         mockParcel.setUser(mockUser);
         mockParcel.setPickUpOption(PickUpOption.PICK_UP_FROM_WAREHOUSE);
 
-        Mockito.when(mockRepository.getById(anyInt()))
-                .thenReturn(mockParcel);
-
-
-        service.updatePickUpOption(mockUser, mockParcel.getId(), "DELIVER_TO_ADDRESS");
+        service.updatePickUpOption(mockUser, mockParcel, "DELIVER_TO_ADDRESS");
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
-                .updatePickUpOption(mockParcel, PickUpOption.DELIVER_TO_ADDRESS);
+                .update(mockParcel);
     }
 
     @Test
@@ -335,13 +305,12 @@ public class ParcelServiceImplTests {
     }
 
     @Test
-    public void updateShipment_Should_Throw_When_UserNotEmpoyee() {
+    public void updateShipment_Should_Throw_When_UserNotEmployee() {
         var mockParcel = createMockParcel();
         var mockUser = createMockCustomer();
-        mockUser.setId(3);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.updateShipment(mockUser, mockParcel.getId(), 3));
+                () -> service.updateShipment(mockUser, mockParcel, 3));
     }
 
     @Test
@@ -351,26 +320,30 @@ public class ParcelServiceImplTests {
         var mockShipment = createMockShipment();
         mockShipment.setFull(true);
 
-        Mockito.when(mockRepository.getById(anyInt()))
-                .thenReturn(mockParcel);
-
         Mockito.when(shipmentMockRepository.getById(anyInt()))
                 .thenReturn(mockShipment);
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> service.updateShipment(mockEmployee, mockParcel.getId(), mockShipment.getId()));
+                () -> service.updateShipment(mockEmployee, mockParcel, 5));
 
     }
+
 
     @Test
     public void updateShipment_Should_Call_Repository_When_Valid() {
         var mockParcel = createMockParcel();
         var mockShipment = createMockShipment();
+        var mockEmployee = createMockEmployee();
 
-        mockRepository.updateShipment(mockParcel, mockShipment);
+
+        Mockito.when(shipmentMockRepository.getById(anyInt()))
+                .thenReturn(mockShipment);
+
+        service.updateShipment(mockEmployee, mockParcel, mockShipment.getId());
 
         Mockito.verify(mockRepository, Mockito.times(1))
-                .updateShipment(mockParcel, mockShipment);
+                .update(mockParcel);
     }
+
 
 }
