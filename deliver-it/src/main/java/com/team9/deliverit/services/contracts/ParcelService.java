@@ -29,9 +29,7 @@ public interface ParcelService {
 
     List<Parcel> pastParcels(User user);
 
-    String getStatusOfParcel(User user, int parcelId);
+    void updatePickUpOption(User user, Parcel parcel, String pickUpOption);
 
-    Parcel updatePickUpOption(User user, int parcelId, String pickUpOption);
-
-    Parcel updateShipment(User user, int parcelId, int shipmentId);
+    void updateShipment(User user, Parcel parcel, int shipmentId);
 }

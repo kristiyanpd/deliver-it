@@ -112,20 +112,24 @@ public class ParcelController {
     @GetMapping("/{id}/status")
     public String getStatusOfParcel(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
-        return service.getStatusOfParcel(user, id);
+        return service.getById(id, user).getShipment().getStatus().toString();
     }
 
     @PutMapping("/{id}/pick-up")
     public ParcelDisplayDto updatePickUpOption(@RequestHeader HttpHeaders headers,
                                                @PathVariable int id, @RequestParam String option) {
         User user = authenticationHelper.tryGetUser(headers);
-        return ParcelModelMapper.toParcelDto(service.updatePickUpOption(user, id, option));
+        Parcel parcel = service.getById(id, user);
+        service.updatePickUpOption(user, parcel, option);
+        return ParcelModelMapper.toParcelDto(parcel);
     }
 
     @PutMapping("/{id}/shipment/{shipmentId}")
     public ParcelDisplayDto updateShipment(@RequestHeader HttpHeaders headers,
                                            @PathVariable int id, @PathVariable int shipmentId) {
         User user = authenticationHelper.tryGetUser(headers);
-        return ParcelModelMapper.toParcelDto(service.updateShipment(user, id, shipmentId));
+        Parcel parcel = service.getById(id, user);
+        service.updateShipment(user, parcel, shipmentId);
+        return ParcelModelMapper.toParcelDto(parcel);
     }
 }

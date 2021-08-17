@@ -63,40 +63,6 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
         }
     }
 
-    //ToDo use getById().getShipment().getStatus()
-    public String getStatusOfParcel(int parcelId) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Shipment> query = session.createQuery(
-                    "select s from Parcel p join Shipment s on p.shipment.id = s.id where p.id = :parcelId", Shipment.class);
-            query.setParameter("parcelId", parcelId);
-            return query.list().get(0).getStatus().toString();
-        }
-    }
-
-    //ToDo reuse update method (service handles the specific change)
-    @Override
-    public Parcel updatePickUpOption(Parcel parcel, PickUpOption pickUpOption) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            parcel.setPickUpOption(pickUpOption);
-            session.update(parcel);
-            session.getTransaction().commit();
-            return parcel;
-        }
-    }
-
-    //ToDo reuse update method (service handles the specific change)
-    @Override
-    public Parcel updateShipment(Parcel parcel, Shipment shipment) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            parcel.setShipment(shipment);
-            session.update(parcel);
-            session.getTransaction().commit();
-            return parcel;
-        }
-    }
-
     @Override
     public List<Parcel> filter(Optional<Double> weight,
                                Optional<Integer> warehouseId,

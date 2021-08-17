@@ -66,8 +66,8 @@ public class ParcelServiceImpl implements ParcelService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "update", "parcels"));
         }
-        //ToDo revise logic
-        if (parcel.getShipment().isFull()) {
+        Parcel oldParcel = getById(parcel.getId(), user);
+        if (parcel.getShipment().isFull() && oldParcel.getShipment().getId() != parcel.getShipment().getId()) {
             throw new IllegalArgumentException(INVALID_SHIPMENT_FULL);
         }
         repository.update(parcel);
@@ -113,36 +113,28 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public String getStatusOfParcel(User user, int parcelId) {
-        if (repository.getById(parcelId).getUser().getId() != user.getId()) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_NOT_OWNER);
-        }
-        return repository.getStatusOfParcel(parcelId);
-    }
-
-    @Override
-    public Parcel updatePickUpOption(User user, int parcelId, String pickUpOption) {
-        if (repository.getById(parcelId).getUser().getId() != user.getId()) {
+    public void updatePickUpOption(User user, Parcel parcel, String pickUpOption) {
+        if (parcel.getUser().getId() != user.getId()) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_NOT_OWNER);
         }
         PickUpOption pick = PickUpOption.getEnum(pickUpOption);
-        Parcel parcel = repository.getById(parcelId);
         if (parcel.getShipment().getStatus() == Status.COMPLETED) {
             throw new EnumAlreadySameException(String.format("Parcel with ID %s is already %s!", parcel.getId(), parcel.getShipment().getStatus().toString()));
         }
-        return repository.updatePickUpOption(parcel, pick);
+        parcel.setPickUpOption(pick);
+        repository.update(parcel);
     }
 
     @Override
-    public Parcel updateShipment(User user, int parcelId, int shipmentId) {
+    public void updateShipment(User user, Parcel parcel, int shipmentId) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "update", "parcels"));
         }
-        Parcel parcel = repository.getById(parcelId);
         Shipment shipment = shipmentRepository.getById(shipmentId);
-        if (shipment.isFull()) {
+        if (shipment.isFull() && parcel.getShipment().getId() != shipmentId) {
             throw new IllegalArgumentException(INVALID_SHIPMENT_FULL);
         }
-        return repository.updateShipment(parcel, shipment);
+        parcel.setShipment(shipment);
+        repository.update(parcel);
     }
 }

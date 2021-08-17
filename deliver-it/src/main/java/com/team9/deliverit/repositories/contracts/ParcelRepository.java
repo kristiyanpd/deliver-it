@@ -26,12 +26,6 @@ public interface ParcelRepository {
 
     List<Parcel> pastParcels(int userId);
 
-    Parcel updatePickUpOption(Parcel parcel, PickUpOption pickUpOption);
-
-    Parcel updateShipment(Parcel parcel, Shipment shipment);
-
-    String getStatusOfParcel(int parcelId);
-
     List<Parcel> filter(Optional<Double> weight,
                         Optional<Integer> warehouseId,
                         Optional<Category> category,
