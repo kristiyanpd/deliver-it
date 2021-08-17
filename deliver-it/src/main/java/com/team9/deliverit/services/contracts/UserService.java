@@ -18,7 +18,7 @@ public interface UserService {
 
     User getByEmail(String email);
 
-    User registerEmployee(int id, User user);
+    void registerEmployee(int id, User user);
 
     int countCustomers();
 

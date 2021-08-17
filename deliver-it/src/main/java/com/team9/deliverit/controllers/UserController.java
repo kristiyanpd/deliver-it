@@ -66,7 +66,8 @@ public class UserController {
     @PutMapping("/{id}/employee/register")
     public User registerEmployee(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
-        return service.registerEmployee(id, user);
+        service.registerEmployee(id, user);
+        return service.getById(user, id);
     }
 
     @GetMapping("/search/optional")

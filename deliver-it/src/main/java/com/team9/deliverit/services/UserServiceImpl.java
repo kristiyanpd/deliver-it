@@ -78,14 +78,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerEmployee(int id, User user) {
+    public void registerEmployee(int id, User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "register new", "employees"));
         }
         User newEmployee = repository.getById(id);
         newEmployee.setRole(roleRepository.getById(2));
         repository.update(newEmployee);
-        return newEmployee;
     }
 
     @Override
