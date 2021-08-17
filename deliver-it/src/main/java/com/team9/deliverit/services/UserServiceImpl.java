@@ -3,6 +3,7 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.repositories.contracts.RoleRepository;
 import com.team9.deliverit.repositories.contracts.UserRepository;
 import com.team9.deliverit.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
 
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
+    public UserServiceImpl(UserRepository repository, RoleRepository roleRepository) {
         this.repository = repository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -78,7 +82,10 @@ public class UserServiceImpl implements UserService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "register new", "employees"));
         }
-        return repository.registerEmployee(id);
+        User newEmployee = repository.getById(id);
+        newEmployee.setRole(roleRepository.getById(2));
+        repository.update(newEmployee);
+        return newEmployee;
     }
 
     @Override

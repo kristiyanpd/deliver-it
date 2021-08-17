@@ -3,6 +3,7 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.repositories.contracts.RoleRepository;
 import com.team9.deliverit.repositories.contracts.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.team9.deliverit.Helpers.createMockCustomer;
-import static com.team9.deliverit.Helpers.createMockEmployee;
+import static com.team9.deliverit.Helpers.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -26,6 +26,9 @@ public class UserServiceImplTests {
 
     @Mock
     UserRepository mockRepository;
+
+    @Mock
+    RoleRepository roleRepository;
 
     @InjectMocks
     UserServiceImpl service;
@@ -185,11 +188,21 @@ public class UserServiceImplTests {
     @Test
     public void registerEmployee_Should_Call_Repository_When_UserIsValid() {
 
-        service.registerEmployee(1, createMockEmployee());
+        var mockUser = createMockEmployee();
+        var mockCustomer = createMockCustomer();
+        var mockRole = createMockEmployeeRole();
+
+        Mockito.when(mockRepository.getById(anyInt()))
+                .thenReturn(mockCustomer);
+
+        Mockito.when(roleRepository.getById(anyInt()))
+                .thenReturn(mockRole);
+
+        service.registerEmployee(1,mockUser);
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
-                .registerEmployee(anyInt());
+                .update(mockCustomer);
     }
 
     @Test

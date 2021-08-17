@@ -33,7 +33,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
     }
 
     @Override
-    public int countCustomers(){
+    public int countCustomers() {
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("select u from User u where u.role.id = 1", User.class);
             return query.list().size();
@@ -58,18 +58,6 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
             query.setParameter("email", email);
             List<User> result = query.list();
             return result.size() > 0;
-        }
-    }
-
-    @Override
-    public User registerEmployee(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            User user = getById(id);
-            session.beginTransaction();
-            user.setRole(roleService.getById(2));
-            session.update(user);
-            session.getTransaction().commit();
-            return user;
         }
     }
 

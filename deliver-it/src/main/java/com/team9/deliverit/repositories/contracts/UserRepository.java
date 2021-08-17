@@ -22,8 +22,6 @@ public interface UserRepository {
 
     int countCustomers();
 
-    User registerEmployee(int id);
-
     List<User> searchEverywhere(String param);
 
     List<User> search(Optional<String> email, Optional<String> firstName, Optional<String> lastName);
