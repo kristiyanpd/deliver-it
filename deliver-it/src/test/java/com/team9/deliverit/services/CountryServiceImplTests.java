@@ -62,7 +62,7 @@ public class CountryServiceImplTests {
 
         Country mockCountry = createMockCountry();
 
-        Mockito.when(mockRepository.getByName(anyString()))
+        Mockito.when(mockRepository.getByField(anyString(),anyString()))
                 .thenReturn(mockCountry);
         // Act
         Country result = service.getByName("Bulgaria");
@@ -80,7 +80,7 @@ public class CountryServiceImplTests {
 
         mockList.add(mockCountry);
 
-        Mockito.when(mockRepository.searchByName(anyString()))
+        Mockito.when(mockRepository.searchByFieldList(anyString(),anyString()))
                 .thenReturn(mockList);
 
         List<Country> result = service.searchByName("Bulgaria");

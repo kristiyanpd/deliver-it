@@ -81,7 +81,7 @@ public class UserServiceImplTests {
 
         var mockUser = createMockEmployee();
 
-        Mockito.when(mockRepository.getByEmail(anyString()))
+        Mockito.when(mockRepository.getByField(anyString(),anyString()))
                 .thenReturn(mockUser);
         // Act
         var result = service.getByEmail("georgiev.kamen@abv.bg");

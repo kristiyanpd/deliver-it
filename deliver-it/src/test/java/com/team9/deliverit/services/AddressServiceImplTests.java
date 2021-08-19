@@ -3,7 +3,6 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Address;
-import com.team9.deliverit.models.dtos.AddressDisplayDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -58,7 +57,7 @@ public class AddressServiceImplTests {
         Mockito.when(mockRepository.getAll())
                 .thenReturn(list);
         // Act
-        List<AddressDisplayDto> result = service.getAll(createMockEmployee());
+        List<Address> result = service.getAll(createMockEmployee());
 
         // Assert
         Assertions.assertEquals(0, result.size());
@@ -79,7 +78,7 @@ public class AddressServiceImplTests {
         Address mockAddress = createMockAddress();
         list.add(mockAddress);
 
-        Mockito.when(mockRepository.getByName(anyString()))
+        Mockito.when(mockRepository.searchByFieldList(anyString(),anyString()))
                 .thenReturn(list);
         // Act
         List<Address> result = service.getByName(createMockEmployee(), "Tsar Samuil");

@@ -316,12 +316,17 @@ public class ParcelServiceImplTests {
     @Test
     public void updateShipment_Should_Throw_When_Shipment_Is_Full() {
         var mockParcel = createMockParcel();
+        var mockParcel1 = createMockParcel();
+        mockParcel1.getShipment().setId(4);
         var mockEmployee = createMockEmployee();
         var mockShipment = createMockShipment();
         mockShipment.setFull(true);
 
         Mockito.when(shipmentMockRepository.getById(anyInt()))
                 .thenReturn(mockShipment);
+
+        Mockito.when(mockRepository.getById(anyInt()))
+                .thenReturn(mockParcel1);
 
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> service.updateShipment(mockEmployee, mockParcel, 5));

@@ -56,6 +56,7 @@ public class CityServiceImplTests {
         Assertions.assertEquals(0, result.size());
     }
 
+
     @Test
     public void getByName_Should_ReturnCity_When_MatchExist() {
         // Arrange
@@ -64,8 +65,9 @@ public class CityServiceImplTests {
         City mockCity = createMockCity();
         list.add(mockCity);
 
-        Mockito.when(mockRepository.getByName(anyString()))
+        Mockito.when(mockRepository.searchByFieldList("name","Bulgaria"))
                 .thenReturn(list);
+
         // Act
         List<City> result = service.getByName("Bulgaria");
 

@@ -1,4 +1,4 @@
-package com.team9.deliverit.controllers;
+package com.team9.deliverit.controllers.rest;
 
 import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.models.Shipment;
