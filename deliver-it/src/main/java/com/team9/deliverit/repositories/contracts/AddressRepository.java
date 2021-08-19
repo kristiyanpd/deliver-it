@@ -4,18 +4,7 @@ import com.team9.deliverit.models.Address;
 
 import java.util.List;
 
-public interface AddressRepository {
-    List<Address> getAll();
-
-    Address getById(int id);
-
-    List<Address> getByName(String name);
-
-    void create(Address address);
-
-    void update(Address address);
-
-    void delete(int id);
+public interface AddressRepository extends BaseRepository<Address> {
 
     List<Address> getDuplicate(String name, int cityId);
 

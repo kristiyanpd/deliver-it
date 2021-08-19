@@ -7,6 +7,12 @@ public interface BaseRepository<E> {
 
     E getById(int id);
 
+    <V> E getByField(String fieldName, V value);
+
+    <V> List<E> getByFieldList(String fieldName, V value);
+
+    <V> List<E> searchByFieldList(String fieldName, V value);
+
     void create(E obj);
 
     void update(E obj);

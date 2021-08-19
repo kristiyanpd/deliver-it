@@ -27,12 +27,11 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<AddressDisplayDto> getAll(User user) {
+    public List<Address> getAll(User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view all", "addresses"));
         }
-        return repository.getAll().stream().map(AddressModelMapper::toAddressDto)
-                .collect(Collectors.toList());
+        return repository.getAll();
     }
 
     @Override
@@ -48,7 +47,7 @@ public class AddressServiceImpl implements AddressService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "addresses"));
         }
-        return repository.getByName(name);
+        return repository.searchByFieldList("streetName", name);
     }
 
     @Override

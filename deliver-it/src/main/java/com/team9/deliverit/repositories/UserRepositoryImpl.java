@@ -1,9 +1,7 @@
 package com.team9.deliverit.repositories;
 
-import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.repositories.contracts.UserRepository;
-import com.team9.deliverit.services.contracts.RoleService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -18,18 +16,11 @@ import java.util.Optional;
 public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements UserRepository {
 
     private final SessionFactory sessionFactory;
-    private final RoleService roleService;
 
     @Autowired
-    public UserRepositoryImpl(SessionFactory sessionFactory, RoleService roleService) {
-        super(sessionFactory);
+    public UserRepositoryImpl(SessionFactory sessionFactory) {
+        super(sessionFactory, User.class);
         this.sessionFactory = sessionFactory;
-        this.roleService = roleService;
-    }
-
-    @Override
-    protected Class<User> getClazz() {
-        return User.class;
     }
 
     @Override
@@ -37,18 +28,6 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<User> implements User
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("select u from User u where u.role.id = 1", User.class);
             return query.list().size();
-        }
-    }
-
-    @Override
-    public User getByEmail(String email) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from User where email = :email", User.class);
-            query.setParameter("email", email);
-            if (query.list().size() == 0) {
-                throw new EntityNotFoundException("User", "email", email);
-            }
-            return query.list().get(0);
         }
     }
 

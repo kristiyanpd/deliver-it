@@ -21,13 +21,8 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
 
     @Autowired
     public ShipmentRepositoryImpl(SessionFactory sessionFactory) {
-        super(sessionFactory);
+        super(sessionFactory, Shipment.class);
         this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    protected Class<Shipment> getClazz() {
-        return Shipment.class;
     }
 
     @Override

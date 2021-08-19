@@ -11,17 +11,17 @@ import java.util.List;
 public abstract class BaseRepositoryImpl<E> implements BaseRepository<E> {
 
     private final SessionFactory sessionFactory;
+    private final Class<E> clazz;
 
-    public BaseRepositoryImpl(SessionFactory sessionFactory) {
+    public BaseRepositoryImpl(SessionFactory sessionFactory, Class<E> clazz) {
         this.sessionFactory = sessionFactory;
+        this.clazz = clazz;
     }
-
-    protected abstract Class<E> getClazz();
 
     @Override
     public List<E> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            Query<E> query = session.createQuery("from " + getClazz().getSimpleName(), getClazz());
+            Query<E> query = session.createQuery("from " + clazz.getSimpleName(), clazz);
             return query.list();
         }
     }
@@ -29,11 +29,38 @@ public abstract class BaseRepositoryImpl<E> implements BaseRepository<E> {
     @Override
     public E getById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            E obj = session.get(getClazz(), id);
+            E obj = session.get(clazz, id);
             if (obj == null) {
-                throw new EntityNotFoundException(getClazz().getSimpleName(), id);
+                throw new EntityNotFoundException(clazz.getSimpleName(), id);
             }
             return obj;
+        }
+    }
+
+    @Override
+    public <V> E getByField(String fieldName, V value) {
+        List<E> list = getByFieldList(fieldName, value);
+        if (list.isEmpty()) {
+            throw new EntityNotFoundException(clazz.getSimpleName(), fieldName, String.valueOf(value));
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public <V> List<E> getByFieldList(String fieldName, V value) {
+        String query = String.format("from %s where %s = :value", clazz.getSimpleName(), fieldName);
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(query, clazz)
+                    .setParameter("value", value).list();
+        }
+    }
+
+    @Override
+    public <V> List<E> searchByFieldList(String fieldName, V value) {
+        String query = String.format("from %s where %s like :value", clazz.getSimpleName(), fieldName);
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(query, clazz)
+                    .setParameter("value", "%" + value + "%").list();
         }
     }
 

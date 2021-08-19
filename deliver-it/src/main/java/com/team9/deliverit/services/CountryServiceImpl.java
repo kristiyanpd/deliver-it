@@ -35,12 +35,12 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getByName(String name) {
-        return repository.getByName(name);
+        return repository.getByField("name", name);
     }
 
     @Override
     public List<Country> searchByName(String name) {
-        return repository.searchByName(name);
+        return repository.searchByFieldList("name", name);
     }
 
     @Override

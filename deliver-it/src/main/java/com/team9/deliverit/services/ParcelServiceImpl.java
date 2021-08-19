@@ -61,17 +61,7 @@ public class ParcelServiceImpl implements ParcelService {
         repository.create(parcel);
     }
 
-    @Override
-    public void update(Parcel parcel, User user) {
-        if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "update", "parcels"));
-        }
-        Parcel oldParcel = getById(parcel.getId(), user);
-        if (parcel.getShipment().isFull() && oldParcel.getShipment().getId() != parcel.getShipment().getId()) {
-            throw new IllegalArgumentException(INVALID_SHIPMENT_FULL);
-        }
-        repository.update(parcel);
-    }
+
 
     @Override
     public void delete(int id, User user) {
@@ -126,15 +116,21 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public void updateShipment(User user, Parcel parcel, int shipmentId) {
+    public void update(Parcel parcel, User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "update", "parcels"));
         }
-        Shipment shipment = shipmentRepository.getById(shipmentId);
-        if (shipment.isFull() && parcel.getShipment().getId() != shipmentId) {
+        Parcel oldParcel = getById(parcel.getId(), user);
+        if (parcel.getShipment().isFull() && oldParcel.getShipment().getId() != parcel.getShipment().getId()) {
             throw new IllegalArgumentException(INVALID_SHIPMENT_FULL);
         }
-        parcel.setShipment(shipment);
         repository.update(parcel);
+    }
+
+    @Override
+    public void updateShipment(User user, Parcel parcel, int shipmentId) {
+        Shipment shipment = shipmentRepository.getById(shipmentId);
+        parcel.setShipment(shipment);
+        update(parcel, user);
     }
 }

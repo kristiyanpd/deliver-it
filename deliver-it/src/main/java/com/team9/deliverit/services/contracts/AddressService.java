@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AddressService {
 
-    List<AddressDisplayDto> getAll(User user);
+    List<Address> getAll(User user);
 
     Address getById(User user, int id);
 

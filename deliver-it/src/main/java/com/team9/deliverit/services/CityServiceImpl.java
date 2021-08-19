@@ -35,7 +35,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<City> getByName(String name) {
-        return repository.getByName(name);
+        return repository.searchByFieldList("name", name);
     }
 
     @Override

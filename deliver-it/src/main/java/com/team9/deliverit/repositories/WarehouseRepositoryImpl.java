@@ -17,13 +17,8 @@ public class WarehouseRepositoryImpl extends BaseRepositoryImpl<Warehouse> imple
 
     @Autowired
     public WarehouseRepositoryImpl(SessionFactory sessionFactory) {
-        super(sessionFactory);
+        super(sessionFactory, Warehouse.class);
         this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    protected Class<Warehouse> getClazz() {
-        return Warehouse.class;
     }
 
     @Override

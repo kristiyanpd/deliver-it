@@ -18,26 +18,8 @@ public class AddressRepositoryImpl extends BaseRepositoryImpl<Address> implement
 
     @Autowired
     public AddressRepositoryImpl(SessionFactory sessionFactory) {
-        super(sessionFactory);
+        super(sessionFactory, Address.class);
         this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    protected Class<Address> getClazz() {
-        return Address.class;
-    }
-
-    @Override
-    public List<Address> getByName(String name) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Address> query = session.createQuery("from Address where streetName like :name", Address.class);
-            query.setParameter("name", "%" + name + "%");
-            List<Address> result = query.list();
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("Address", "street name", name);
-            }
-            return result;
-        }
     }
 
     @Override

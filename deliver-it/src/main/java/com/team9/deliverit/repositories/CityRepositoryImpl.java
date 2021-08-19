@@ -1,6 +1,5 @@
 package com.team9.deliverit.repositories;
 
-import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.repositories.contracts.CityRepository;
 import org.hibernate.Session;
@@ -18,26 +17,8 @@ public class CityRepositoryImpl extends BaseRepositoryImpl<City> implements City
 
     @Autowired
     public CityRepositoryImpl(SessionFactory sessionFactory) {
-        super(sessionFactory);
+        super(sessionFactory, City.class);
         this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    protected Class<City> getClazz() {
-        return City.class;
-    }
-
-    @Override
-    public List<City> getByName(String name) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<City> query = session.createQuery("from City where name like :name", City.class);
-            query.setParameter("name", "%" + name + "%");
-            List<City> result = query.list();
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("City", "name", name);
-            }
-            return result;
-        }
     }
 
     public boolean isDuplicate(String name, int countryId) {

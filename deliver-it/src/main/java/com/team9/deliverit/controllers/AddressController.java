@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/addresses")
@@ -32,7 +33,8 @@ public class AddressController {
     @GetMapping
     public List<AddressDisplayDto> getAll(@RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
-        return service.getAll(user);
+        return service.getAll(user).stream().map(AddressModelMapper::toAddressDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")

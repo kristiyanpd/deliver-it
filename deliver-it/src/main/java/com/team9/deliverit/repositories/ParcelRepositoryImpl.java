@@ -1,10 +1,7 @@
 package com.team9.deliverit.repositories;
 
-import com.team9.deliverit.exceptions.EnumAlreadySameException;
 import com.team9.deliverit.models.Parcel;
-import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.enums.Category;
-import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import org.hibernate.Session;
@@ -24,13 +21,8 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
 
     @Autowired
     public ParcelRepositoryImpl(SessionFactory sessionFactory) {
-        super(sessionFactory);
+        super(sessionFactory, Parcel.class);
         this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    protected Class<Parcel> getClazz() {
-        return Parcel.class;
     }
 
     @Override

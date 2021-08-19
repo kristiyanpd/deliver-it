@@ -1,24 +1,13 @@
 package com.team9.deliverit.repositories.contracts;
 
 import com.team9.deliverit.models.Parcel;
-import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.enums.Category;
-import com.team9.deliverit.models.enums.PickUpOption;
 import com.team9.deliverit.models.enums.Status;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ParcelRepository {
-    List<Parcel> getAll();
-
-    Parcel getById(int id);
-
-    void create(Parcel parcel);
-
-    void update(Parcel parcel);
-
-    void delete(int id);
+public interface ParcelRepository extends BaseRepository<Parcel> {
 
     List<Parcel> getAllUserParcels(int userId);
 
