@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Country</title>
+    <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<ul>
+    <li><h3><a href="#" th:href="@{/beers}" th:text="#{navigation.all-countries}">Browse all countries</a></h3></li>
+</ul>
+
+<h2>Edit Country</h2>
+
+<form th:replace="country-form.html :: country-form"></form>
+</body>
+</html>

@@ -28,6 +28,12 @@ public class CountryModelMapper {
         return country;
     }
 
+    public CountryDto toDto(Country country) {
+        CountryDto countryDto = new CountryDto();
+        countryDto.setName(country.getName());
+        return countryDto;
+    }
+
     private void dtoToObject(CountryDto countryDto, Country country) {
         country.setName(countryDto.getName());
     }
