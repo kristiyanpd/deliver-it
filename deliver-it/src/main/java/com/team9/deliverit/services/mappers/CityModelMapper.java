@@ -21,12 +21,19 @@ public class CityModelMapper {
         this.countryRepository = styleRepository;
     }
 
-    public static CityDisplayDto toDto(City city) {
+    public static CityDisplayDto toDisplayDto(City city) {
         CityDisplayDto cityDisplayDto = new CityDisplayDto();
         cityDisplayDto.setName(city.getName());
         cityDisplayDto.setCountry(city.getCountry().getName());
 
         return cityDisplayDto;
+    }
+
+    public CityDto toDto(City city) {
+        CityDto cityDto = new CityDto();
+        cityDto.setName(city.getName());
+        cityDto.setCountryId(city.getCountry().getId());
+        return cityDto;
     }
 
     public City fromDto(CityDto cityDto) {

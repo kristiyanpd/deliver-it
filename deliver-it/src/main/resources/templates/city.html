@@ -14,5 +14,10 @@
 <h2 th:text="${city.getName}">City Name</h2>
 <h2 th:text="${city.getCountry.getName}">City Country</h2>
 
+<h3>
+    <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/update}">Update</a>
+    <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/delete}">Delete</a>
+</h3>
+
 </body>
 </html>

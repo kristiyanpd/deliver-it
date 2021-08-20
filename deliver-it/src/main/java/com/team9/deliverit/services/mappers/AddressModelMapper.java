@@ -9,7 +9,7 @@ import com.team9.deliverit.repositories.contracts.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.team9.deliverit.services.mappers.CityModelMapper.toDto;
+import static com.team9.deliverit.services.mappers.CityModelMapper.toDisplayDto;
 
 
 @Component
@@ -26,7 +26,7 @@ public class AddressModelMapper {
 
     public static AddressDisplayDto toAddressDto(Address address) {
         AddressDisplayDto addressDisplayDto = new AddressDisplayDto();
-        addressDisplayDto.setCity(toDto(address.getCity()));
+        addressDisplayDto.setCity(toDisplayDto(address.getCity()));
         addressDisplayDto.setStreetName(address.getStreetName());
 
         return addressDisplayDto;
