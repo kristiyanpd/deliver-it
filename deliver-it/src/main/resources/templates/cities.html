@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Countries</title>
+    <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<ul>
+    <li><h3><a href="/" th:text="#{navigation.home}">Home</a></h3></li>
+</ul>
+
+<div th:if="${cities.isEmpty()}">
+    <h2 th:text="#{city.title.empty}">No Cities</h2>
+</div>
+<div th:unless="${cities.isEmpty()}">
+    <h2 th:text="#{city.title}">All Cities</h2>
+
+    <div class="table">
+        <div class="header">
+            <div class="cell" th:text="#{city.label.name}">Name</div>
+        </div>
+        <div class="row" th:each="city : ${cities}">
+            <div class="cell">
+                <a href="#" th:href="@{/cities/{id}(id=${city.getId})}" th:text="${city.name}">City</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
