@@ -4,6 +4,7 @@ import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.dtos.AddressDisplayDto;
 import com.team9.deliverit.models.dtos.AddressDto;
+import com.team9.deliverit.models.dtos.CityDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import com.team9.deliverit.repositories.contracts.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,14 @@ public class AddressModelMapper {
         addressDisplayDto.setStreetName(address.getStreetName());
 
         return addressDisplayDto;
+    }
+
+    public AddressDto toDto(Address address) {
+        AddressDto addressDto = new AddressDto();
+        addressDto.setStreetName(address.getStreetName());
+        addressDto.setCityId(address.getCity().getId());
+
+        return addressDto;
     }
 
     public Address fromDto(AddressDto addressDto) {

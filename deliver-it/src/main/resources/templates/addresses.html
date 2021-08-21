@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Addresses</title>
+    <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<ul>
+    <li><h3><a href="/" th:text="#{navigation.home}">Home</a></h3></li>
+</ul>
+
+<div th:if="${addresses.isEmpty()}">
+    <h2 th:text="#{address.title.empty}">No Addresses</h2>
+</div>
+<div th:unless="${addresses.isEmpty()}">
+    <h2 th:text="#{address.title}">All Addresses</h2>
+
+    <div class="table">
+        <div class="header">
+            <div class="cell" th:text="#{address.label.street.name}">Street Name</div>
+        </div>
+        <div class="row" th:each="address : ${addresses}">
+            <div class="cell">
+                <a href="#" th:href="@{/addresses/{id}(id=${address.getId()})}"
+                   th:text="${address.streetName}+', '+${address.getCity().getName()}+', '+${address.getCity().getCountry().getName()}">Address</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -6,6 +6,7 @@ import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.AddressDisplayDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
+import com.team9.deliverit.repositories.contracts.UserRepository;
 import com.team9.deliverit.services.contracts.AddressService;
 import com.team9.deliverit.services.mappers.AddressModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,8 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void create(User user, Address address) {
         if (repository.isDuplicate(address.getStreetName(), address.getCity().getId())) {
-            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
+            throw new DuplicateEntityException(String.format("Address %s in %s, %s already exists!",
+                    address.getStreetName(),address.getCity().getName(),address.getCity().getCountry().getName()));
         }
         repository.create(address);
     }
@@ -64,7 +66,8 @@ public class AddressServiceImpl implements AddressService {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "modify", "addresses"));
         }
         if (repository.isDuplicate(address.getStreetName(), address.getCity().getId())) {
-            throw new DuplicateEntityException("Address", "street name", address.getStreetName());
+            throw new DuplicateEntityException(String.format("Address %s in %s, %s already exists!",
+                    address.getStreetName(),address.getCity().getName(),address.getCity().getCountry().getName()));
         }
         repository.update(address);
     }
@@ -74,6 +77,7 @@ public class AddressServiceImpl implements AddressService {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "addresses"));
         }
+
         repository.delete(id);
     }
 }
