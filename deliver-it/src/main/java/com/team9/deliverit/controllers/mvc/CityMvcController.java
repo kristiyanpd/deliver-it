@@ -29,11 +29,11 @@ public class CityMvcController {
     private final CountryService countryService;
 
     @Autowired
-    public CityMvcController(CityService cityService,
+    public CityMvcController(CityService service,
                              CityModelMapper modelMapper,
                              UserService userService,
                              CountryService countryService) {
-        this.service = cityService;
+        this.service = service;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.countryService = countryService;

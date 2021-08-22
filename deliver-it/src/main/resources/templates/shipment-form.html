@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shipment Form Fragment</title>
+</head>
+<body>
+<form th:fragment="shipment-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${shipment}"
+      method="post">
+    <label th:text="#{shipment.label.id}">Shipment</label>
+
+    <label th:text="#{shipment.label.departureDate}">Departure Date</label>
+    <br>
+    <input type="date" th:field="*{departureDate}">
+    <label class="error" th:errors="*{departureDate}">Departure Date error placeholder</label>
+    <br><br>
+
+    <label th:text="#{shipment.label.arrivalDate}">Arrival Date</label>
+    <br>
+    <input type="date" th:field="*{arrivalDate}">
+    <label class="error" th:errors="*{arrivalDate}">Arrival Date error placeholder</label>
+    <br><br>
+
+    <label th:text="#{shipment.label.full}">Full</label>
+    <br>
+    <input type="checkbox" th:field="*{full}">
+    <label class="error" th:errors="*{full}">Full error placeholder</label>
+    <br><br>
+
+    <label th:text="#{shipment.label.status}">Status</label>
+    <br/>
+    <select th:field="*{status}">
+        <option th:each="status : ${T(com.team9.deliverit.models.enums.Status).values()}"
+                th:value="${status.value}"
+                th:text="${status.toString()}">
+            City Country
+        </option>
+    </select>
+    <label class="error" th:errors="*{status}">Status error placeholder</label>
+    <br/><br/>
+
+    <label th:text="#{shipment.label.originWarehouse}">Origin Warehouse</label>
+    <br/>
+    <select th:field="*{originWarehouseId}">
+        <option th:each="warehouse : ${warehouses}"
+                th:value="${warehouse.getId()}"
+                th:text="${warehouse.getAddress.getStreetName}">
+            Warehouse Address
+        </option>
+    </select>
+    <label class="error" th:errors="*{originWarehouseId}">Status error placeholder</label>
+    <br/><br/>
+
+    <label th:text="#{shipment.label.destinationWarehouse}">Destination Warehouse</label>
+    <br/>
+    <select th:field="*{destinationWarehouseId}">
+        <option th:each="warehouse : ${warehouses}"
+                th:value="${warehouse.getId()}"
+                th:text="${warehouse.getAddress.getStreetName}">
+            Warehouse Address
+        </option>
+    </select>
+    <label class="error" th:errors="*{destinationWarehouseId}">Destination Warehouse error placeholder</label>
+    <br/><br/>
+
+    <input type="submit" value="Save"/>
+</form>
+</body>
+</html>

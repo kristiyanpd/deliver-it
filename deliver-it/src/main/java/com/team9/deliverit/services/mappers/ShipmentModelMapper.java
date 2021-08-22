@@ -1,7 +1,9 @@
 package com.team9.deliverit.services.mappers;
 
+import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.Warehouse;
+import com.team9.deliverit.models.dtos.CityDto;
 import com.team9.deliverit.models.dtos.ShipmentDisplayDto;
 import com.team9.deliverit.models.dtos.ShipmentDto;
 import com.team9.deliverit.models.enums.Status;
@@ -35,6 +37,17 @@ public class ShipmentModelMapper {
         shipmentDisplayDto.setDestinationWarehouseAddress(AddressModelMapper.toAddressDto(shipment.getDestinationWarehouse().getAddress()));
 
         return shipmentDisplayDto;
+    }
+
+    public ShipmentDto toDto(Shipment shipment) {
+        ShipmentDto shipmentDto = new ShipmentDto();
+        shipmentDto.setDepartureDate(shipment.getDepartureDate());
+        shipmentDto.setArrivalDate(shipment.getArrivalDate());
+        shipmentDto.setStatus(String.valueOf(shipment.getStatus()));
+        shipmentDto.setOriginWarehouseId(shipment.getOriginWarehouse().getId());
+        shipmentDto.setDestinationWarehouseId(shipment.getDestinationWarehouse().getId());
+        shipmentDto.setFull(shipment.isFull());
+        return shipmentDto;
     }
 
     public Shipment fromDto(ShipmentDto shipmentDto) {

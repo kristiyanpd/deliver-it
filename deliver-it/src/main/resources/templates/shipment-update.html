@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Shipment</title>
+    <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<ul>
+    <li><h3><a href="#" th:href="@{/shipments}" th:text="#{navigation.all-shipments}">Browse all shipments</a></h3></li>
+</ul>
+
+<h2>Edit Shipment</h2>
+
+<form th:replace="shipment-form.html :: shipment-form"></form>
+</body>
+</html>
