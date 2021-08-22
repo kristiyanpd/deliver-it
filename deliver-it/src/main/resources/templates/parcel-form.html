@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Parcel Form Fragment</title>
+</head>
+<body>
+<form th:fragment="parcel-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${parcel}"
+      method="post">
+    <label th:text="#{parcel.label.id}">Shipment</label>
+
+    <label th:text="#{parcel.label.weight}">Weight</label>
+    <br>
+    <input type="number" th:field="*{weight}">
+    <label class="error" th:errors="*{weight}">Weight error placeholder</label>
+    <br><br>
+
+    <label th:text="#{parcel.label.pickupoption}">Pick Up Option</label>
+    <br/>
+    <select th:field="*{pickUpOption}">
+        <option th:each="pickUp : ${T(com.team9.deliverit.models.enums.PickUpOption).values()}"
+                th:value="${pickUp.value}"
+                th:text="${pickUp.toString()}">
+            Pick Up Option
+        </option>
+    </select>
+    <label class="error" th:errors="*{pickUpOption}">Pick Up Option error placeholder</label>
+    <br/><br/>
+
+    <label th:text="#{parcel.label.user}">User</label>
+    <br/>
+    <select th:field="*{userId}">
+        <option th:each="user : ${users}"
+                th:value="${user.getId()}"
+                th:text="'ID: '+${user.getId}+', Full name: '+${user.getFirstName()}+' '+${user.getLastName()}">
+            Parcel Owner
+        </option>
+    </select>
+    <label class="error" th:errors="*{userId}">User error placeholder</label>
+    <br/><br/>
+
+    <label th:text="#{parcel.label.shipment}">Shipment</label>
+    <br/>
+    <select th:field="*{shipmentId}">
+        <option th:each="shipment : ${shipments}"
+                th:value="${shipment.getId()}"
+                th:text="'ID: '+${shipment.getId}+', From: '
+                +${shipment.getOriginWarehouse().getAddress().getStreetName()}+', '
+                +${shipment.getOriginWarehouse().getAddress().getCity().getName}+', '
+                +${shipment.getOriginWarehouse().getAddress().getCity().getCountry().getName()}+' | To: '
+                +${shipment.getDestinationWarehouse().getAddress().getStreetName()}+', '
+                +${shipment.getDestinationWarehouse().getAddress().getCity().getName}+', '
+                +${shipment.getDestinationWarehouse().getAddress().getCity().getCountry().getName()}+'.'">
+            Parcel Owner
+        </option>
+    </select>
+    <label class="error" th:errors="*{shipmentId}">Shipment error placeholder</label>
+    <br/><br/>
+
+    <label th:text="#{parcel.label.category}">Category</label>
+    <br/>
+    <select th:field="*{category}">
+        <option th:each="category : ${T(com.team9.deliverit.models.enums.Category).values()}"
+                th:value="${category.value}"
+                th:text="${category.toString()}">
+            Category
+        </option>
+    </select>
+    <label class="error" th:errors="*{category}">Category error placeholder</label>
+    <br/><br/>
+
+
+    <input type="submit" value="Save"/>
+</form>
+</body>
+</html>

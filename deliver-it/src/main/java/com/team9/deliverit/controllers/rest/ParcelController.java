@@ -37,20 +37,20 @@ public class ParcelController {
     @GetMapping
     public List<ParcelDisplayDto> getAll(@RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
-        return service.getAll(user).stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        return service.getAll(user).stream().map(ParcelModelMapper::toParcelDisplayDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ParcelDisplayDto getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
-        return ParcelModelMapper.toParcelDto(service.getById(id, user));
+        return ParcelModelMapper.toParcelDisplayDto(service.getById(user, id));
     }
 
     @PostMapping
     public Parcel create(@RequestHeader HttpHeaders headers, @Valid @RequestBody ParcelDto parcelDto) {
         User user = authenticationHelper.tryGetUser(headers);
         Parcel parcel = modelMapper.fromDto(parcelDto);
-        service.create(parcel, user);
+        service.create(user, parcel);
         return parcel;
     }
 
@@ -59,14 +59,14 @@ public class ParcelController {
                          @Valid @RequestBody ParcelDto parcelDto) {
         User user = authenticationHelper.tryGetUser(headers);
         Parcel parcel = modelMapper.fromDto(parcelDto, id);
-        service.update(parcel, user);
+        service.update(user, parcel);
         return parcel;
     }
 
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
-        service.delete(id, user);
+        service.delete(user, id);
     }
 
     @GetMapping("/filter")
@@ -75,8 +75,8 @@ public class ParcelController {
                                          Optional<Integer> warehouseId, Optional<Category> category,
                                          Optional<Status> status, Optional<Integer> userId) {
         User user = authenticationHelper.tryGetUser(headers);
-        return service.filter(weight, warehouseId, category, status, userId, user)
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        return service.filter(user, weight, warehouseId, category, status, userId)
+                .stream().map(ParcelModelMapper::toParcelDisplayDto).collect(Collectors.toList());
     }
 
     @GetMapping("/sort")
@@ -84,52 +84,52 @@ public class ParcelController {
                                        @RequestParam(required = false) Optional<String> weight,
                                        Optional<String> date, Optional<Integer> userId) {
         User user = authenticationHelper.tryGetUser(headers);
-        return service.sort(weight, date, userId, user).
-                stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+        return service.sort(user, weight, date, userId).
+                stream().map(ParcelModelMapper::toParcelDisplayDto).collect(Collectors.toList());
     }
 
     @GetMapping("/mine")
     public List<ParcelDisplayDto> getAllUserParcels(@RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         return service.getAllUserParcels(user)
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+                .stream().map(ParcelModelMapper::toParcelDisplayDto).collect(Collectors.toList());
     }
 
     @GetMapping("/mine/incoming")
     public List<ParcelDisplayDto> incomingParcels(@RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         return service.incomingParcels(user)
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+                .stream().map(ParcelModelMapper::toParcelDisplayDto).collect(Collectors.toList());
     }
 
     @GetMapping("/mine/past")
     public List<ParcelDisplayDto> pastParcels(@RequestHeader HttpHeaders headers) {
         User user = authenticationHelper.tryGetUser(headers);
         return service.pastParcels(user)
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+                .stream().map(ParcelModelMapper::toParcelDisplayDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}/status")
     public String getStatusOfParcel(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
-        return service.getById(id, user).getShipment().getStatus().toString();
+        return service.getById(user, id).getShipment().getStatus().toString();
     }
 
     @PutMapping("/{id}/pick-up")
     public ParcelDisplayDto updatePickUpOption(@RequestHeader HttpHeaders headers,
                                                @PathVariable int id, @RequestParam String option) {
         User user = authenticationHelper.tryGetUser(headers);
-        Parcel parcel = service.getById(id, user);
+        Parcel parcel = service.getById(user, id);
         service.updatePickUpOption(user, parcel, option);
-        return ParcelModelMapper.toParcelDto(parcel);
+        return ParcelModelMapper.toParcelDisplayDto(parcel);
     }
 
     @PutMapping("/{id}/shipment/{shipmentId}")
     public ParcelDisplayDto updateShipment(@RequestHeader HttpHeaders headers,
                                            @PathVariable int id, @PathVariable int shipmentId) {
         User user = authenticationHelper.tryGetUser(headers);
-        Parcel parcel = service.getById(id, user);
+        Parcel parcel = service.getById(user, id);
         service.updateShipment(user, parcel, shipmentId);
-        return ParcelModelMapper.toParcelDto(parcel);
+        return ParcelModelMapper.toParcelDisplayDto(parcel);
     }
 }

@@ -84,7 +84,7 @@ public class ParcelServiceImplTests {
                 .thenReturn(mockParcel);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.getById(1, mockCustomer));
+                () -> service.getById(mockCustomer, 1));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ParcelServiceImplTests {
         Mockito.when(mockRepository.getById(anyInt()))
                 .thenReturn(mockParcel);
         // Act
-        var result = service.getById(1, createMockEmployee());
+        var result = service.getById(createMockEmployee(), 1);
 
         // Assert
         Assertions.assertEquals(1, result.getId());
@@ -107,7 +107,7 @@ public class ParcelServiceImplTests {
         var mockParcel = createMockParcel();
 
         // Act
-        service.create(mockParcel, createMockEmployee());
+        service.create(createMockEmployee(), mockParcel);
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
@@ -118,7 +118,7 @@ public class ParcelServiceImplTests {
     public void create_Should_Throw_When_UnauthorizedUser() {
         // Assert
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.create(createMockParcel(), createMockCustomer()));
+                () -> service.create(createMockCustomer(), createMockParcel()));
     }
 
     @Test
@@ -127,7 +127,7 @@ public class ParcelServiceImplTests {
         mockParcel.getShipment().setFull(true);
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> service.create(mockParcel, createMockEmployee()));
+                () -> service.create(createMockEmployee(), mockParcel));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class ParcelServiceImplTests {
 
         var mockParcel = createMockParcel();
 
-        service.update(mockParcel, createMockEmployee());
+        service.update(createMockEmployee(), mockParcel);
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
                 .update(Mockito.any(Parcel.class));
@@ -145,7 +145,7 @@ public class ParcelServiceImplTests {
     public void update_Should_Throw_When_UnauthorizedUser() {
         // Assert
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.update(createMockParcel(), createMockCustomer()));
+                () -> service.update(createMockCustomer(), createMockParcel()));
     }
 
     @Test
@@ -164,21 +164,21 @@ public class ParcelServiceImplTests {
 
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> service.update(mockParcel2, createMockEmployee()));
+                () -> service.update(createMockEmployee(), mockParcel2));
     }
 
     @Test
     public void delete_Should_Throw_When_UserNotEmployee() {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> service.delete(1, createMockCustomer()));
+                () -> service.delete(createMockCustomer(), 1));
 
     }
 
     @Test
     public void delete_Should_Call_Repository_When_UserValid() {
 
-        service.delete(1, createMockEmployee());
+        service.delete(createMockEmployee(), 1);
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
@@ -188,8 +188,8 @@ public class ParcelServiceImplTests {
 
     @Test
     public void filter_Calls_Repository_When_UserNotEmployee() {
-        service.filter(Optional.empty(), Optional.empty(), Optional.empty(),
-                Optional.empty(), Optional.empty(), createMockCustomer());
+        service.filter(createMockCustomer(), Optional.empty(), Optional.empty(), Optional.empty(),
+                Optional.empty(), Optional.empty());
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
@@ -199,8 +199,8 @@ public class ParcelServiceImplTests {
     @Test
     public void filter_Calls_Repository_When_UserIsValid() {
 
-        service.filter(Optional.empty(), Optional.empty(), Optional.empty(),
-                Optional.empty(), Optional.empty(), createMockEmployee());
+        service.filter(createMockEmployee(), Optional.empty(), Optional.empty(), Optional.empty(),
+                Optional.empty(), Optional.empty());
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
@@ -209,7 +209,7 @@ public class ParcelServiceImplTests {
 
     @Test
     public void sort_Should_Call_Repository_When_UserNotEmployee() {
-        service.sort(Optional.empty(), Optional.empty(), Optional.empty(), createMockCustomer());
+        service.sort(createMockCustomer(), Optional.empty(), Optional.empty(), Optional.empty());
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))
@@ -219,7 +219,7 @@ public class ParcelServiceImplTests {
     @Test
     public void sort_Should_Call_Repository_When_UserIsEmployee() {
 
-        service.sort(Optional.empty(), Optional.empty(), Optional.empty(), createMockEmployee());
+        service.sort(createMockEmployee(), Optional.empty(), Optional.empty(), Optional.empty());
 
         // Assert
         Mockito.verify(mockRepository, Mockito.times(1))

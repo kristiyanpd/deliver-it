@@ -27,7 +27,7 @@ public class ParcelModelMapper {
         this.parcelRepository = parcelRepository;
     }
 
-    public static ParcelDisplayDto toParcelDto(Parcel parcel){
+    public static ParcelDisplayDto toParcelDisplayDto(Parcel parcel){
         ParcelDisplayDto parcelDisplayDto = new ParcelDisplayDto();
         parcelDisplayDto.setId(parcel.getId());
         parcelDisplayDto.setWeight(parcel.getWeight());
@@ -39,6 +39,17 @@ public class ParcelModelMapper {
                 parcel.getShipment().getDestinationWarehouse().getAddress()));
 
         return parcelDisplayDto;
+    }
+
+    public ParcelDto toDto(Parcel parcel){
+        ParcelDto parcelDto = new ParcelDto();
+        parcelDto.setWeight(parcel.getWeight());
+        parcelDto.setCategory(String.valueOf(parcel.getCategory()));
+        parcelDto.setPickUpOption(String.valueOf(parcel.getPickUpOption()));
+        parcelDto.setShipmentId(parcel.getShipment().getId());
+        parcelDto.setUserId(parcel.getUser().getId());
+
+        return parcelDto;
     }
 
     public Parcel fromDto(ParcelDto parcelDto) {

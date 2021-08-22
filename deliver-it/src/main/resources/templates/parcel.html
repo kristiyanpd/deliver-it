@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${parcel.getId}">Parcel profile</title>
+</head>
+<body>
+<ul>
+    <li><h3><a href="/" th:text="#{navigation.home}">Home</a></h3></li>
+    <li><h3><a href="#" th:href="@{/parcels}" th:text="#{navigation.all-parcels}">Browse all parcels</a></h3></li>
+</ul>
+
+<h2 th:text= "${parcel.getId()}">Parcel Id</h2>
+<h2 th:text="${parcel.getWeight()}">Parcel Weight</h2>
+<h2 th:text="${parcel.getPickUpOption()}">Parcel Pick Up Option</h2>
+<h2 th:text="'ID: '+${parcel.getUser().getId()}+' '+${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}">Parcel Owner</h2>
+<h2>Parcel Shipment: <br>
+    ID: <span th:text="${parcel.getShipment().getId()}">ID</span> <br>
+    Origin Warehouse: <span th:text="${parcel.getShipment().getOriginWarehouse().getAddress().getStreetName()}">Origin Warehouse Street Name</span>,
+    <span th:text="${parcel.getShipment().getOriginWarehouse().getAddress().getCity().getName()}">City</span>,
+    <span th:text="${parcel.getShipment().getOriginWarehouse().getAddress().getCity().getCountry().getName()}">Country</span><br>
+    Destination Warehouse: <span th:text="${parcel.getShipment().getDestinationWarehouse().getAddress().getStreetName()}">Origin Warehouse Street Name</span>,
+    <span th:text="${parcel.getShipment().getDestinationWarehouse().getAddress().getCity().getName()}">City</span>,
+    <span th:text="${parcel.getShipment().getDestinationWarehouse().getAddress().getCity().getCountry().getName()}">Country</span><br>
+    Departure Date: <span th:text="${parcel.getShipment().getDepartureDate()}">Departure Date</span> <br>
+    Arrival Date: <span th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</span> <br>
+</h2>
+<h2 th:text="${parcel.getCategory()}">Category</h2>
+<h2 th:text="${parcel.getShipment().getStatus()}">Shipment Status</h2>
+
+<h3>
+    <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/update}">Update</a>
+    <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/delete}">Delete</a>
+    <a href="#" th:href="@{/shipments/{id}/update(id=${parcel.getShipment().getId()})}">Edit Shipment</a>
+</h3>
+
+</body>
+</html>

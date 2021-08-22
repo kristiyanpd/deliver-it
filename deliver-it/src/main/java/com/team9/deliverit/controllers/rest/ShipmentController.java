@@ -91,6 +91,6 @@ public class ShipmentController {
     public List<ParcelDisplayDto> getParcels(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         User user = authenticationHelper.tryGetUser(headers);
         return service.getParcels(id, user)
-                .stream().map(ParcelModelMapper::toParcelDto).collect(Collectors.toList());
+                .stream().map(ParcelModelMapper::toParcelDisplayDto).collect(Collectors.toList());
     }
 }

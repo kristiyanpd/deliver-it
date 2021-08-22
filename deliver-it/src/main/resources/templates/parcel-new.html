@@ -2,16 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Address</title>
+    <title>New Parcel</title>
     <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
 </head>
 <body>
 <ul>
-    <li><h3><a href="#" th:href="@{/}" th:text="#{navigation.all-users}">Browse all users</a></h3></li>
+    <li><h3><a href="#" th:href="@{/parcels}" th:text="#{navigation.all-parcels}">Browse all parcels</a></h3></li>
 </ul>
 
-<h2>Edit User</h2>
+<h2>New Parcel</h2>
 
-<form th:replace="user-form.html :: user-form"></form>
+<form th:replace="parcel-form.html :: parcel-form"></form>
 </body>
 </html>

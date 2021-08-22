@@ -11,17 +11,17 @@ import java.util.Optional;
 public interface ParcelService {
     List<Parcel> getAll(User user);
 
-    Parcel getById(int id, User user);
+    Parcel getById(User user, int id);
 
-    void create(Parcel parcel, User user);
+    void create(User user, Parcel parcel);
 
-    void update(Parcel parcel, User user);
+    void update(User user, Parcel parcel);
 
-    void delete(int id, User user);
+    void delete(User user, int id);
 
-    List<Parcel> filter(Optional<Double> weight, Optional<Integer> warehouseId, Optional<Category> category, Optional<Status> status, Optional<Integer> userId, User user);
+    List<Parcel> filter(User user, Optional<Double> weight, Optional<Integer> warehouseId, Optional<Category> category, Optional<Status> status, Optional<Integer> userId);
 
-    List<Parcel> sort(Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId, User user);
+    List<Parcel> sort(User user, Optional<String> weight, Optional<String> arrivalDate, Optional<Integer> userId);
 
     List<Parcel> getAllUserParcels(User user);
 

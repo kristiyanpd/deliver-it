@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Parcels</title>
+    <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<ul>
+    <li><h3><a href="/" th:text="#{navigation.home}">Home</a></h3></li>
+</ul>
+
+<div th:if="${parcels.isEmpty()}">
+    <h2 th:text="#{parcel.title.empty}">No Parcels</h2>
+</div>
+<div th:unless="${parcels.isEmpty()}">
+    <h2 th:text="#{parcel.title}">All Parcels</h2>
+
+    <div class="table">
+        <div class="header">
+            <div class="cell" th:text="#{parcel.label.id}">Id</div>
+        </div>
+        <div class="row" th:each="parcel : ${parcels}">
+            <div class="cell">
+                <a href="#" th:href="@{/parcels/{id}(id=${parcel.getId})}" th:text="${parcel.id}">Parcel</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
