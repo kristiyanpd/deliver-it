@@ -3,6 +3,7 @@ package com.team9.deliverit.services.mappers;
 import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.dtos.AddressDto;
 import com.team9.deliverit.models.dtos.UserDisplayDto;
 import com.team9.deliverit.models.dtos.UserRegistrationDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
@@ -39,6 +40,18 @@ public class UserModelMapper {
         userDisplayDto.setEmail(user.getEmail());
 
         return userDisplayDto;
+    }
+
+    public UserRegistrationDto toDto(User user) {
+        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+
+        userRegistrationDto.setEmail(user.getEmail());
+        userRegistrationDto.setCityId(user.getAddress().getCity().getId());
+        userRegistrationDto.setStreetName(user.getAddress().getStreetName());
+        userRegistrationDto.setFirstName(user.getFirstName());
+        userRegistrationDto.setLastName(user.getLastName());
+
+        return userRegistrationDto;
     }
 
     public User fromDto(UserRegistrationDto userDto) {

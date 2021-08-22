@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.getEmail()}">User Profile</title>
+</head>
+<body>
+<ul>
+    <li><h3><a href="/" th:text="#{navigation.home}">Home</a></h3></li>
+</ul>
+
+<h2 th:text= "${user.getId}" ></h2>
+<h2 th:text= "${user.getEmail}" ></h2>
+<h2 th:text= "${user.firstName}+' '+${user.lastName}" ></h2>
+<h2 th:text= "${user.getAddress().getStreetName()}+', '+${user.getAddress().getCity().getName()}+', '+${user.getAddress().getCity().getCountry.getName()}" ></h2>
+<h3>
+    <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/update}">Update</a>
+    <a href="#" th:href="@{__${#httpServletRequest.requestURI}__/delete}">Delete</a>
+</h3>
+
+</body>
+</html>

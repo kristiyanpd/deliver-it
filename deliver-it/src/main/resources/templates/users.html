@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Users</title>
+    <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<ul>
+    <li><h3><a href="/" th:text="#{navigation.home}">Home</a></h3></li>
+</ul>
+
+    <h2 th:text="#{user.title}">All Users</h2>
+
+    <div class="table">
+        <div class="header">
+            <div class="cell" th:text="#{user.label.email}">User email</div>
+        </div>
+        <div class="row" th:each="user : ${users}">
+            <div class="cell">
+                <a href="#" th:href="@{/users/{id}(id=${user.getId()})}"
+                   th:text="${user.getEmail()}">Email</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

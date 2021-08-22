@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Form Fragment</title>
+</head>
+<body>
+<form th:fragment="user-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${user}"
+      method="post">
+    <label th:text="#{user.label.email}">User</label>
+
+    <br>
+    <input type="text" th:field="*{email}">
+    <label class="error" th:errors="*{email}">Name error placeholder</label>
+    <br>
+    <label th:text="#{user.label.first.name}">User</label>
+
+    <br>
+    <input type="text" th:field="*{firstName}">
+    <label class="error" th:errors="*{firstName}">Name error placeholder</label>
+    <br>
+    <label th:text="#{user.label.last.name}">User</label>
+
+    <br>
+    <input type="text" th:field="*{lastName}">
+    <label class="error" th:errors="*{lastName}">Name error placeholder</label>
+    <br><br>
+
+    <label th:text="#{user.label.address}">City</label>
+    <br>
+    <label th:text="#{user.label.street}">City</label>
+    <input type="text" th:field="*{streetName}">
+    <br/>
+    <select th:field="*{cityId}">
+        <option th:each="city : ${cities}"
+                th:value="${city.getId()}"
+                th:text="${city.getName()}+', '+${city.getCountry().getName()}">
+            City Country
+        </option>
+    </select>
+    <label class="error" th:errors="*{cityId}">City error placeholder</label>
+    <br/><br/>
+
+    <input type="submit" value="Save"/>
+</form>
+</body>
+</html>
