@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Address</title>
+    <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<ul>
+    <li><h3><a href="#" th:href="@{/warehouses}" th:text="#{navigation.all-warehouses}">Browse all ws</a></h3></li>
+</ul>
+
+<h2>New Warehouse</h2>
+
+<form th:replace="warehouse-form.html :: warehouse-form"></form>
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.team9.deliverit.services.mappers;
 
 import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.Warehouse;
+import com.team9.deliverit.models.dtos.AddressDto;
 import com.team9.deliverit.models.dtos.WarehouseDisplayDto;
 import com.team9.deliverit.models.dtos.WarehouseDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
@@ -20,6 +21,14 @@ public class WarehouseModelMapper {
         this.warehouseRepository = warehouseRepository;
         this.addressRepository = addressRepository;
     }
+
+    public WarehouseDto toDto(Warehouse warehouse) {
+        WarehouseDto warehouseDto = new WarehouseDto();
+        warehouseDto.setAddressId(warehouse.getAddress().getId());
+
+        return warehouseDto;
+    }
+
 
     public static WarehouseDisplayDto toWarehouseDto(Warehouse warehouse) {
         WarehouseDisplayDto warehouseDisplayDto = new WarehouseDisplayDto();

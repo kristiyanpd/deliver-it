@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Warehouse Form Fragment</title>
+</head>
+<body>
+<form th:fragment="warehouse-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}"
+      th:object="${warehouse}"
+      method="post">
+
+    <label th:text="#{warehouse.label.address}">address</label>
+    <br/>
+    <select th:field="*{addressId}">
+        <option th:each="address : ${addresses}"
+                th:value="${address.getId()}"
+                th:text="${address.getStreetName()}+', '+${address.getCity.getName()}+', '+${address.getCity.getCountry().getName()}">
+            Address
+        </option>
+    </select>
+    <label class="error" th:errors="*{addressId}">City error placeholder</label>
+    <br/><br/>
+
+    <input type="submit" value="Save"/>
+</form>
+</body>
+</html>
