@@ -31,7 +31,7 @@
     <br/>
     <select th:field="*{status}">
         <option th:each="status : ${T(com.team9.deliverit.models.enums.Status).values()}"
-                th:value="${status.value}"
+                th:value="${status}"
                 th:text="${status.toString()}">
             City Country
         </option>

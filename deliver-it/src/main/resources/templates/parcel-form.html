@@ -19,7 +19,7 @@
     <br/>
     <select th:field="*{pickUpOption}">
         <option th:each="pickUp : ${T(com.team9.deliverit.models.enums.PickUpOption).values()}"
-                th:value="${pickUp.value}"
+                th:value="${pickUp}"
                 th:text="${pickUp.toString()}">
             Pick Up Option
         </option>
@@ -61,7 +61,7 @@
     <br/>
     <select th:field="*{category}">
         <option th:each="category : ${T(com.team9.deliverit.models.enums.Category).values()}"
-                th:value="${category.value}"
+                th:value="${category}"
                 th:text="${category.toString()}">
             Category
         </option>
