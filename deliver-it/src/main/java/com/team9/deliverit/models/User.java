@@ -22,6 +22,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "user_password")
+    private String password;
+
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
@@ -64,6 +67,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Address getAddress() {
