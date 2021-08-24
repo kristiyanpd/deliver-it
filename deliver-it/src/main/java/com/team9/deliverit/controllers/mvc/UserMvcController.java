@@ -2,15 +2,11 @@ package com.team9.deliverit.controllers.mvc;
 
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.dtos.AddressDto;
-import com.team9.deliverit.models.dtos.UserRegistrationDto;
-import com.team9.deliverit.services.contracts.AddressService;
+import com.team9.deliverit.models.dtos.RegisterDto;
 import com.team9.deliverit.services.contracts.CityService;
 import com.team9.deliverit.services.contracts.UserService;
-import com.team9.deliverit.services.mappers.AddressModelMapper;
 import com.team9.deliverit.services.mappers.UserModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -66,12 +62,12 @@ public class UserMvcController {
 
     @GetMapping("/new")
     public String showNewUserPage(Model model) {
-        model.addAttribute("user", new UserRegistrationDto());
+        model.addAttribute("user", new RegisterDto());
         return "user-new";
     }
 
     @PostMapping("/new")
-    public String createAddress(@Valid @ModelAttribute("user") UserRegistrationDto userRegistrationDto,
+    public String createAddress(@Valid @ModelAttribute("user") RegisterDto registerDto,
                                 BindingResult errors, Model model) {
         if (errors.hasErrors()) {
             return "user-new";
@@ -79,10 +75,10 @@ public class UserMvcController {
 
         try {
             //ToDo Rework with current user in MVC authentication session.
-            User user = modelMapper.fromDto(userRegistrationDto);
+            User user = modelMapper.fromDto(registerDto);
             service.create(user);
 
-            return "redirect:../";
+            return "redirect:/";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("email", "duplicate_email", e.getMessage());
             return "user-new";
@@ -97,9 +93,9 @@ public class UserMvcController {
         try {
             User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
             User user = service.getById(admin, id);
-            UserRegistrationDto userRegistrationDto = modelMapper.toDto(user);
+            RegisterDto registerDto = modelMapper.toDto(user);
             model.addAttribute("userId", id);
-            model.addAttribute("user", userRegistrationDto);
+            model.addAttribute("user", registerDto);
             return "user-update";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
@@ -109,7 +105,7 @@ public class UserMvcController {
 
     @PostMapping("/{id}/update")
     public String updateAddress(@PathVariable int id,
-                                @Valid @ModelAttribute("user") UserRegistrationDto userRegistrationDto,
+                                @Valid @ModelAttribute("user") RegisterDto registerDto,
                                 BindingResult errors,
                                 Model model) {
         if (errors.hasErrors()) {
@@ -118,7 +114,7 @@ public class UserMvcController {
 
         try {
             User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
-            User user = modelMapper.fromDto(userRegistrationDto,id);
+            User user = modelMapper.fromDto(registerDto,id);
             service.update(admin,user,user.getId());
 
             return "redirect:../";

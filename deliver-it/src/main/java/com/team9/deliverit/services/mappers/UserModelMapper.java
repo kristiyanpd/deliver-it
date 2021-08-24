@@ -3,9 +3,8 @@ package com.team9.deliverit.services.mappers;
 import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.dtos.AddressDto;
 import com.team9.deliverit.models.dtos.UserDisplayDto;
-import com.team9.deliverit.models.dtos.UserRegistrationDto;
+import com.team9.deliverit.models.dtos.RegisterDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import com.team9.deliverit.repositories.contracts.CityRepository;
 import com.team9.deliverit.repositories.contracts.RoleRepository;
@@ -42,39 +41,40 @@ public class UserModelMapper {
         return userDisplayDto;
     }
 
-    public UserRegistrationDto toDto(User user) {
-        UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+    public RegisterDto toDto(User user) {
+        RegisterDto registerDto = new RegisterDto();
 
-        userRegistrationDto.setEmail(user.getEmail());
-        userRegistrationDto.setCityId(user.getAddress().getCity().getId());
-        userRegistrationDto.setStreetName(user.getAddress().getStreetName());
-        userRegistrationDto.setFirstName(user.getFirstName());
-        userRegistrationDto.setLastName(user.getLastName());
+        registerDto.setEmail(user.getEmail());
+        registerDto.setCityId(user.getAddress().getCity().getId());
+        registerDto.setStreetName(user.getAddress().getStreetName());
+        registerDto.setFirstName(user.getFirstName());
+        registerDto.setLastName(user.getLastName());
 
-        return userRegistrationDto;
+        return registerDto;
     }
 
-    public User fromDto(UserRegistrationDto userDto) {
+    public User fromDto(RegisterDto userDto) {
         User user = new User();
         dtoToObject(userDto, user);
         return user;
     }
 
-    public User fromDto(UserRegistrationDto userDto, int id) {
+    public User fromDto(RegisterDto userDto, int id) {
         User user = userRepository.getById(id);
         dtoToObject(userDto, user);
         return user;
     }
 
-    private void dtoToObject(UserRegistrationDto userRegistrationDto, User user) {
-        user.setFirstName(userRegistrationDto.getFirstName());
-        user.setLastName(userRegistrationDto.getLastName());
-        user.setEmail(userRegistrationDto.getEmail());
+    private void dtoToObject(RegisterDto registerDto, User user) {
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
+        user.setEmail(registerDto.getEmail());
+        user.setPassword(registerDto.getPassword());
         user.setRole(roleRepository.getById(1));
 
         Address address = new Address();
-        String streetName = userRegistrationDto.getStreetName();
-        City city = cityRepository.getById(userRegistrationDto.getCityId());
+        String streetName = registerDto.getStreetName();
+        City city = cityRepository.getById(registerDto.getCityId());
 
         if (addressRepository.isDuplicate(streetName, city.getId())) {
             address = addressRepository.getDuplicate(streetName, city.getId()).get(0);

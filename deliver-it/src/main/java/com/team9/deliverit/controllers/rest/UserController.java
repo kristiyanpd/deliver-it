@@ -3,7 +3,7 @@ package com.team9.deliverit.controllers.rest;
 import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.UserDisplayDto;
-import com.team9.deliverit.models.dtos.UserRegistrationDto;
+import com.team9.deliverit.models.dtos.RegisterDto;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.mappers.UserModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDisplayDto create(@Valid @RequestBody UserRegistrationDto userDto) {
+    public UserDisplayDto create(@Valid @RequestBody RegisterDto userDto) {
         User user = modelMapper.fromDto(userDto);
         service.create(user);
         return UserModelMapper.toUserDto(user);
@@ -50,7 +50,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User update(@RequestHeader HttpHeaders headers, @PathVariable int id,
-                       @Valid @RequestBody UserRegistrationDto userDto) {
+                       @Valid @RequestBody RegisterDto userDto) {
         User userExecuting = authenticationHelper.tryGetUser(headers);
         User user = modelMapper.fromDto(userDto, id);
         service.update(userExecuting, user, id);

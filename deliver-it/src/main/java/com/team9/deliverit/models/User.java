@@ -22,7 +22,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "user_password")
+    @Column(name = "password")
     private String password;
 
     @ManyToOne

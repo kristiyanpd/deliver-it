@@ -1,11 +1,13 @@
 package com.team9.deliverit.models.dtos;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
-public class UserRegistrationDto {
+public class RegisterDto extends LoginDto {
+
+    @NotBlank(message = "Password can't be blank!")
+    private String passwordConfirm;
 
     @NotBlank(message = "First name can't be blank!")
     @Size(min = 2, max = 50, message = "Street name length must be between 2 and 50 symbols!")
@@ -15,11 +17,6 @@ public class UserRegistrationDto {
     @Size(min = 2, max = 50, message = "Last name length must be between 2 and 50 symbols!")
     private String lastName;
 
-    @Email
-    @NotBlank(message = "Email can't be blank!")
-    @Size(min = 2, max = 100, message = "Email length must be between 2 and 100 symbols!")
-    private String email;
-
     @NotBlank(message = "Street name can't be blank!")
     @Size(min = 2, max = 100, message = "Street name length must be between 2 and 100 symbols!")
     private String streetName;
@@ -27,8 +24,16 @@ public class UserRegistrationDto {
     @Positive(message = "City ID must be positive")
     private int cityId;
 
-    public UserRegistrationDto() {
+    public RegisterDto() {
 
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 
     public String getFirstName() {
@@ -45,14 +50,6 @@ public class UserRegistrationDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getStreetName() {

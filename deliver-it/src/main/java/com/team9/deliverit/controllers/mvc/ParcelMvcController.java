@@ -1,5 +1,7 @@
 package com.team9.deliverit.controllers.mvc;
 
+import com.team9.deliverit.controllers.utils.AuthenticationHelper;
+import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
@@ -17,45 +19,51 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/parcels")
-public class ParcelMvcController {
+public class ParcelMvcController extends BaseAuthenticationController {
 
     private final ParcelService service;
     private final ParcelModelMapper modelMapper;
     private final UserService userService;
     private final ShipmentService shipmentService;
+    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
     public ParcelMvcController(ParcelService service,
                                ParcelModelMapper modelMapper,
                                UserService userService,
-                               ShipmentService shipmentService) {
+                               ShipmentService shipmentService,
+                               AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.shipmentService = shipmentService;
+        this.authenticationHelper = authenticationHelper;
     }
 
     @ModelAttribute("shipments")
-    public List<Shipment> populateShipments() {
-        User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+    public List<Shipment> populateShipments(HttpSession session) {
+        User user = authenticationHelper.tryGetUser(session);
         return shipmentService.getAll(user);
+
     }
 
+
     @ModelAttribute("users")
-    public List<User> populateUsers() {
-        User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+    public List<User> populateUsers(HttpSession session) {
+        User user = authenticationHelper.tryGetUser(session);
         return userService.getAll(user);
     }
 
     @GetMapping
-    public String showAllParcels(Model model) {
+    public String showAllParcels(Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("parcels", service.getAll(user));
             return "parcels";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
@@ -65,9 +73,9 @@ public class ParcelMvcController {
     }
 
     @GetMapping("/{id}")
-    public String showSingleParcel(@PathVariable int id, Model model) {
+    public String showSingleParcel(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             Parcel parcel = service.getById(user, id);
             model.addAttribute("parcel", parcel);
             return "parcel";
@@ -78,23 +86,26 @@ public class ParcelMvcController {
     }
 
     @GetMapping("/new")
-    public String showNewParcelPage(Model model) {
+    public String showNewParcelPage(Model model, HttpSession session) {
+        try {
+            authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
         model.addAttribute("parcel", new ParcelDto());
         return "parcel-new";
     }
 
     @PostMapping("/new")
-    public String createParcel(@Valid @ModelAttribute("parcel") ParcelDto parcelDto, BindingResult errors, Model model) {
+    public String createParcel(@Valid @ModelAttribute("parcel") ParcelDto parcelDto, BindingResult errors, Model model, HttpSession session) {
         if (errors.hasErrors()) {
             return "parcel-new";
         }
 
         try {
-            //ToDo Rework with current user in MVC authentication session.
+            User user = authenticationHelper.tryGetUser(session);
             Parcel parcel = modelMapper.fromDto(parcelDto);
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
             service.create(user, parcel);
-
             return "redirect:/parcels";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_parcel", e.getMessage());
@@ -102,38 +113,42 @@ public class ParcelMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
     @GetMapping("/{id}/update")
-    public String showEditParcelPage(@PathVariable int id, Model model) {
+    public String showEditParcelPage(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             Parcel parcel = service.getById(user, id);
             ParcelDto parcelDto = modelMapper.toDto(parcel);
             model.addAttribute("parcelId", id);
             model.addAttribute("parcel", parcelDto);
             return "parcel-update";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
         }
     }
 
     @PostMapping("/{id}/update")
-    public String updateParcel(@PathVariable int id,
-                             @Valid @ModelAttribute("parcel") ParcelDto parcelDto,
-                             BindingResult errors,
-                             Model model) {
+    public String updateParcel(@PathVariable int id, @Valid @ModelAttribute("parcel") ParcelDto parcelDto,
+                               BindingResult errors, Model model, HttpSession session) {
         if (errors.hasErrors()) {
             return "parcel-update";
         }
 
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             Parcel parcel = modelMapper.fromDto(parcelDto, id);
             service.update(user, parcel);
-
             return "redirect:/parcels";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_parcel", e.getMessage());
@@ -141,19 +156,24 @@ public class ParcelMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
         }
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteParcel(@PathVariable int id, Model model) {
+    public String deleteParcel(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             service.delete(user, id);
-
             return "redirect:/parcels";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
         }
     }
 }
