@@ -10,7 +10,9 @@
     <li><h3><a href="#" th:href="@{/cities}" th:text="#{navigation.all-cities}">Browse all cities</a></h3></li>
     <li><h3><a href="#" th:href="@{/addresses}" th:text="#{navigation.all-addresses}">Browse all addresses</a></h3></li>
     <li><h3><a href="#" th:href="@{/warehouses}" th:text="#{navigation.all-warehouses}">Browse all warehouses</a></h3></li>
-    <li><h3><a href="#" th:href="@{/users/new}" th:text="#{register.label}"></a></h3></li>
+    <li th:unless="${isAuthenticated}"><h3><a href="#" th:href="@{/auth/login}">Login</a></h3></li>
+    <li th:unless="${isAuthenticated}"><h3><a href="#" th:href="@{/auth/register}">Register</a></h3></li>
+    <li th:if="${isAuthenticated}"><h3><a href="#" th:href="@{/auth/logout}">Logout</a></h3></li>
 </ul>
 <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
 <h2 th:if="${isAuthenticated}" th:text="${session.currentUser}"></h2>
