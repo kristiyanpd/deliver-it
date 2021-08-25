@@ -50,7 +50,6 @@ public class ParcelMvcController extends BaseAuthenticationController {
     public List<Shipment> populateShipments(HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
         return shipmentService.getAll(user);
-
     }
 
 
