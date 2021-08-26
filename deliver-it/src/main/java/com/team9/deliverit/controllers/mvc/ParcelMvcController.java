@@ -24,8 +24,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/parcels")
-public class ParcelMvcController extends BaseAuthenticationController {
+@RequestMapping("/panel/parcels")
+public class ParcelMvcController {
 
     private final ParcelService service;
     private final ParcelModelMapper modelMapper;
