@@ -15,6 +15,9 @@ public class Warehouse {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @Column(name = "photo_url")
+    private String photoUrl;
+
     public Warehouse() {
     }
 
@@ -32,5 +35,13 @@ public class Warehouse {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
