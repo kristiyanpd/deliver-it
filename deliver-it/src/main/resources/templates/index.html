@@ -50,15 +50,15 @@
              src="../static/home_page/assets/img/_109929814_amazonwarehouse2.gif"
              th:src="@{/home_page/assets/img/_109929814_amazonwarehouse2.gif}" alt="">
         <!-- Masthead Heading-->
-        <h1 class="masthead-heading mb-0">Our Customers</h1>
+        <h1 class="masthead-heading mb-0">DeliverIT</h1>
         <!-- Icon Divider-->
         <div class="divider-custom divider-light">
             <div class="divider-custom-line"></div>
-            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-icon"><i class="fas fa-truck"></i></div>
             <div class="divider-custom-line"></div>
         </div>
         <!-- Masthead Subheading-->
-        <p class="pre-wrap masthead-subheading font-weight-light mb-0" th:text="${customersCount}"></p>
+        <p class="pre-wrap masthead-subheading font-weight-light mb-0">Freight Forwarding Management System</p>
     </div>
 </header>
 <section class="page-section portfolio" id="portfolio">
@@ -105,7 +105,8 @@
                         <div class="col-lg-8">
                             <!-- Portfolio Modal - Title-->
                             <h2 class="portfolio-modal-title text-secondary mb-0"
-                                th:text="${'ID#' + warehouse.id + ' ' + warehouse.address.city.name + ', ' + warehouse.address.city.country.name}">Bulgaria, Sofia</h2>
+                                th:text="${'ID#' + warehouse.id + ' ' + warehouse.address.city.name + ', ' + warehouse.address.city.country.name}">
+                                Bulgaria, Sofia</h2>
                             <h2 style="font-size: 2rem" class="portfolio-modal-title text-secondary mb-0"
                                 th:text="${warehouse.address.streetName}">Bulgaria, Sofia</h2>
                             <!-- Icon Divider-->
@@ -129,7 +130,31 @@
         </div>
     </div>
 </div>
-
+<!-- About Section-->
+<section class="page-section bg-primary text-white mb-0" id="about">
+    <div class="container">
+        <!-- About Section Heading-->
+        <h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+        <!-- Icon Divider-->
+        <div class="divider-custom divider-light">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+        <!-- About Section Content-->
+        <div class="row">
+            <div class="col-lg-12 ms-auto"><p class="lead">DelvierIT is a web application that serves the needs of a freight forwarding company.
+                The program consists of countries, cities, addresses, warehouses, shipments, parcels, users and user roles.</p></div>
+        </div>
+        <!-- About Section Button-->
+        <div class="text-center mt-4">
+            <a class="btn btn-xl btn-outline-light" th:href="@{/auth/register}" href="#">
+                <i class="fas fa-user-plus me-2"></i>
+                Join the <span th:text="${customersCount}">customers</span> customers that trusted us!
+            </a>
+        </div>
+    </div>
+</section>
 <!-- Copyright Section-->
 <section class="copyright py-4 text-center text-white">
     <div class="container"><small class="pre-wrap">Copyright © DeliverIT 2021 </small></div>
