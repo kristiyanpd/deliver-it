@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/shipments")
+@RequestMapping("/panel/shipments")
 public class ShipmentMvcController {
 
     private final ShipmentService service;

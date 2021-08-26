@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/warehouses")
+@RequestMapping("/panel/warehouses")
 public class WarehouseMvcController {
 
     private final WarehouseService service;

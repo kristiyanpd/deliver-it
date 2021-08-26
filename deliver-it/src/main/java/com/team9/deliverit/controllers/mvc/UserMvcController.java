@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/panel/users")
 public class UserMvcController {
 
     private final UserService service;
