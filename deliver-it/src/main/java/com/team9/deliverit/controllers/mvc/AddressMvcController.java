@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/addresses")
+@RequestMapping("/panel/addresses")
 public class AddressMvcController {
 
     private final AddressService service;

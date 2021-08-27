@@ -22,7 +22,7 @@
         </div>
         <div class="row" th:each="address : ${addresses}">
             <div class="cell">
-                <a href="#" th:href="@{/addresses/{id}(id=${address.getId()})}"
+                <a href="#" th:href="@{/panel/addresses/{id}(id=${address.getId()})}"
                    th:text="${address.streetName}+', '+${address.getCity().getName()}+', '+${address.getCity().getCountry().getName()}">Address</a>
             </div>
         </div>

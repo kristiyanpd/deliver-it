@@ -1,5 +1,7 @@
 package com.team9.deliverit.controllers.mvc;
 
+import com.team9.deliverit.controllers.utils.AuthenticationHelper;
+import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.Country;
@@ -14,21 +16,35 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/countries")
+@RequestMapping("/panel/countries")
 public class CountryMvcController {
 
     private final CountryService service;
     private final CountryModelMapper modelMapper;
     private final UserService userService;
+    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public CountryMvcController(CountryService service, CountryModelMapper modelMapper, UserService userService) {
+    public CountryMvcController(CountryService service, CountryModelMapper modelMapper, UserService userService, AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.modelMapper = modelMapper;
         this.userService = userService;
+        this.authenticationHelper = authenticationHelper;
+    }
+
+    @ModelAttribute("currentUser")
+    public String currentUser(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+        return String.format("%s %s", user.getFirstName(), user.getLastName());
     }
 
     @GetMapping

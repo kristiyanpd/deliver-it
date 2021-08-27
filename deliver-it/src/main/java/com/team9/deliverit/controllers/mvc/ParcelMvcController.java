@@ -6,6 +6,7 @@ import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Parcel;
+import com.team9.deliverit.models.Role;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.ParcelDto;
@@ -48,16 +49,29 @@ public class ParcelMvcController {
 
     @ModelAttribute("shipments")
     public List<Shipment> populateShipments(HttpSession session) {
-        User user = authenticationHelper.tryGetUser(session);
+        User user = userService.getByEmail("kristiyanpd02@gmail.com");
         return shipmentService.getAll(user);
     }
 
 
     @ModelAttribute("users")
     public List<User> populateUsers(HttpSession session) {
-        User user = authenticationHelper.tryGetUser(session);
+        User user = userService.getByEmail("kristiyanpd02@gmail.com");
         return userService.getAll(user);
     }
+
+    @ModelAttribute("currentUser")
+    public String currentUser(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+        return String.format("%s %s", user.getFirstName(), user.getLastName());
+    }
+
+    //TODO Has parcels, otherwise hide tables and show "You do not have any parcels!"
 
     @GetMapping
     public String showAllParcels(Model model, HttpSession session) {
@@ -78,6 +92,8 @@ public class ParcelMvcController {
             Parcel parcel = service.getById(user, id);
             model.addAttribute("parcel", parcel);
             return "parcel";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";

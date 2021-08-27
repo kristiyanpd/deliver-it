@@ -1,5 +1,7 @@
 package com.team9.deliverit.controllers.mvc;
 
+import com.team9.deliverit.controllers.utils.AuthenticationHelper;
+import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.City;
@@ -16,27 +18,41 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/cities")
+@RequestMapping("/panel/cities")
 public class CityMvcController {
 
     private final CityService service;
     private final CityModelMapper modelMapper;
     private final UserService userService;
     private final CountryService countryService;
+    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
     public CityMvcController(CityService service,
                              CityModelMapper modelMapper,
                              UserService userService,
-                             CountryService countryService) {
+                             CountryService countryService, AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.countryService = countryService;
+        this.authenticationHelper = authenticationHelper;
+    }
+
+    @ModelAttribute("currentUser")
+    public String currentUser(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+        return String.format("%s %s", user.getFirstName(), user.getLastName());
     }
 
     @ModelAttribute("countries")

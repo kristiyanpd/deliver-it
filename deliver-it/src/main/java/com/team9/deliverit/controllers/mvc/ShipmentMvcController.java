@@ -1,9 +1,10 @@
 package com.team9.deliverit.controllers.mvc;
 
+import com.team9.deliverit.controllers.utils.AuthenticationHelper;
+import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
-import com.team9.deliverit.models.Country;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
@@ -18,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -29,21 +31,35 @@ public class ShipmentMvcController {
     private final ShipmentModelMapper modelMapper;
     private final UserService userService;
     private final WarehouseService warehouseService;
+    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
     public ShipmentMvcController(ShipmentService service,
                                  ShipmentModelMapper modelMapper,
                                  UserService userService,
-                                 WarehouseService warehouseService) {
+                                 WarehouseService warehouseService,
+                                 AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.warehouseService = warehouseService;
+        this.authenticationHelper = authenticationHelper;
     }
 
     @ModelAttribute("warehouses")
     public List<Warehouse> populateWarehouses() {
         return warehouseService.getAll();
+    }
+
+    @ModelAttribute("currentUser")
+    public String currentUser(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+        return String.format("%s %s", user.getFirstName(), user.getLastName());
     }
 
     @GetMapping

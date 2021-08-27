@@ -37,7 +37,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public List<Parcel> getAll(User user) {
         if (!user.isEmployee()) {
-            throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view all", "parcels"));
+            return repository.getAllUserParcels(user.getId());
         }
         return repository.getAll();
     }
@@ -97,6 +97,7 @@ public class ParcelServiceImpl implements ParcelService {
         return repository.sort(weight, arrivalDate, userId);
     }
 
+    //TODO Изтрий след като направиш проверки
     @Override
     public List<Parcel> getAllUserParcels(User user) {
         return repository.getAllUserParcels(user.getId());

@@ -22,7 +22,7 @@
         </div>
         <div class="row" th:each="city : ${cities}">
             <div class="cell">
-                <a href="#" th:href="@{/cities/{id}(id=${city.getId})}" th:text="${city.name}">City</a>
+                <a href="#" th:href="@{/panel/cities/{id}(id=${city.getId})}" th:text="${city.name}">City</a>
             </div>
         </div>
     </div>
