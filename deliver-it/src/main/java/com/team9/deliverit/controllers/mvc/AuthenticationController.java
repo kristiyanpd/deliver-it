@@ -65,7 +65,7 @@ public class AuthenticationController {
         try {
             authenticationHelper.verifyAuthentication(dto.getEmail(), dto.getPassword());
             session.setAttribute(CURRENT_USER_SESSION_KEY, dto.getEmail());
-            return "redirect:/";
+            return "redirect:/panel";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("email", "auth_error", e.getMessage());
             return "login";
@@ -100,7 +100,7 @@ public class AuthenticationController {
             User user = mapper.fromDto(registerDto);
             userService.create(user);
             session.setAttribute(CURRENT_USER_SESSION_KEY, user.getEmail());
-            return "redirect:/";
+            return "redirect:/panel";
         } catch (DuplicateEntityException e) {
             bindingResult.rejectValue("email", "username_error", e.getMessage());
             return "register";

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Shipments</title>
+    <link href="../static/styles.css" th:href="@{/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<ul>
+    <li><h3><a href="/" th:text="#{navigation.home}">Home</a></h3></li>
+</ul>
+
+<div th:if="${shipments.isEmpty()}">
+    <h2 th:text="#{shipment.title.empty}">No Shipments</h2>
+</div>
+<div th:unless="${shipments.isEmpty()}">
+    <h2 th:text="#{shipment.title}">All Shipments</h2>
+
+    <div class="table">
+        <div class="header">
+            <div class="cell" th:text="#{shipment.label.id}">Shipment</div>
+        </div>
+        <div class="row" th:each="shipment : ${shipments}">
+            <div class="cell">
+                <a href="#" th:href="@{/shipments/{id}(id=${shipment.getId})}" th:text="${shipment.getId()}">City</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

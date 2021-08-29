@@ -28,6 +28,7 @@ public class UserMvcController {
     private final CityService cityService;
     private final UserModelMapper modelMapper;
     private final AuthenticationHelper authenticationHelper;
+
     @Autowired
     public UserMvcController(UserService service,
                              CityService cityService,
@@ -67,7 +68,7 @@ public class UserMvcController {
     public String showSingleUser(@PathVariable int id, Model model) {
         try {
             User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
-            User user = service.getById(admin,id);
+            User user = service.getById(admin, id);
             model.addAttribute("user", user);
             return "user";
         } catch (EntityNotFoundException e) {
@@ -104,39 +105,38 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/{id}/update")
-    public String showEditAddressPage(@PathVariable int id, Model model) {
+    @GetMapping("/update")
+    public String showEditUserPage(Model model, HttpSession session) {
         try {
-            User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
-            User user = service.getById(admin, id);
+            User user = authenticationHelper.tryGetUser(session);
             RegisterDto registerDto = modelMapper.toDto(user);
-            model.addAttribute("userId", id);
+            model.addAttribute("userId", user.getId());
             model.addAttribute("user", registerDto);
-            return "user-update";
+            return "user-settings";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
         }
     }
 
-    @PostMapping("/{id}/update")
-    public String updateAddress(@PathVariable int id,
-                                @Valid @ModelAttribute("user") RegisterDto registerDto,
-                                BindingResult errors,
-                                Model model) {
+    @PostMapping("/update")
+    public String updateUser(@Valid @ModelAttribute("user") RegisterDto registerDto,
+                             BindingResult errors,
+                             Model model,
+                             HttpSession session) {
         if (errors.hasErrors()) {
-            return "user-update";
+            return "user-settings";
         }
 
         try {
             User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
-            User user = modelMapper.fromDto(registerDto,id);
-            service.update(admin,user,user.getId());
+            User user = modelMapper.fromDto(registerDto, (int) model.getAttribute("userId"));
+            service.update(admin, user, user.getId());
 
             return "redirect:../";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("email", "duplicate_email", e.getMessage());
-            return "user-update";
+            return "user-settings";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
@@ -147,7 +147,7 @@ public class UserMvcController {
     public String deleteAddress(@PathVariable int id, Model model) {
         try {
             User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
-            User user = service.getById(admin,id);
+            User user = service.getById(admin, id);
             service.delete(admin, user.getId());
 
             return "redirect:../";
