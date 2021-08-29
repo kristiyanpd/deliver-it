@@ -57,6 +57,7 @@
                       <th>Customer</th>
                       <th>Category</th>
                       <th>Weight</th>
+                      <th>Shipment ID</th>
                       <th>Pickup Option</th>
                       <th>Arrival Date</th>
                       <th>Status</th>
@@ -68,6 +69,7 @@
                       <th>Customer</th>
                       <th>Category</th>
                       <th>Weight</th>
+                      <th>Shipment ID</th>
                       <th>Pickup Option</th>
                       <th>Arrival Date</th>
                       <th>Status</th>
@@ -79,6 +81,7 @@
                       <th th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">Customer</th>
                       <td th:text="${parcel.getCategory()}">Category</td>
                       <td th:text="${parcel.weight}">Weight</td>
+                      <td th:text="${parcel.shipment.id}">Shipment ID</td>
                       <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
                       <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
                       <td th:text="${parcel.getShipment().getStatus()}">Status</td>
