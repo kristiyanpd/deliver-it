@@ -54,9 +54,8 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Shipments</h6>
                             </div>
                             <div class="col-6">
-                                <a href="#" th:href="@{/panel/shipments/new}">
-                                    <button class="btn btn-primary m-0 float-right" type="button">Create a Shipment
-                                    </button>
+                                <a class="btn btn-primary m-0 float-right" href="#" th:href="@{/panel/shipments/new}">Create
+                                    a Shipment
                                 </a>
                             </div>
                         </div>
@@ -89,7 +88,7 @@
                                 <tbody>
                                 <tr th:each="shipment : ${shipments}">
                                     <td>
-                                        <a th:href="@{/panel/shipments/{id}/update(id=${shipment.id})}" href="#"
+                                        <a th:href="@{/panel/shipments/{id}(id=${shipment.id})}" href="#"
                                            th:text="${shipment.id}">ID</a>
                                     </td>
                                     <td th:text="${shipment.status}">Status</td>

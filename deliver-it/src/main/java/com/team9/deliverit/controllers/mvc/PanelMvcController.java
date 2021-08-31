@@ -54,8 +54,13 @@ public class PanelMvcController {
     }
 
     @GetMapping
-    public String showPanelPage() {
-        return "panel";
+    public String showPanelPage(HttpSession session) {
+        try {
+            authenticationHelper.tryGetUser(session);
+            return "panel";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
     }
 
 }
