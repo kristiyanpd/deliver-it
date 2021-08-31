@@ -3,67 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <title>Shipment Form Fragment</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="../static/panel/vendor/fontawesome-free/css/all.min.css"
+          th:href="@{/panel/vendor/fontawesome-free/css/all.min.css}"
+          rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="../static/panel/css/sb-admin-2.min.css" th:href="@{/panel/css/sb-admin-2.min.css}" rel="stylesheet">
 </head>
 <body>
-<form th:fragment="shipment-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${shipment}"
-      method="post">
-    <label th:text="#{shipment.label.id}">Shipment</label>
+<form class="user" th:fragment="shipment-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}"
+      th:object="${shipment}" method="post">
 
-    <label th:text="#{shipment.label.departureDate}">Departure Date</label>
-    <br>
-    <input type="date" th:field="*{departureDate}">
-    <label class="error" th:errors="*{departureDate}">Departure Date error placeholder</label>
-    <br><br>
+    <div class="form-group row">
 
-    <label th:text="#{shipment.label.arrivalDate}">Arrival Date</label>
-    <br>
-    <input type="date" th:field="*{arrivalDate}">
-    <label class="error" th:errors="*{arrivalDate}">Arrival Date error placeholder</label>
-    <br><br>
+        <div class="col-sm-5 mb-3 mb-sm-0">
+            <label for="departure-date" th:text="#{shipment.label.departureDate}">Departure Date</label>
+            <input class="form-control form-control-user" type="date" id="departure-date" th:field="*{departureDate}">
+            <label class="error" th:errors="*{departureDate}">Departure Date error placeholder</label>
+        </div>
 
-    <label th:text="#{shipment.label.full}">Full</label>
-    <br>
-    <input type="checkbox" th:field="*{full}">
-    <label class="error" th:errors="*{full}">Full error placeholder</label>
-    <br><br>
+        <div class="col-sm-5 mb-3 mb-sm-0">
+            <label for="arrival-date" th:text="#{shipment.label.arrivalDate}">Arrival Date</label>
+            <input class="form-control form-control-user" type="date" id="arrival-date" th:field="*{arrivalDate}">
+            <label class="error" th:errors="*{arrivalDate}">Arrival Date error placeholder</label>
+        </div>
 
-    <label th:text="#{shipment.label.status}">Status</label>
-    <br/>
-    <select th:field="*{status}">
-        <option th:each="status : ${T(com.team9.deliverit.models.enums.Status).values()}"
-                th:value="${status}"
-                th:text="${status.toString()}">
-            City Country
-        </option>
-    </select>
-    <label class="error" th:errors="*{status}">Status error placeholder</label>
-    <br/><br/>
+        <div class="col-sm-2 mb-3 mb-sm-0">
+            <label for="full" th:text="#{shipment.label.full}">Full</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="full" th:field="*{full}">
+            </div>
+            <label class="error" th:errors="*{full}">Full error placeholder</label>
+        </div>
 
-    <label th:text="#{shipment.label.originWarehouse}">Origin Warehouse</label>
-    <br/>
-    <select th:field="*{originWarehouseId}">
-        <option th:each="warehouse : ${warehouses}"
-                th:value="${warehouse.getId()}"
-                th:text="${warehouse.getAddress.getStreetName}">
-            Warehouse Address
-        </option>
-    </select>
-    <label class="error" th:errors="*{originWarehouseId}">Status error placeholder</label>
-    <br/><br/>
+    </div>
 
-    <label th:text="#{shipment.label.destinationWarehouse}">Destination Warehouse</label>
-    <br/>
-    <select th:field="*{destinationWarehouseId}">
-        <option th:each="warehouse : ${warehouses}"
-                th:value="${warehouse.getId()}"
-                th:text="${warehouse.getAddress.getStreetName}">
-            Warehouse Address
-        </option>
-    </select>
-    <label class="error" th:errors="*{destinationWarehouseId}">Destination Warehouse error placeholder</label>
-    <br/><br/>
+    <div class="form-group">
 
-    <input type="submit" value="Save"/>
+        <label for="status" th:text="#{shipment.label.status}">Status</label>
+        <select class="form-select form-control" id="status" th:field="*{status}">
+            <option th:each="status : ${T(com.team9.deliverit.models.enums.Status).values()}"
+                    th:value="${status}"
+                    th:text="${status.value}">
+                Status
+            </option>
+        </select>
+        <label class="error" th:errors="*{status}">Status error placeholder</label>
+
+    </div>
+
+    <div class="form-group row">
+
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <label for="origin-warehouse" th:text="#{shipment.label.originWarehouse}">Origin Warehouse</label>
+            <select class="form-select form-control" id="origin-warehouse" th:field="*{originWarehouseId}">
+                <option th:each="warehouse : ${warehouses}"
+                        th:value="${warehouse.getId()}"
+                        th:text="${warehouse.getAddress.getStreetName}">
+                    Warehouse Address
+                </option>
+            </select>
+            <label class="error" th:errors="*{originWarehouseId}">Status error placeholder</label>
+        </div>
+
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <label for="destination-warehouse" th:text="#{shipment.label.destinationWarehouse}">Destination
+                Warehouse</label>
+            <select class="form-select form-control" id="destination-warehouse" th:field="*{destinationWarehouseId}">
+                <option th:each="warehouse : ${warehouses}"
+                        th:value="${warehouse.getId()}"
+                        th:text="${warehouse.getAddress.getStreetName}">
+                    Warehouse Address
+                </option>
+            </select>
+            <label class="error" th:errors="*{destinationWarehouseId}">Destination Warehouse error placeholder</label>
+        </div>
+
+    </div>
+
+    <input class="btn btn-primary btn-user btn-block" type="submit" value="Save"/>
 </form>
+
+<!-- Bootstrap core JavaScript-->
+<script src="../static/panel/vendor/jquery/jquery.min.js" th:src="@{/panel/vendor/jquery/jquery.min.js}"></script>
+<script src="../static/panel/vendor/bootstrap/js/bootstrap.bundle.min.js"
+        th:src="@{/panel/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../static/panel/vendor/jquery-easing/jquery.easing.min.js"
+        th:src="@{/panel/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="../static/panel/js/sb-admin-2.min.js"></script>
+
 </body>
 </html>

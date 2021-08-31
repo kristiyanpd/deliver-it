@@ -74,9 +74,9 @@ public class ShipmentMvcController {
     }
 
     @GetMapping
-    public String showAllShipments(Model model) {
+    public String showAllShipments(Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("shipments", service.getAll(user));
             return "shipments";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
@@ -86,9 +86,9 @@ public class ShipmentMvcController {
     }
 
     @GetMapping("/{id}")
-    public String showSingleShipment(@PathVariable int id, Model model) {
+    public String showSingleShipment(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             Shipment shipment = service.getById(user, id);
             model.addAttribute("shipment", shipment);
             return "shipment";
@@ -99,24 +99,34 @@ public class ShipmentMvcController {
     }
 
     @GetMapping("/new")
-    public String showNewShipmentPage(Model model) {
-        model.addAttribute("shipment", new ShipmentDto());
-        return "shipment-new";
+    public String showNewShipmentPage(Model model, HttpSession session) {
+        //TODO Make this check better
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                model.addAttribute("shipment", new ShipmentDto());
+                return "shipment-new";
+            } else {
+                return "not-found";
+            }
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/auth/login";
+        }
     }
 
     @PostMapping("/new")
-    public String createShipment(@Valid @ModelAttribute("shipment") ShipmentDto shipmentDto, BindingResult errors, Model model) {
+    public String createShipment(@Valid @ModelAttribute("shipment") ShipmentDto shipmentDto, BindingResult errors, Model model, HttpSession session) {
         if (errors.hasErrors()) {
             return "shipment-new";
         }
 
         try {
-            //ToDo Rework with current user in MVC authentication session.
             Shipment shipment = modelMapper.fromDto(shipmentDto);
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             service.create(user, shipment);
 
-            return "redirect:/shipments";
+            return "redirect:/panel/shipments";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_shipment", e.getMessage());
             return "shipment-new";
@@ -127,9 +137,9 @@ public class ShipmentMvcController {
     }
 
     @GetMapping("/{id}/update")
-    public String showEditShipmentPage(@PathVariable int id, Model model) {
+    public String showEditShipmentPage(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             Shipment shipment = service.getById(user, id);
             ShipmentDto shipmentDto = modelMapper.toDto(shipment);
             model.addAttribute("shipmentId", id);
@@ -143,19 +153,20 @@ public class ShipmentMvcController {
 
     @PostMapping("/{id}/update")
     public String updateShipment(@PathVariable int id,
-                             @Valid @ModelAttribute("shipment") ShipmentDto shipmentDto,
-                             BindingResult errors,
-                             Model model) {
+                                 @Valid @ModelAttribute("shipment") ShipmentDto shipmentDto,
+                                 BindingResult errors,
+                                 Model model,
+                                 HttpSession session) {
         if (errors.hasErrors()) {
             return "shipment-update";
         }
 
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             Shipment shipment = modelMapper.fromDto(shipmentDto, id);
             service.update(user, shipment);
 
-            return "redirect:/shipments";
+            return "redirect:/panel/shipments";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_shipment", e.getMessage());
             return "shipment-update";
@@ -166,12 +177,12 @@ public class ShipmentMvcController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteShipment(@PathVariable int id, Model model) {
+    public String deleteShipment(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             service.delete(user, id);
 
-            return "redirect:/shipments";
+            return "redirect:/panel/shipments";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
