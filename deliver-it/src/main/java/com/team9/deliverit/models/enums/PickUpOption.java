@@ -4,8 +4,8 @@ import com.team9.deliverit.exceptions.EnumNotFoundException;
 
 public enum PickUpOption {
 
-    PICK_UP_FROM_WAREHOUSE("PICK_UP_FROM_WAREHOUSE"),
-    DELIVER_TO_ADDRESS("DELIVER_TO_ADDRESS");
+    PICK_UP_FROM_WAREHOUSE("Pick up from warehouse"),
+    DELIVER_TO_ADDRESS("Deliver to address");
 
     public static final String INVALID_PICKUP_OPTION = "Pick up option should be PICK_UP_FROM_WAREHOUSE or DELIVER_TO_ADDRESS";
 

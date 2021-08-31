@@ -4,9 +4,9 @@ import com.team9.deliverit.exceptions.EnumNotFoundException;
 
 public enum Category {
 
-    ELECTRONICS("ELECTRONICS"),
-    CLOTHING("CLOTHING"),
-    MEDICAL("MEDICAL");
+    ELECTRONICS("Electronics"),
+    CLOTHING("Clothing"),
+    MEDICAL("Medical");
 
     public static final String INVALID_CATEGORY = "Category should be ELECTRONICS, CLOTHING or MEDICAL";
 

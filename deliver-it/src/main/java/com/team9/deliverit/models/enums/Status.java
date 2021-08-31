@@ -4,9 +4,9 @@ import com.team9.deliverit.exceptions.EnumNotFoundException;
 
 public enum Status {
 
-    PREPARING("PREPARING"),
-    ON_THE_WAY("ON_THE_WAY"),
-    COMPLETED("COMPLETED");
+    PREPARING("Preparing"),
+    ON_THE_WAY("On the way"),
+    COMPLETED("Completed");
 
     public static final String INVALID_STATUS = "Status should be PREPARING, ON_THE_WAY or COMPLETED";
 
