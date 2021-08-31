@@ -37,6 +37,17 @@ public class PanelMvcController {
         return String.format("%s %s", user.getFirstName(), user.getLastName());
     }
 
+    @ModelAttribute("isEmployee")
+    public boolean isEmployee(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return false;
+        }
+        return user.isEmployee();
+    }
+
     @ModelAttribute("customersCount")
     public String customersCount() {
         return String.valueOf(userService.countCustomers());

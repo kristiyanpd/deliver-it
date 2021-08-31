@@ -71,6 +71,17 @@ public class ParcelMvcController {
         return String.format("%s %s", user.getFirstName(), user.getLastName());
     }
 
+    @ModelAttribute("isEmployee")
+    public boolean isEmployee(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return false;
+        }
+        return user.isEmployee();
+    }
+
     //TODO Has parcels, otherwise hide tables and show "You do not have any parcels!"
 
     @GetMapping

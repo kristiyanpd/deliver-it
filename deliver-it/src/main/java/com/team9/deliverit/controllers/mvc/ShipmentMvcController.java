@@ -62,6 +62,17 @@ public class ShipmentMvcController {
         return String.format("%s %s", user.getFirstName(), user.getLastName());
     }
 
+    @ModelAttribute("isEmployee")
+    public boolean isEmployee(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return false;
+        }
+        return user.isEmployee();
+    }
+
     @GetMapping
     public String showAllShipments(Model model) {
         try {

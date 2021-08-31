@@ -62,6 +62,17 @@ public class WarehouseMvcController {
         return String.format("%s %s", user.getFirstName(), user.getLastName());
     }
 
+    @ModelAttribute("isEmployee")
+    public boolean isEmployee(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return false;
+        }
+        return user.isEmployee();
+    }
+
     @GetMapping
     public String showAllWarehouses(Model model) {
         model.addAttribute("warehouses", service.getAll());
