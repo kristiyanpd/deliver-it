@@ -75,9 +75,14 @@ public class WarehouseMvcController {
     }
 
     @GetMapping
-    public String showAllWarehouses(Model model) {
-        model.addAttribute("warehouses", service.getAll());
-        return "warehouses";
+    public String showAllWarehouses(Model model, HttpSession session) {
+        try {
+            authenticationHelper.tryGetUser(session);
+            model.addAttribute("warehouses", service.getAll());
+            return "warehouses";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
     }
 
     @GetMapping("/{id}")

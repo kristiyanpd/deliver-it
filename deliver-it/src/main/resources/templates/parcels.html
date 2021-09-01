@@ -90,7 +90,7 @@
                         <a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${parcel.id})}" href="#"
                            th:text="${parcel.id}">ID</a>
                       </td>
-                      <th th:if="${isEmployee}" th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">Customer</th>
+                      <td th:if="${isEmployee}" th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">Customer</td>
                       <td th:text="${parcel.getCategory()}">Category</td>
                       <td th:text="${parcel.weight}">Weight</td>
                       <td th:text="${parcel.shipment.id}">Shipment ID</td>

@@ -93,15 +93,15 @@
                                            th:text="${shipment.id}">ID</a>
                                     </td>
                                     <td th:text="${shipment.status}">Status</td>
-                                    <th th:text="${shipment.originWarehouse.address.streetName}+', '+${shipment.originWarehouse.address.city.name}+', '+${shipment.originWarehouse.address.city.country.name}+' (#'+${shipment.originWarehouse.id}+')'">
+                                    <td th:text="${shipment.originWarehouse.address.streetName}+', '+${shipment.originWarehouse.address.city.name}+', '+${shipment.originWarehouse.address.city.country.name}+' (#'+${shipment.originWarehouse.id}+')'">
                                         Origin Warehouse
-                                    </th>
-                                    <th th:text="${shipment.destinationWarehouse.address.streetName}+', '+${shipment.destinationWarehouse.address.city.name}+', '+${shipment.destinationWarehouse.address.city.country.name}+' (#'+${shipment.destinationWarehouse.id}+')'">
+                                    </td>
+                                    <td th:text="${shipment.destinationWarehouse.address.streetName}+', '+${shipment.destinationWarehouse.address.city.name}+', '+${shipment.destinationWarehouse.address.city.country.name}+' (#'+${shipment.destinationWarehouse.id}+')'">
                                         Destination Warehouse
-                                    </th>
-                                    <th th:text="${shipment.departureDate}">Departure Date</th>
-                                    <th th:text="${shipment.arrivalDate}">Arrival Date</th>
-                                    <th th:text="${shipment.isFull}">Full</th>
+                                    </td>
+                                    <td th:text="${shipment.departureDate}">Departure Date</td>
+                                    <td th:text="${shipment.arrivalDate}">Arrival Date</td>
+                                    <td th:text="${shipment.isFull}">Full</td>
                                 </tr>
                                 </tbody>
                             </table>
