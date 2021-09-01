@@ -46,15 +46,24 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
+              <div class="row">
+                <div class="col-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
+                </div>
+                <div th:if="${isEmployee}" class="col-6">
+                  <a class="btn btn-primary m-0 float-right" href="#" th:href="@{__${#httpServletRequest.requestURI}__/new}">Create
+                    a Parcel
+                  </a>
+                </div>
+              </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="dataTable">
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Customer</th>
+                      <th th:if="${isEmployee}">Customer</th>
                       <th>Category</th>
                       <th>Weight</th>
                       <th>Shipment ID</th>
@@ -66,7 +75,7 @@
                   <tfoot>
                     <tr>
                       <th>ID</th>
-                      <th>Customer</th>
+                      <th th:if="${isEmployee}">Customer</th>
                       <th>Category</th>
                       <th>Weight</th>
                       <th>Shipment ID</th>
@@ -78,7 +87,7 @@
                   <tbody>
                     <tr th:each="parcel : ${parcels}">
                       <td th:text="${parcel.id}">ID</td>
-                      <th th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">Customer</th>
+                      <th th:if="${isEmployee}" th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">Customer</th>
                       <td th:text="${parcel.getCategory()}">Category</td>
                       <td th:text="${parcel.weight}">Weight</td>
                       <td th:text="${parcel.shipment.id}">Shipment ID</td>

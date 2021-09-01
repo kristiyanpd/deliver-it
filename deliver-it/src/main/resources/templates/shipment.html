@@ -55,11 +55,11 @@
                             </div>
                             <div class="col-6">
                                 <div class="btn-toolbar float-right">
-                                    <a th:href="@{/panel/shipments/{id}/update(id=${shipment.id})}"
+                                    <a th:href="@{__${#httpServletRequest.requestURI}__/update}"
                                        class="btn btn-warning text-white m-1">
                                         Edit
                                     </a>
-                                    <a th:href="@{/panel/shipments/{id}/delete(id=${shipment.id})}" href="#"
+                                    <a th:href="@{__${#httpServletRequest.requestURI}__/delete}" href="#"
                                        class="btn btn-danger text-white m-1">
                                         Delete
                                     </a>
@@ -75,7 +75,7 @@
                             </div>
 
                             <div class="col-sm-5 mb-3 mb-sm-0">
-                                <label th:text="#{shipment.label.arrivalDate}">Arrival Date</label>
+                                <label class="text-secondary " th:text="#{shipment.label.arrivalDate}">Arrival Date</label>
                                 <h2 class="form-control form-control-user" th:text="${shipment.arrivalDate}"></h2>
                             </div>
 

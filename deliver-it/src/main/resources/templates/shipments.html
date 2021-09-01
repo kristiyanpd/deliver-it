@@ -54,15 +54,15 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Shipments</h6>
                             </div>
                             <div class="col-6">
-                                <a class="btn btn-primary m-0 float-right" href="#" th:href="@{/panel/shipments/new}">Create
-                                    a Shipment
+                                <a class="btn btn-primary m-0 float-right" href="#"
+                                   th:href="@{__${#httpServletRequest.requestURI}__/new}">Create a Shipment
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -88,7 +88,8 @@
                                 <tbody>
                                 <tr th:each="shipment : ${shipments}">
                                     <td>
-                                        <a th:href="@{/panel/shipments/{id}(id=${shipment.id})}" href="#"
+                                        <a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${shipment.id})}"
+                                           href="#"
                                            th:text="${shipment.id}">ID</a>
                                     </td>
                                     <td th:text="${shipment.status}">Status</td>
