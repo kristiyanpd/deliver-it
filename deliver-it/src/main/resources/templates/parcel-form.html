@@ -27,7 +27,7 @@
                 Customer
             </option>
         </select>
-        <label class="error" th:errors="*{userId}">User error placeholder</label>
+        <label th:errors="*{userId}">User error placeholder</label>
     </div>
 
     <div class="form-group row">
@@ -41,7 +41,7 @@
                     Category
                 </option>
             </select>
-            <label class="error" th:errors="*{category}">Category error placeholder</label>
+            <label th:errors="*{category}">Category error placeholder</label>
         </div>
 
         <div class="col-sm-12 col-md-12 col-lg-4 mb-3 mb-sm-0">
@@ -59,7 +59,7 @@
                     Pick Up Option
                 </option>
             </select>
-            <label class="error" th:errors="*{pickUpOption}">Pick Up Option error placeholder</label>
+            <label th:errors="*{pickUpOption}">Pick Up Option error placeholder</label>
         </div>
 
     </div>
@@ -79,7 +79,7 @@
                 Parcel Owner
             </option>
         </select>
-        <label class="error" th:errors="*{shipmentId}">Shipment error placeholder</label>
+        <label th:errors="*{shipmentId}">Shipment error placeholder</label>
     </div>
 
     <input class="btn btn-primary btn-user btn-block" type="submit" value="Save"/>
