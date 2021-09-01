@@ -4,6 +4,7 @@ import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
@@ -80,37 +81,48 @@ public class WarehouseMvcController {
     }
 
     @GetMapping("/{id}")
-    public String showSingleWarehouse(@PathVariable int id, Model model) {
+    public String showSingleWarehouse(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
-            Warehouse warehouse = service.getById(user,id);
+            User user = authenticationHelper.tryGetUser(session);
+            Warehouse warehouse = service.getById(user, id);
             model.addAttribute("warehouse", warehouse);
             return "warehouse";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
     @GetMapping("/new")
-    public String showNewWarehousePage(Model model) {
-        model.addAttribute("warehouse", new WarehouseDto());
-        return "warehouse-new";
+    public String showNewWarehousePage(Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                model.addAttribute("warehouse", new WarehouseDto());
+                return "warehouse-new";
+            } else {
+                return "not-found";
+            }
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
+        }
     }
 
     @PostMapping("/new")
     public String createWarehouse(@Valid @ModelAttribute("warehouse") WarehouseDto warehouseDto,
-                                BindingResult errors, Model model) {
+                                  BindingResult errors, Model model, HttpSession session) {
         if (errors.hasErrors()) {
             return "warehouse-new";
         }
 
         try {
-            //ToDo Rework with current user in MVC authentication session.
             Warehouse warehouse = modelMapper.fromDto(warehouseDto);
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
-            service.create(warehouse,user);
-
+            User user = authenticationHelper.tryGetUser(session);
+            service.create(warehouse, user);
             return "redirect:/warehouses";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("addressId", "duplicate_address", e.getMessage());
@@ -122,15 +134,18 @@ public class WarehouseMvcController {
     }
 
     @GetMapping("/{id}/update")
-    public String showEditWarehousePage(@PathVariable int id, Model model) {
+    public String showEditWarehousePage(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
-            Warehouse warehouse = service.getById(user,id);
-            WarehouseDto warehouseDto = modelMapper.toDto(warehouse);
-
-            model.addAttribute("warehouseId", id);
-            model.addAttribute("warehouse", warehouseDto);
-            return "warehouse-update";
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                Warehouse warehouse = service.getById(user, id);
+                WarehouseDto warehouseDto = modelMapper.toDto(warehouse);
+                model.addAttribute("warehouseId", id);
+                model.addAttribute("warehouse", warehouseDto);
+                return "warehouse-update";
+            } else {
+                return "not-found";
+            }
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
@@ -139,17 +154,18 @@ public class WarehouseMvcController {
 
     @PostMapping("/{id}/update")
     public String updateWarehouse(@PathVariable int id,
-                                @Valid @ModelAttribute("warehouse") WarehouseDto warehouseDto,
-                                BindingResult errors,
-                                Model model) {
+                                  @Valid @ModelAttribute("warehouse") WarehouseDto warehouseDto,
+                                  BindingResult errors,
+                                  Model model,
+                                  HttpSession session) {
         if (errors.hasErrors()) {
             return "warehouse-update";
         }
 
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             Warehouse warehouse = modelMapper.fromDto(warehouseDto, id);
-            service.update(warehouse,user);
+            service.update(warehouse, user);
 
             return "redirect:/warehouses";
         } catch (DuplicateEntityException e) {
@@ -162,14 +178,16 @@ public class WarehouseMvcController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteAddress(@PathVariable int id, Model model) {
+    public String deleteAddress(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
-            service.delete(id,user);
+            User user = authenticationHelper.tryGetUser(session);
+            service.delete(id, user);
 
             return "redirect:/warehouses";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (UnauthorizedOperationException e) {
             return "not-found";
         }
     }
