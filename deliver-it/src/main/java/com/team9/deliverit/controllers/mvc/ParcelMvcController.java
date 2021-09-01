@@ -93,6 +93,8 @@ public class ParcelMvcController {
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
@@ -114,12 +116,16 @@ public class ParcelMvcController {
     @GetMapping("/new")
     public String showNewParcelPage(Model model, HttpSession session) {
         try {
-            authenticationHelper.tryGetUser(session);
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                model.addAttribute("parcel", new ParcelDto());
+                return "parcel-new";
+            } else {
+                return "not-found";
+            }
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
-        model.addAttribute("parcel", new ParcelDto());
-        return "parcel-new";
     }
 
     @PostMapping("/new")
@@ -132,7 +138,7 @@ public class ParcelMvcController {
             User user = authenticationHelper.tryGetUser(session);
             Parcel parcel = modelMapper.fromDto(parcelDto);
             service.create(user, parcel);
-            return "redirect:/parcels";
+            return "redirect:/panel/parcels";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_parcel", e.getMessage());
             return "parcel-new";
@@ -148,11 +154,15 @@ public class ParcelMvcController {
     public String showEditParcelPage(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUser(session);
-            Parcel parcel = service.getById(user, id);
-            ParcelDto parcelDto = modelMapper.toDto(parcel);
-            model.addAttribute("parcelId", id);
-            model.addAttribute("parcel", parcelDto);
-            return "parcel-update";
+            if (user.isEmployee()) {
+                Parcel parcel = service.getById(user, id);
+                ParcelDto parcelDto = modelMapper.toDto(parcel);
+                model.addAttribute("parcelId", id);
+                model.addAttribute("parcel", parcelDto);
+                return "parcel-update";
+            } else {
+                return "not-found;";
+            }
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
@@ -175,7 +185,7 @@ public class ParcelMvcController {
             User user = authenticationHelper.tryGetUser(session);
             Parcel parcel = modelMapper.fromDto(parcelDto, id);
             service.update(user, parcel);
-            return "redirect:/parcels";
+            return "redirect:/panel/parcels";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_parcel", e.getMessage());
             return "parcel-update";
@@ -193,7 +203,7 @@ public class ParcelMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             service.delete(user, id);
-            return "redirect:/parcels";
+            return "redirect:/panel/parcels";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";

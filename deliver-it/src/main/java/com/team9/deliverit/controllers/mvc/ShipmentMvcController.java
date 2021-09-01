@@ -92,7 +92,7 @@ public class ShipmentMvcController {
             Shipment shipment = service.getById(user, id);
             model.addAttribute("shipment", shipment);
             return "shipment";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
         }
@@ -100,7 +100,6 @@ public class ShipmentMvcController {
 
     @GetMapping("/new")
     public String showNewShipmentPage(Model model, HttpSession session) {
-        //TODO Make this check better
         try {
             User user = authenticationHelper.tryGetUser(session);
             if (user.isEmployee()) {

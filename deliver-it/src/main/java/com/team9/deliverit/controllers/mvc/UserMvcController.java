@@ -67,7 +67,6 @@ public class UserMvcController {
         return user.isEmployee();
     }
 
-
     @GetMapping
     public String showAllUsers(Model model) {
         User user = service.getByEmail("kristiyan.dimitrov@gmail.com");
@@ -82,34 +81,6 @@ public class UserMvcController {
             User user = service.getById(admin, id);
             model.addAttribute("user", user);
             return "user";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "not-found";
-        }
-    }
-
-    @GetMapping("/new")
-    public String showNewUserPage(Model model) {
-        model.addAttribute("user", new RegisterDto());
-        return "user-new";
-    }
-
-    @PostMapping("/new")
-    public String createAddress(@Valid @ModelAttribute("user") RegisterDto registerDto,
-                                BindingResult errors, Model model) {
-        if (errors.hasErrors()) {
-            return "user-new";
-        }
-
-        try {
-            //ToDo Rework with current user in MVC authentication session.
-            User user = modelMapper.fromDto(registerDto);
-            service.create(user);
-
-            return "redirect:/";
-        } catch (DuplicateEntityException e) {
-            errors.rejectValue("email", "duplicate_email", e.getMessage());
-            return "user-new";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
@@ -140,7 +111,7 @@ public class UserMvcController {
         }
 
         try {
-            User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
+            User admin = authenticationHelper.tryGetUser(session);
             User user = modelMapper.fromDto(registerDto, (int) model.getAttribute("userId"));
             service.update(admin, user, user.getId());
 

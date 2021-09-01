@@ -17,12 +17,10 @@ import javax.servlet.http.HttpSession;
 public class PanelMvcController {
 
     private final UserService userService;
-    private final WarehouseService warehouseService;
     private final AuthenticationHelper authenticationHelper;
 
-    public PanelMvcController(UserService userService, WarehouseService warehouseService, AuthenticationHelper authenticationHelper) {
+    public PanelMvcController(UserService userService, AuthenticationHelper authenticationHelper) {
         this.userService = userService;
-        this.warehouseService = warehouseService;
         this.authenticationHelper = authenticationHelper;
     }
 
