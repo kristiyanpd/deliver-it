@@ -29,7 +29,7 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
     public Shipment nextShipmentToArrive(int warehouseId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Shipment> query = session.createQuery(
-                    "select s from Shipment s where s.destinationWarehouse.id = :warehouseId and s.status != 'COMPLETED' order by s.arrivalDate desc", Shipment.class);
+                    "select s from Shipment s where s.destinationWarehouse.id = :warehouseId and s.status != 'COMPLETED' order by s.arrivalDate asc", Shipment.class);
             query.setParameter("warehouseId", warehouseId);
             if (query.list().size() == 0) {
                 throw new EntityNotFoundException("Shipment", "Destination warehouseId", String.valueOf(warehouseId));

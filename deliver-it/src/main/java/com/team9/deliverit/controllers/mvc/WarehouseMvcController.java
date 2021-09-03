@@ -10,6 +10,7 @@ import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.models.dtos.WarehouseDto;
 import com.team9.deliverit.services.contracts.AddressService;
+import com.team9.deliverit.services.contracts.ShipmentService;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.contracts.WarehouseService;
 import com.team9.deliverit.services.mappers.WarehouseModelMapper;
@@ -31,6 +32,7 @@ public class WarehouseMvcController {
     private final WarehouseModelMapper modelMapper;
     private final UserService userService;
     private final AddressService addressService;
+    private final ShipmentService shipmentService;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
@@ -38,11 +40,13 @@ public class WarehouseMvcController {
                                   WarehouseModelMapper modelMapper,
                                   UserService userService,
                                   AddressService addressService,
+                                  ShipmentService shipmentService,
                                   AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.addressService = addressService;
+        this.shipmentService = shipmentService;
         this.authenticationHelper = authenticationHelper;
     }
 
@@ -91,6 +95,9 @@ public class WarehouseMvcController {
             User user = authenticationHelper.tryGetUser(session);
             Warehouse warehouse = service.getById(user, id);
             model.addAttribute("warehouse", warehouse);
+            if (user.isEmployee()) {
+                model.addAttribute("shipmentToArrive", shipmentService.nextShipmentToArrive(id, user));
+            }
             return "warehouse";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());

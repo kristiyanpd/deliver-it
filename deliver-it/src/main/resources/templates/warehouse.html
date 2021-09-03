@@ -82,15 +82,30 @@
                             </div>
 
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                            <label th:text="#{warehouse.label.address.country}">Country</label>
-                            <h2 class="form-select form-control" th:text="${warehouse.address.city.country.name}"></h2>
+                                <label th:text="#{warehouse.label.address.country}">Country</label>
+                                <h2 class="form-select form-control"
+                                    th:text="${warehouse.address.city.country.name}"></h2>
 
                             </div>
 
                         </div>
+
+                        <div th:if="${isEmployee}" class="form-group">
+
+                            <label th:text="#{warehouse.label.shipment.next}">Next Shipment</label>
+                            <h2 class="form-select form-control" th:text="'ID: '+${shipmentToArrive.getId}+' | From: '
+                +${shipmentToArrive.getOriginWarehouse().getAddress().getStreetName()}+', '
+                +${shipmentToArrive.getOriginWarehouse().getAddress().getCity().getName}+', '
+                +${shipmentToArrive.getOriginWarehouse().getAddress().getCity().getCountry().getName()}+' | To: '
+                +${shipmentToArrive.getDestinationWarehouse().getAddress().getStreetName()}+', '
+                +${shipmentToArrive.getDestinationWarehouse().getAddress().getCity().getName}+', '
+                +${shipmentToArrive.getDestinationWarehouse().getAddress().getCity().getCountry().getName()}+' | Arriving: '
+                +${shipmentToArrive.arrivalDate}+'.'"></h2>
+
+                        </div>
+
                     </div>
                 </div>
-
             </div>
             <!-- /.container-fluid -->
 
