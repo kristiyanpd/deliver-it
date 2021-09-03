@@ -95,22 +95,22 @@
 
                         <div class="form-group row">
 
-                            <div class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
+                            <div th:if="${isEmployee}" class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
                                 <label th:text="#{parcel.label.shipment.id}">ID</label>
                                 <h2 class="form-select form-control" th:text="${parcel.shipment.id}"></h2>
                             </div>
 
-                            <div class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
+                            <div th:classappend="${isEmployee} ? 'col-lg-3' : 'col-lg-4'" class="col-sm-12 col-md-12 mb-3 mb-sm-0">
                                 <label th:text="#{parcel.label.pickupoption}">Pickup Option</label>
                                 <h2 class="form-select form-control" th:text="${parcel.pickUpOption}"></h2>
                             </div>
 
-                            <div class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
+                            <div th:classappend="${isEmployee} ? 'col-lg-3' : 'col-lg-4'" class="col-sm-12 col-md-12 mb-3 mb-sm-0">
                                 <label th:text="#{parcel.label.arrivaldate}">Arrival Date</label>
                                 <h2 class="form-select form-control" th:text="${parcel.shipment.arrivalDate}"></h2>
                             </div>
 
-                            <div class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
+                            <div th:classappend="${isEmployee} ? 'col-lg-3' : 'col-lg-4'" class="col-sm-12 col-md-12 mb-3 mb-sm-0">
                                 <label th:text="#{shipment.label.status}">Status</label>
                                 <h2 class="form-select form-control" th:text="${parcel.shipment.status}"></h2>
                             </div>
