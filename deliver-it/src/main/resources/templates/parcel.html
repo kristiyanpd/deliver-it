@@ -53,9 +53,9 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Viewing a Parcel (#<span
                                         th:text="${parcel.id}">ID</span>)</h6>
                             </div>
-                            <div th:if="${isEmployee}" class="col-6">
+                            <div class="col-6">
                                 <div class="btn-toolbar float-right">
-                                    <a th:href="@{/panel/shipments/{id}/update(id=${parcel.getShipment().getId()})}"
+                                    <a th:if="${isEmployee}" th:href="@{/panel/shipments/{id}/update(id=${parcel.getShipment().getId()})}"
                                        href="#"
                                        class="btn btn-primary text-white m-1">
                                         Edit Shipment
@@ -64,7 +64,7 @@
                                        class="btn btn-warning text-white m-1">
                                         Edit
                                     </a>
-                                    <a th:href="@{__${#httpServletRequest.requestURI}__/delete}" href="#"
+                                    <a th:if="${isEmployee}" th:href="@{__${#httpServletRequest.requestURI}__/delete}" href="#"
                                        class="btn btn-danger text-white m-1">
                                         Delete
                                     </a>
@@ -97,30 +97,22 @@
 
                             <div class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
                                 <label th:text="#{parcel.label.shipment.id}">ID</label>
-                                <h2 class="form-select form-control"
-                                    th:text="${parcel.shipment.id}">
-                                </h2>
+                                <h2 class="form-select form-control" th:text="${parcel.shipment.id}"></h2>
                             </div>
 
                             <div class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
                                 <label th:text="#{parcel.label.pickupoption}">Pickup Option</label>
-                                <h2 class="form-select form-control"
-                                    th:text="${parcel.pickUpOption}">
-                                </h2>
+                                <h2 class="form-select form-control" th:text="${parcel.pickUpOption}"></h2>
                             </div>
 
                             <div class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
                                 <label th:text="#{parcel.label.arrivaldate}">Arrival Date</label>
-                                <h2 class="form-select form-control"
-                                    th:text="${parcel.shipment.arrivalDate}">
-                                </h2>
+                                <h2 class="form-select form-control" th:text="${parcel.shipment.arrivalDate}"></h2>
                             </div>
 
                             <div class="col-sm-12 col-md-12 col-lg-3 mb-3 mb-sm-0">
                                 <label th:text="#{shipment.label.status}">Status</label>
-                                <h2 class="form-select form-control"
-                                    th:text="${parcel.shipment.status}">
-                                </h2>
+                                <h2 class="form-select form-control" th:text="${parcel.shipment.status}"></h2>
                             </div>
                         </div>
                     </div>

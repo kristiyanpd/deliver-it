@@ -85,6 +85,25 @@
     <input class="btn btn-primary btn-user btn-block" type="submit" value="Save"/>
 </form>
 
+<form class="user" th:fragment="parcel-form-user" action="#"
+      th:action="@{/panel/parcels/{id}/update/pickup(id = ${parcelId})}" method="post">
+
+    <div class="form-group">
+        <label for="pickUp" th:text="#{parcel.label.pickupoption}">Pick Up Option</label>
+        <select id="pickUp" class="form-select form-control" th:name="pickUpOption">
+            <option th:each="pickUp : ${T(com.team9.deliverit.models.enums.PickUpOption).values()}"
+                    th:value="${pickUp}"
+                    th:text="${pickUp.value}"
+                    th:selected="${parcel.pickUpOption} == ${pickUp.value}">
+                Pick Up Option
+            </option>
+        </select>
+        <!--        <label th:errors="*{pickUpOption}">Pick Up Option error placeholder</label>-->
+    </div>
+
+    <input class="btn btn-primary btn-user btn-block" type="submit" value="Save"/>
+</form>
+
 <!-- Bootstrap core JavaScript-->
 <script src="../static/panel/vendor/jquery/jquery.min.js" th:src="@{/panel/vendor/jquery/jquery.min.js}"></script>
 <script src="../static/panel/vendor/bootstrap/js/bootstrap.bundle.min.js"

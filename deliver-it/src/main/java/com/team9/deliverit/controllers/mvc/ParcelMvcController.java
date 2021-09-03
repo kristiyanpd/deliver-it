@@ -154,14 +154,14 @@ public class ParcelMvcController {
     public String showEditParcelPage(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUser(session);
-            if (user.isEmployee()) {
-                Parcel parcel = service.getById(user, id);
+            Parcel parcel = service.getById(user, id);
+            if (user.isEmployee() || parcel.getUser().getId() == user.getId()) {
                 ParcelDto parcelDto = modelMapper.toDto(parcel);
                 model.addAttribute("parcelId", id);
                 model.addAttribute("parcel", parcelDto);
                 return "parcel-update";
             } else {
-                return "not-found;";
+                return "not-found";
             }
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
@@ -196,6 +196,28 @@ public class ParcelMvcController {
             model.addAttribute("error", e.getMessage());
             return "access-denied";
         }
+    }
+
+    @PostMapping("/{id}/update/pickup")
+    public String updateParcel(@PathVariable int id,
+                               @RequestParam(name = "pickUpOption", required = false) String pickUpOption,
+                               HttpSession session) {
+
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            Parcel parcel = service.getById(user, id);
+
+            if (parcel.getUser().getId() == user.getId()) {
+                service.updatePickUpOption(user, parcel, pickUpOption);
+            }
+
+            return String.format("redirect:/panel/parcels/%s", id);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
+        }
+
     }
 
     @GetMapping("/{id}/delete")
