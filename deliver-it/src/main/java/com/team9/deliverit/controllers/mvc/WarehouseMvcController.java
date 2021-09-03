@@ -96,7 +96,12 @@ public class WarehouseMvcController {
             Warehouse warehouse = service.getById(user, id);
             model.addAttribute("warehouse", warehouse);
             if (user.isEmployee()) {
-                model.addAttribute("shipmentToArrive", shipmentService.nextShipmentToArrive(id, user));
+                try {
+                    model.addAttribute("shipmentToArrive", shipmentService.nextShipmentToArrive(id, user));
+                    model.addAttribute("shipmentExists", true);
+                } catch (EntityNotFoundException e) {
+                    model.addAttribute("shipmentExists", false);
+                }
             }
             return "warehouse";
         } catch (EntityNotFoundException e) {
