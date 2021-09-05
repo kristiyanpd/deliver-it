@@ -50,18 +50,9 @@
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
+
                         <div class="row">
-
-                            <div class="col-6">
-                                <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
-                            </div>
-
-                            <div class="col-6">
-                                <a th:if="${isEmployee}" class="btn btn-primary m-1 float-right" href="#"
-                                   th:href="@{/panel/parcels/new}">Create
-                                    a Parcel
-                                </a>
-                            </div>
+                            <h6 class="m-1 font-weight-bold text-primary">Parcels</h6>
                         </div>
 
                         <form method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
@@ -75,7 +66,7 @@
 
                                 <div class="col-sm-12 col-md-12 col-lg-2">
                                     <select th:if="${isEmployee}" class="form-select form-control" th:field="*{userId}">
-                                        <option selected value="-1"> Any User</option>
+                                        <option selected value="-1">Any User</option>
                                         <option th:each="user : ${users}"
                                                 th:value="${user.getId()}"
                                                 th:text="${user.getEmail}">
@@ -86,7 +77,7 @@
 
                                 <div class="col-sm-12 col-md-12 col-lg-2">
                                     <select class="form-select form-control" th:field="*{category}">
-                                        <option selected value=""> Any Category</option>
+                                        <option selected value="">Any Category</option>
                                         <option th:each="category : ${categories}"
                                                 th:value="${category}"
                                                 th:text="${category}">
@@ -97,7 +88,7 @@
 
                                 <div class="col-sm-12 col-md-12 col-lg-2">
                                     <select class="form-select form-control" th:field="*{status}">
-                                        <option selected value=""> Any Status</option>
+                                        <option selected value="">Any Status</option>
                                         <option th:each="status : ${statuses}"
                                                 th:value="${status}"
                                                 th:text="${status}">
@@ -109,7 +100,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-2">
                                     <select class="form-select form-control"
                                             th:field="*{warehouseId}">
-                                        <option selected value="-1"> Any Warehouse</option>
+                                        <option selected value="-1">Any Warehouse</option>
                                         <option th:each="warehouse : ${warehouses}"
                                                 th:value="${warehouse.getId()}"
                                                 th:text="${warehouse.getAddress.getStreetName}">
@@ -119,7 +110,11 @@
                                 </div>
 
                                 <div class="col-sm-12 col-md-12 col-lg-2">
-                                    <button type="submit" class="btn btn-primary m-1 float-right">Filter</button>
+                                    <div class="btn-toolbar float-right">
+                                        <button type="submit" class="btn btn-primary m-1 float-right">Filter</button>
+                                        <a th:if="${isEmployee}" class="btn btn-primary m-1 float-right" href="#"
+                                           th:href="@{/panel/parcels/new}">Create a Parcel</a>
+                                    </div>
                                 </div>
 
                             </div>
