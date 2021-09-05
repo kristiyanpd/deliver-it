@@ -52,21 +52,29 @@
                     <div class="card-header py-3">
                         <div class="row">
 
-                            <div class="col-4">
+                            <div class="col-6">
                                 <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
                             </div>
 
-                            <div class="col-4">
-                                <form method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
+                            <div class="col-6">
+                                <a th:if="${isEmployee}" class="btn btn-primary m-1 float-right" href="#"
+                                   th:href="@{/panel/parcels/new}">Create
+                                    a Parcel
+                                </a>
+                            </div>
+                        </div>
 
-                                    <div class="form-group">
-                                        <input type="number" id="replyNumber" min="0" data-bind="value:replyNumber"
-                                               step="0.01" class="form-control" placeholder="Weight"
-                                               th:field="*{weight}">
-                                    </div>
+                        <form method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
+                            <div class="row">
 
-                                    <select th:if="${isEmployee}" class="form-select form-control m-1 float-right"
-                                            th:field="*{userId}">
+                                <div class="col-sm-12 col-md-12 col-lg-2">
+                                    <input type="number" min="0" step=".01" class="form-select form-control"
+                                           placeholder="Weight" th:field="*{weight}">
+                                </div>
+
+
+                                <div class="col-sm-12 col-md-12 col-lg-2">
+                                    <select th:if="${isEmployee}" class="form-select form-control" th:field="*{userId}">
                                         <option selected value="-1"> Any User</option>
                                         <option th:each="user : ${users}"
                                                 th:value="${user.getId()}"
@@ -74,8 +82,10 @@
                                             User Email
                                         </option>
                                     </select>
+                                </div>
 
-                                    <select class="form-select form-control m-1 float-right" th:field="*{category}">
+                                <div class="col-sm-12 col-md-12 col-lg-2">
+                                    <select class="form-select form-control" th:field="*{category}">
                                         <option selected value=""> Any Category</option>
                                         <option th:each="category : ${categories}"
                                                 th:value="${category}"
@@ -83,8 +93,10 @@
                                             Warehouse Address
                                         </option>
                                     </select>
+                                </div>
 
-                                    <select class="form-select form-control m-1 float-right" th:field="*{status}">
+                                <div class="col-sm-12 col-md-12 col-lg-2">
+                                    <select class="form-select form-control" th:field="*{status}">
                                         <option selected value=""> Any Status</option>
                                         <option th:each="status : ${statuses}"
                                                 th:value="${status}"
@@ -92,8 +104,10 @@
                                             Warehouse Address
                                         </option>
                                     </select>
+                                </div>
 
-                                    <select class="form-select form-control m-1 float-right"
+                                <div class="col-sm-12 col-md-12 col-lg-2">
+                                    <select class="form-select form-control"
                                             th:field="*{warehouseId}">
                                         <option selected value="-1"> Any Warehouse</option>
                                         <option th:each="warehouse : ${warehouses}"
@@ -102,92 +116,85 @@
                                             Warehouse Address
                                         </option>
                                     </select>
+                                </div>
 
-                                    <button type="submit" class="btn btn-primary m-1 float-right">
-                                        Filter
-                                    </button>
-                                </form>
+                                <div class="col-sm-12 col-md-12 col-lg-2">
+                                    <button type="submit" class="btn btn-primary m-1 float-right">Filter</button>
+                                </div>
+
                             </div>
+                        </form>
 
-                            <div class="col-4">
-                                <a th:if="${isEmployee}" class="btn btn-primary m-1 float-right" href="#"
-                                   th:href="@{__${#httpServletRequest.requestURI}__/new}">Create
-                                    a Parcel
-                                </a>
-                            </div>
-
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th th:if="${isEmployee}">Customer</th>
+                                    <th>Category</th>
+                                    <th>Weight</th>
+                                    <th th:if="${isEmployee}">Shipment ID</th>
+                                    <th>Pickup Option</th>
+                                    <th>Arrival Date</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th th:if="${isEmployee}">Customer</th>
+                                    <th>Category</th>
+                                    <th>Weight</th>
+                                    <th th:if="${isEmployee}">Shipment ID</th>
+                                    <th>Pickup Option</th>
+                                    <th>Arrival Date</th>
+                                    <th>Status</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                <tr th:each="parcel : ${parcels}">
+                                    <td>
+                                        <a th:href="@{/panel/parcels/{id}(id=${parcel.id})}"
+                                           href="#"
+                                           th:text="${parcel.id}">ID</a>
+                                    </td>
+                                    <td th:if="${isEmployee}"
+                                        th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">
+                                        Customer
+                                    </td>
+                                    <td th:text="${parcel.getCategory()}">Category</td>
+                                    <td th:text="${parcel.weight}">Weight</td>
+                                    <td th:if="${isEmployee}" th:text="${parcel.shipment.id}">Shipment ID</td>
+                                    <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
+                                    <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
+                                    <td th:text="${parcel.getShipment().getStatus()}">Status</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th th:if="${isEmployee}">Customer</th>
-                                <th>Category</th>
-                                <th>Weight</th>
-                                <th th:if="${isEmployee}">Shipment ID</th>
-                                <th>Pickup Option</th>
-                                <th>Arrival Date</th>
-                                <th>Status</th>
-                            </tr>
-                            </thead>
-                            <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th th:if="${isEmployee}">Customer</th>
-                                <th>Category</th>
-                                <th>Weight</th>
-                                <th th:if="${isEmployee}">Shipment ID</th>
-                                <th>Pickup Option</th>
-                                <th>Arrival Date</th>
-                                <th>Status</th>
-                            </tr>
-                            </tfoot>
-                            <tbody>
-                            <tr th:each="parcel : ${parcels}">
-                                <td>
-                                    <a th:href="@{/panel/parcels/{id}(id=${parcel.id})}"
-                                       href="#"
-                                       th:text="${parcel.id}">ID</a>
-                                </td>
-                                <td th:if="${isEmployee}"
-                                    th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">
-                                    Customer
-                                </td>
-                                <td th:text="${parcel.getCategory()}">Category</td>
-                                <td th:text="${parcel.weight}">Weight</td>
-                                <td th:if="${isEmployee}" th:text="${parcel.shipment.id}">Shipment ID</td>
-                                <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
-                                <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
-                                <td th:text="${parcel.getShipment().getStatus()}">Status</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                </form>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; DeliverIT 2021</span>
                 </div>
             </div>
-            </form>
-        </div>
-        <!-- /.container-fluid -->
+        </footer>
+        <!-- End of Footer -->
 
     </div>
-    <!-- End of Main Content -->
-
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-                <span>Copyright &copy; DeliverIT 2021</span>
-            </div>
-        </div>
-    </footer>
-    <!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
+    <!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
