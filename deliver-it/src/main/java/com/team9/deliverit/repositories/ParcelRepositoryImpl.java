@@ -66,9 +66,6 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
             var baseQuery = "select p from Parcel p join Shipment s on p.shipment.id = s.id ";
             List<String> filters = new ArrayList<>();
 
-            if (warehouseId.isPresent()) {
-                filters.add("s.originWarehouse.id = :warehouseId or destinationWarehouse.id = :warehouseId");
-            }
             if (weight.isPresent()) {
                 filters.add("p.weight = :weight");
             }
@@ -76,10 +73,14 @@ public class ParcelRepositoryImpl extends BaseRepositoryImpl<Parcel> implements 
                 filters.add("p.category like :category");
             }
             if (status.isPresent()) {
-                filters.add("p.status like :status");
+                filters.add("s.status like :status");
             }
             if (userId.isPresent()) {
                 filters.add("p.user.id = :userId");
+            }
+
+            if (warehouseId.isPresent()) {
+                filters.add("(s.originWarehouse.id = :warehouseId or s.destinationWarehouse.id = :warehouseId)");
             }
 
             if (!filters.isEmpty()) {

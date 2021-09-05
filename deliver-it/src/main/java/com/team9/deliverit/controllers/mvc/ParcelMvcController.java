@@ -5,14 +5,15 @@ import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
-import com.team9.deliverit.models.Parcel;
-import com.team9.deliverit.models.Role;
-import com.team9.deliverit.models.Shipment;
-import com.team9.deliverit.models.User;
+import com.team9.deliverit.models.*;
+import com.team9.deliverit.models.dtos.FilterParcelDto;
 import com.team9.deliverit.models.dtos.ParcelDto;
+import com.team9.deliverit.models.enums.Category;
+import com.team9.deliverit.models.enums.Status;
 import com.team9.deliverit.services.contracts.ParcelService;
 import com.team9.deliverit.services.contracts.ShipmentService;
 import com.team9.deliverit.services.contracts.UserService;
+import com.team9.deliverit.services.contracts.WarehouseService;
 import com.team9.deliverit.services.mappers.ParcelModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/panel/parcels")
@@ -32,6 +36,7 @@ public class ParcelMvcController {
     private final ParcelModelMapper modelMapper;
     private final UserService userService;
     private final ShipmentService shipmentService;
+    private final WarehouseService warehouseService;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
@@ -39,12 +44,18 @@ public class ParcelMvcController {
                                ParcelModelMapper modelMapper,
                                UserService userService,
                                ShipmentService shipmentService,
-                               AuthenticationHelper authenticationHelper) {
+                               WarehouseService warehouseService, AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.shipmentService = shipmentService;
+        this.warehouseService = warehouseService;
         this.authenticationHelper = authenticationHelper;
+    }
+
+    @ModelAttribute("warehouses")
+    public List<Warehouse> populateWarehouses() {
+        return warehouseService.getAll();
     }
 
     @ModelAttribute("shipments")
@@ -53,9 +64,19 @@ public class ParcelMvcController {
         return shipmentService.getAll(user);
     }
 
+    @ModelAttribute("categories")
+    public List<Category> populateCategories() {
+       return Arrays.asList(Category.values());
+    }
+
+    @ModelAttribute("statuses")
+    public List<Status> populateStatuses() {
+        return Arrays.asList(Status.values());
+    }
+
 
     @ModelAttribute("users")
-    public List<User> populateUsers(HttpSession session) {
+    public List<User> populateUsers() {
         User user = userService.getByEmail("kristiyanpd02@gmail.com");
         return userService.getAll(user);
     }
@@ -89,6 +110,7 @@ public class ParcelMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("parcels", service.getAll(user));
+            model.addAttribute("filterParcelDto", new FilterParcelDto());
             return "parcels";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
@@ -233,5 +255,27 @@ public class ParcelMvcController {
             model.addAttribute("error", e.getMessage());
             return "access-denied";
         }
+    }
+
+    @PostMapping("/filter")
+    public String filterParcels(@ModelAttribute FilterParcelDto filterParcelDto, HttpSession session, Model model) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            Optional<Double> weight = !filterParcelDto.getWeight().isEmpty() ? Optional.of(Double.valueOf(filterParcelDto.getWeight())) : Optional.empty();
+            Optional<Integer> warehouseId = filterParcelDto.getWarehouseId() != -1 ? Optional.of(filterParcelDto.getWarehouseId()) : Optional.empty();
+            Optional<Category> category = !filterParcelDto.getCategory().isEmpty() ? Optional.of(Category.getEnum(filterParcelDto.getCategory())) : Optional.empty();
+            Optional<Status> status = !filterParcelDto.getStatus().isEmpty() ? Optional.of(Status.getEnum(filterParcelDto.getStatus())) : Optional.empty();
+            Optional<Integer> userId = filterParcelDto.getUserId() != -1 ? Optional.of(filterParcelDto.getUserId()) : Optional.empty();
+
+            var filtered = service.filter(user, weight, warehouseId, category, status, userId);
+            model.addAttribute("parcels", filtered);
+            return "parcels";
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
     }
 }

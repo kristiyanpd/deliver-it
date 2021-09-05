@@ -3,30 +3,33 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>DeliverIT | Parcels</title>
+    <title>DeliverIT | Parcels</title>
 
-  <!-- Custom fonts for this template-->
-  <link href="../static/panel/vendor/fontawesome-free/css/all.min.css" th:href="@{/panel/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <!-- Custom fonts for this template-->
+    <link href="../static/panel/vendor/fontawesome-free/css/all.min.css"
+          th:href="@{/panel/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
 
-  <!-- Custom styles for this template-->
-  <link href="../static/panel/css/sb-admin-2.min.css" th:href="@{/panel/css/sb-admin-2.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="../static/panel/css/sb-admin-2.min.css" th:href="@{/panel/css/sb-admin-2.min.css}" rel="stylesheet">
 
-  <!-- Custom styles for this page -->
-  <link href="../static/panel/vendor/datatables/dataTables.bootstrap4.min.css" th:href="@{/panel/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
+    <!-- Custom styles for this page -->
+    <link href="../static/panel/vendor/datatables/dataTables.bootstrap4.min.css"
+          th:href="@{/panel/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
 
-  <!-- Page Wrapper -->
-  <div id="wrapper">
+<!-- Page Wrapper -->
+<div id="wrapper">
 
     <!-- Sidebar -->
     <ul th:replace="fragments.html :: sidebar"></ul>
@@ -34,138 +37,206 @@
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
-      <!-- Main Content -->
-      <div id="content">
+        <!-- Main Content -->
+        <div id="content">
 
-        <!-- Topbar -->
-        <navbar th:replace="fragments.html :: topbar"></navbar>
+            <!-- Topbar -->
+            <navbar th:replace="fragments.html :: topbar"></navbar>
 
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
 
-          <!-- DataTales Example -->
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <div class="row">
-                <div class="col-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
+                <!-- DataTales Example -->
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <div class="row">
+
+                            <div class="col-4">
+                                <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
+                            </div>
+
+                            <div class="col-4">
+                                <form method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
+
+                                    <div class="form-group">
+                                        <input type="number" id="replyNumber" min="0" data-bind="value:replyNumber"
+                                               step="0.01" class="form-control" placeholder="Weight"
+                                               th:field="*{weight}">
+                                    </div>
+
+                                    <select th:if="${isEmployee}" class="form-select form-control m-1 float-right"
+                                            th:field="*{userId}">
+                                        <option selected value="-1"> Any User</option>
+                                        <option th:each="user : ${users}"
+                                                th:value="${user.getId()}"
+                                                th:text="${user.getEmail}">
+                                            User Email
+                                        </option>
+                                    </select>
+
+                                    <select class="form-select form-control m-1 float-right" th:field="*{category}">
+                                        <option selected value=""> Any Category</option>
+                                        <option th:each="category : ${categories}"
+                                                th:value="${category}"
+                                                th:text="${category}">
+                                            Warehouse Address
+                                        </option>
+                                    </select>
+
+                                    <select class="form-select form-control m-1 float-right" th:field="*{status}">
+                                        <option selected value=""> Any Status</option>
+                                        <option th:each="status : ${statuses}"
+                                                th:value="${status}"
+                                                th:text="${status}">
+                                            Warehouse Address
+                                        </option>
+                                    </select>
+
+                                    <select class="form-select form-control m-1 float-right"
+                                            th:field="*{warehouseId}">
+                                        <option selected value="-1"> Any Warehouse</option>
+                                        <option th:each="warehouse : ${warehouses}"
+                                                th:value="${warehouse.getId()}"
+                                                th:text="${warehouse.getAddress.getStreetName}">
+                                            Warehouse Address
+                                        </option>
+                                    </select>
+
+                                    <button type="submit" class="btn btn-primary m-1 float-right">
+                                        Filter
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="col-4">
+                                <a th:if="${isEmployee}" class="btn btn-primary m-1 float-right" href="#"
+                                   th:href="@{__${#httpServletRequest.requestURI}__/new}">Create
+                                    a Parcel
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-                <div th:if="${isEmployee}" class="col-6">
-                  <a class="btn btn-primary m-0 float-right" href="#" th:href="@{__${#httpServletRequest.requestURI}__/new}">Create
-                    a Parcel
-                  </a>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th th:if="${isEmployee}">Customer</th>
+                                <th>Category</th>
+                                <th>Weight</th>
+                                <th th:if="${isEmployee}">Shipment ID</th>
+                                <th>Pickup Option</th>
+                                <th>Arrival Date</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th th:if="${isEmployee}">Customer</th>
+                                <th>Category</th>
+                                <th>Weight</th>
+                                <th th:if="${isEmployee}">Shipment ID</th>
+                                <th>Pickup Option</th>
+                                <th>Arrival Date</th>
+                                <th>Status</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr th:each="parcel : ${parcels}">
+                                <td>
+                                    <a th:href="@{/panel/parcels/{id}(id=${parcel.id})}"
+                                       href="#"
+                                       th:text="${parcel.id}">ID</a>
+                                </td>
+                                <td th:if="${isEmployee}"
+                                    th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">
+                                    Customer
+                                </td>
+                                <td th:text="${parcel.getCategory()}">Category</td>
+                                <td th:text="${parcel.weight}">Weight</td>
+                                <td th:if="${isEmployee}" th:text="${parcel.shipment.id}">Shipment ID</td>
+                                <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
+                                <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
+                                <td th:text="${parcel.getShipment().getStatus()}">Status</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th th:if="${isEmployee}">Customer</th>
-                      <th>Category</th>
-                      <th>Weight</th>
-                      <th th:if="${isEmployee}">Shipment ID</th>
-                      <th>Pickup Option</th>
-                      <th>Arrival Date</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <th>ID</th>
-                      <th th:if="${isEmployee}">Customer</th>
-                      <th>Category</th>
-                      <th>Weight</th>
-                      <th th:if="${isEmployee}">Shipment ID</th>
-                      <th>Pickup Option</th>
-                      <th>Arrival Date</th>
-                      <th>Status</th>
-                    </tr>
-                  </tfoot>
-                  <tbody>
-                    <tr th:each="parcel : ${parcels}">
-                      <td>
-                        <a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${parcel.id})}" href="#"
-                           th:text="${parcel.id}">ID</a>
-                      </td>
-                      <td th:if="${isEmployee}" th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">Customer</td>
-                      <td th:text="${parcel.getCategory()}">Category</td>
-                      <td th:text="${parcel.weight}">Weight</td>
-                      <td th:if="${isEmployee}" th:text="${parcel.shipment.id}">Shipment ID</td>
-                      <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
-                      <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
-                      <td th:text="${parcel.getShipment().getStatus()}">Status</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
+            </form>
         </div>
         <!-- /.container-fluid -->
 
-      </div>
-      <!-- End of Main Content -->
+    </div>
+    <!-- End of Main Content -->
 
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
         <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; DeliverIT 2021</span>
-          </div>
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; DeliverIT 2021</span>
+            </div>
         </div>
-      </footer>
-      <!-- End of Footer -->
+    </footer>
+    <!-- End of Footer -->
 
-    </div>
-    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Content Wrapper -->
 
-  </div>
-  <!-- End of Page Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
-  </a>
+</a>
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="../static/panel/vendor/jquery/jquery.min.js" th:src="@{/panel/vendor/jquery/jquery.min.js}"></script>
-  <script src="../static/panel/vendor/bootstrap/js/bootstrap.bundle.min.js" th:src="@{/panel/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="../static/panel/vendor/jquery/jquery.min.js" th:src="@{/panel/vendor/jquery/jquery.min.js}"></script>
+<script src="../static/panel/vendor/bootstrap/js/bootstrap.bundle.min.js"
+        th:src="@{/panel/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="../static/panel/vendor/jquery-easing/jquery.easing.min.js" th:src="@{/panel/vendor/jquery-easing/jquery.easing.min.js}"></script>
+<!-- Core plugin JavaScript-->
+<script src="../static/panel/vendor/jquery-easing/jquery.easing.min.js"
+        th:src="@{/panel/vendor/jquery-easing/jquery.easing.min.js}"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="../static/panel/js/sb-admin-2.min.js" th:src="@{/panel/js/sb-admin-2.min.js}"></script>
+<!-- Custom scripts for all pages-->
+<script src="../static/panel/js/sb-admin-2.min.js" th:src="@{/panel/js/sb-admin-2.min.js}"></script>
 
-  <!-- Page level plugins -->
-  <script src="../static/panel/vendor/datatables/jquery.dataTables.min.js" th:src="@{/panel/vendor/datatables/jquery.dataTables.min.js}"></script>
-  <script src="../static/panel/vendor/datatables/dataTables.bootstrap4.min.js" th:src="@{/panel/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+<!-- Page level plugins -->
+<script src="../static/panel/vendor/datatables/jquery.dataTables.min.js"
+        th:src="@{/panel/vendor/datatables/jquery.dataTables.min.js}"></script>
+<script src="../static/panel/vendor/datatables/dataTables.bootstrap4.min.js"
+        th:src="@{/panel/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="../static/panel/js/demo/datatables-demo.js" th:src="@{/panel/js/demo/datatables-demo.js}"></script>
+<!-- Page level custom scripts -->
+<script src="../static/panel/js/demo/datatables-demo.js" th:src="@{/panel/js/demo/datatables-demo.js}"></script>
 
 </body>
 

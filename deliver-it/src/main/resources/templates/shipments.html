@@ -47,16 +47,37 @@
             <div class="container-fluid">
 
                 <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
+                <form method="post" th:action = "@{shipments/filter}" th:object="${filterShipmentDto}">
+                <div class="card shadow mb-4" >
+                    <div class="card-header py-3" style="display: inline">
                         <div class="row">
                             <div class="col-6">
                                 <h6 class="m-0 font-weight-bold text-primary">Shipments</h6>
                             </div>
                             <div class="col-6">
-                                <a class="btn btn-primary m-0 float-right" href="#"
+                                <select class="form-select form-control m-1 float-right" th:field="*{userId}">
+                                    <option selected value="-1"> Any User</option>
+                                    <option th:each="user : ${users}"
+                                            th:value="${user.getId()}"
+                                            th:text="${user.getEmail}">
+                                        User Email
+                                    </option>
+                                </select>
+
+                                <select class="form-select form-control m-1 float-right" th:field="*{warehouseId}">
+                                    <option selected value="-1"> Any Warehouse</option>
+                                    <option th:each="warehouse : ${warehouses}"
+                                            th:value="${warehouse.getId()}"
+                                            th:text="${warehouse.getAddress.getStreetName}">
+                                        Warehouse Address
+                                    </option>
+                                </select>
+                                <a class="btn btn-primary m-1 float-right" href="#"
                                    th:href="@{__${#httpServletRequest.requestURI}__/new}">Create a Shipment
                                 </a>
+                                <button type="submit" class= "btn btn-primary m-1 float-right">
+                                    Filter
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -108,9 +129,11 @@
                         </div>
                     </div>
                 </div>
-
+                </form>
             </div>
             <!-- /.container-fluid -->
+
+
 
         </div>
         <!-- End of Main Content -->

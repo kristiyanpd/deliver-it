@@ -8,6 +8,7 @@ import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
+import com.team9.deliverit.models.dtos.FilterShipmentDto;
 import com.team9.deliverit.models.dtos.ShipmentDto;
 import com.team9.deliverit.services.contracts.ShipmentService;
 import com.team9.deliverit.services.contracts.UserService;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/panel/shipments")
@@ -51,6 +54,12 @@ public class ShipmentMvcController {
         return warehouseService.getAll();
     }
 
+    @ModelAttribute("users")
+    public List<User> populateUsers() {
+        User user = userService.getByEmail("kristiyanpd02@gmail.com");
+        return userService.getAll(user);
+    }
+
     @ModelAttribute("currentUser")
     public String currentUser(HttpSession session) {
         User user;
@@ -78,6 +87,7 @@ public class ShipmentMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("shipments", service.getAll(user));
+            model.addAttribute("filterShipmentDto", new FilterShipmentDto());
             return "shipments";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
@@ -117,7 +127,8 @@ public class ShipmentMvcController {
     }
 
     @PostMapping("/new")
-    public String createShipment(@Valid @ModelAttribute("shipment") ShipmentDto shipmentDto, BindingResult errors, Model model, HttpSession session) {
+    public String createShipment(@Valid @ModelAttribute("shipment") ShipmentDto shipmentDto, BindingResult
+            errors, Model model, HttpSession session) {
         if (errors.hasErrors()) {
             return "shipment-new";
         }
@@ -188,5 +199,24 @@ public class ShipmentMvcController {
             model.addAttribute("error", e.getMessage());
             return "not-found";
         }
+    }
+
+    @PostMapping("/filter")
+    public String filterShipments(@ModelAttribute FilterShipmentDto filterShipmentDto, HttpSession session, Model
+            model) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            Optional<Integer> warehouseId = filterShipmentDto.getWarehouseId() != -1 ? Optional.of(filterShipmentDto.getWarehouseId()) : Optional.empty();
+            Optional<Integer> userId = filterShipmentDto.getUserId() != -1 ? Optional.of(filterShipmentDto.getUserId()) : Optional.empty();
+            var filtered = service.filter(user, warehouseId, userId);
+            model.addAttribute("shipments", filtered);
+            return "shipments";
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
     }
 }
