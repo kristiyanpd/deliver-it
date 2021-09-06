@@ -76,7 +76,7 @@
         <!-- Portfolio Grid Items-->
         <div class="row justify-content-center">
             <!-- Portfolio Items-->
-            <div th:each="warehouse : ${warehouses}" class="col-md-12 col-lg-6 mb-5">
+            <div th:if="${warehouse.photoUrl} != null" th:each="warehouse : ${warehouses}" class="col-md-12 col-lg-6 mb-5">
                 <div class="portfolio-item mx-auto" data-toggle="modal"
                      th:attr="data-target='#portfolioModal' + ${warehouse.id}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
@@ -92,7 +92,7 @@
     </div>
 </section>
 <!-- Portfolio Modal-->
-<div th:each="warehouse : ${warehouses}" class="portfolio-modal modal fade" th:id="'portfolioModal' + ${warehouse.id}"
+<div th:if="${warehouse.photoUrl} != null" th:each="warehouse : ${warehouses}" class="portfolio-modal modal fade" th:id="'portfolioModal' + ${warehouse.id}"
      tabindex="-1" role="dialog"
      aria-labelledby="#portfolioModal0Label" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
