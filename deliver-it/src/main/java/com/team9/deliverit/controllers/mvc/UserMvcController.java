@@ -11,6 +11,7 @@ import com.team9.deliverit.services.contracts.CityService;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.mappers.UserModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -127,8 +128,15 @@ public class UserMvcController {
         }
     }
 
+    @GetMapping("/{id}/employee")
+    public String registerEmployee(@PathVariable int id, HttpSession session) {
+        User user = authenticationHelper.tryGetUser(session);
+        service.registerEmployee(id, user);
+        return String.format("redirect:/panel/users/%s", id);
+    }
+
     @GetMapping("/{id}/delete")
-    public String deleteAddress(@PathVariable int id, Model model) {
+    public String deleteUser(@PathVariable int id, Model model) {
         try {
             User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
             User user = service.getById(admin, id);
