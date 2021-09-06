@@ -1,7 +1,6 @@
 package com.team9.deliverit.repositories;
 
 import com.team9.deliverit.exceptions.EntityNotFoundException;
-import com.team9.deliverit.exceptions.InvalidFilterException;
 import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.repositories.contracts.ShipmentRepository;
@@ -11,6 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,18 +67,21 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
 
     @Override
     public List<Shipment> filter(Optional<Integer> warehouseId, Optional<Integer> userId) {
-        if (userId.isPresent() && warehouseId.isPresent()) {
-            throw new InvalidFilterException("You can filter only by warehouseId or customerId separately");
-        }
-        try (Session session = sessionFactory.openSession()) {
 
+        try (Session session = sessionFactory.openSession()) {
             var baseQuery = "select distinct s from Shipment s left join Parcel p on s.id = p.shipment.id ";
+            List<String> filters = new ArrayList<>();
+
+            if (userId.isPresent()) {
+                filters.add(" p.user.id = :userId ");
+            }
 
             if (warehouseId.isPresent()) {
-                baseQuery += " where s.destinationWarehouse.id = :warehouseId or s.originWarehouse.id = :warehouseId ";
+                filters.add(" (s.destinationWarehouse.id = :warehouseId or s.originWarehouse.id = :warehouseId) ");
             }
-            if (userId.isPresent()) {
-                baseQuery += " where p.user.id = :userId ";
+
+            if (!filters.isEmpty()) {
+                baseQuery += " where " + String.join(" and ", filters);
             }
 
             Query<Shipment> query = session.createQuery(baseQuery, Shipment.class);
@@ -87,7 +90,6 @@ public class ShipmentRepositoryImpl extends BaseRepositoryImpl<Shipment> impleme
             userId.ifPresent(integer -> query.setParameter("userId", integer));
 
             return query.list();
-
         }
 
     }
