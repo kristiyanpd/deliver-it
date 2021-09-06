@@ -140,7 +140,7 @@ public class WarehouseMvcController {
             Warehouse warehouse = modelMapper.fromDto(warehouseDto);
             User user = authenticationHelper.tryGetUser(session);
             service.create(warehouse, user);
-            return "redirect:/warehouses";
+            return "redirect:/panel/warehouses";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("addressId", "duplicate_address", e.getMessage());
             return "warehouse-new";
@@ -184,7 +184,7 @@ public class WarehouseMvcController {
             Warehouse warehouse = modelMapper.fromDto(warehouseDto, id);
             service.update(warehouse, user);
 
-            return "redirect:/warehouses";
+            return "redirect:/panel/warehouses";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("addressId", "duplicate_address", e.getMessage());
             return "warehouse-update";
@@ -200,7 +200,7 @@ public class WarehouseMvcController {
             User user = authenticationHelper.tryGetUser(session);
             service.delete(id, user);
 
-            return "redirect:/warehouses";
+            return "redirect:/panel/warehouses";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";

@@ -75,15 +75,17 @@ public class UserMvcController {
     }
 
     @GetMapping("/{id}")
-    public String showSingleUser(@PathVariable int id, Model model) {
+    public String showSingleUser(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
+            User admin = authenticationHelper.tryGetUser(session);
             User user = service.getById(admin, id);
             model.addAttribute("user", user);
             return "user";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 

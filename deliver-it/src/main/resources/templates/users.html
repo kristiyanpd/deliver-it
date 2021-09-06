@@ -75,7 +75,10 @@
                   </tfoot>
                   <tbody>
                     <tr th:each="user : ${users}">
-                      <td th:text="${user.id}">ID</td>
+                      <td>
+                        <a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${user.id})}" href="#"
+                           th:text="${user.id}">ID</a>
+                      </td>
                       <td th:text="${user.email}">Email</td>
                       <td th:text="${user.firstName}">First name</td>
                       <td th:text="${user.lastName}">Last name</td>
