@@ -126,6 +126,8 @@
                                         <th>ID</th>
                                         <th>Customer</th>
                                         <th>Pickup Option</th>
+                                        <th>Arrival Date</th>
+                                        <th>Status</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -133,6 +135,8 @@
                                         <th>ID</th>
                                         <th>Customer</th>
                                         <th>Pickup Option</th>
+                                        <th>Arrival Date</th>
+                                        <th>Status</th>
                                     </tr>
                                     </tfoot>
                                     <tbody>
@@ -146,6 +150,8 @@
                                             Customer
                                         </td>
                                         <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
+                                        <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
+                                        <td th:text="${parcel.getShipment().getStatus()}">Status</td>
                                     </tr>
                                     </tbody>
                                 </table>
