@@ -75,7 +75,8 @@
                             </div>
 
                             <div class="col-sm-5 mb-3 mb-sm-0">
-                                <label class="text-secondary " th:text="#{shipment.label.arrivalDate}">Arrival Date</label>
+                                <label class="text-secondary " th:text="#{shipment.label.arrivalDate}">Arrival
+                                    Date</label>
                                 <h2 class="form-control form-control-user" th:text="${shipment.arrivalDate}"></h2>
                             </div>
 
@@ -93,13 +94,54 @@
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <label th:text="#{shipment.label.originWarehouse}">Origin Warehouse</label>
-                                <h2 class="form-select form-control" th:text="${shipment.originWarehouse.address.streetName}">
+                                <h2 class="form-select form-control"
+                                    th:text="${shipment.originWarehouse.address.streetName}">
                                 </h2>
                             </div>
 
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <label th:text="#{shipment.label.destinationWarehouse}">Destination Warehouse</label>
-                                <h2 class="form-select form-control" th:text="${shipment.destinationWarehouse.address.streetName}"></h2>
+                                <h2 class="form-select form-control"
+                                    th:text="${shipment.destinationWarehouse.address.streetName}"></h2>
+                            </div>
+                        </div>
+
+                        <div th:if="${parcelsExist}" class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Customer</th>
+                                            <th>Pickup Option</th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Customer</th>
+                                            <th>Pickup Option</th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        <tr th:each="parcel : ${parcels}">
+                                            <td>
+                                                <a th:href="@{/panel/parcels/{id}(id=${parcel.id})}"
+                                                   href="#"
+                                                   th:text="${parcel.id}">ID</a>
+                                            </td>
+                                            <td th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">
+                                                Customer
+                                            </td>
+                                            <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -153,7 +195,8 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
-<script src="../static/panel/vendor/jquery/jquery.min.js" th:src="@{/panel/vendor/jquery/jquery.min.js}"></script>
+<script src="../static/panel/vendor/jquery/jquery.min.js"
+        th:src="@{/panel/vendor/jquery/jquery.min.js}"></script>
 <script src="../static/panel/vendor/bootstrap/js/bootstrap.bundle.min.js"
         th:src="@{/panel/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 

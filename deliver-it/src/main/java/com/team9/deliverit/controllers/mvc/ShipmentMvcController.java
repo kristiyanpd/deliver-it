@@ -5,6 +5,7 @@ import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.Shipment;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,7 +102,10 @@ public class ShipmentMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             Shipment shipment = service.getById(user, id);
+            List<Parcel> parcels = service.getParcels(id, user);
             model.addAttribute("shipment", shipment);
+            model.addAttribute("parcels", parcels);
+            model.addAttribute("parcelsExist", !parcels.isEmpty());
             return "shipment";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
