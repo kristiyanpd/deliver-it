@@ -63,8 +63,8 @@
                                            placeholder="Weight" th:field="*{weight}">
                                 </div>
 
-                                <div class="col-sm-12 col-md-12 col-lg-2">
-                                    <select th:if="${isEmployee}" class="form-select form-control" th:field="*{userId}">
+                                <div th:if="${isEmployee}" class="col-sm-12 col-md-12 col-lg-2">
+                                    <select class="form-select form-control" th:field="*{userId}">
                                         <option selected value="-1">Any User</option>
                                         <option th:each="user : ${users}"
                                                 th:value="${user.getId()}"
@@ -108,7 +108,7 @@
                                     </select>
                                 </div>
 
-                                <div class="col-sm-12 col-md-12 col-lg-2">
+                                <div class="col-sm-12 col-md-12" th:classappend="${isEmployee} ? 'col-lg-2' : 'col-lg-4'">
                                     <div class="btn-toolbar float-right">
                                         <button type="submit" class="btn btn-primary m-1 float-right">Filter</button>
                                         <a th:if="${isEmployee}" class="btn btn-primary m-1 float-right" href="#"
