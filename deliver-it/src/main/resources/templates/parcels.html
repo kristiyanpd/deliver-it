@@ -55,7 +55,7 @@
                             <h6 class="m-1 font-weight-bold text-primary">Parcels</h6>
                         </div>
 
-                        <form method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
+                        <form th:if="${parcelsExist} or (${parcelsExist} == false and ${filtered} == true)" method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
                             <div class="row">
 
                                 <div class="col-sm-12 col-md-12 col-lg-2">
@@ -168,8 +168,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == true" class="m-0 font-weight-bold text-primary">There are no parcels!</h6>
-                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == false" class="m-0 font-weight-bold text-primary">You have no parcels!</h6>
+                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == true and ${filtered} == false" class="m-0 font-weight-bold text-primary">There are no parcels!</h6>
+                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == false and ${filtered} == false" class="m-0 font-weight-bold text-primary">You have no parcels!</h6>
+                        <h6 th:if="${parcelsExist} == false and ${filtered} == true" class="m-0 font-weight-bold text-primary">There are no parcels matching criteria!</h6>
                     </div>
                 </div>
                 </form>

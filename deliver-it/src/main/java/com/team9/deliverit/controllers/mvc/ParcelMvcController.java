@@ -111,6 +111,7 @@ public class ParcelMvcController {
             model.addAttribute("parcels", parcels);
             model.addAttribute("filterParcelDto", new FilterParcelDto());
             model.addAttribute("parcelsExist", !parcels.isEmpty());
+            model.addAttribute("filtered", false);
             return "parcels";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
@@ -279,6 +280,7 @@ public class ParcelMvcController {
             var filtered = service.filter(user, weight, warehouseId, category, status, userId);
             model.addAttribute("parcels", filtered);
             model.addAttribute("parcelsExist", !filtered.isEmpty());
+            model.addAttribute("filtered", true);
             return "parcels";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
