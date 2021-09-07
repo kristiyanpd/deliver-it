@@ -195,7 +195,7 @@ public class WarehouseMvcController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteAddress(@PathVariable int id, Model model, HttpSession session) {
+    public String deleteWarehouse(@PathVariable int id, Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUser(session);
             service.delete(id, user);
@@ -206,6 +206,9 @@ public class WarehouseMvcController {
             return "not-found";
         } catch (UnauthorizedOperationException e) {
             return "not-found";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:";
         }
     }
 }

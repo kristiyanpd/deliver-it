@@ -3,6 +3,7 @@ package com.team9.deliverit.services;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.repositories.contracts.ParcelRepository;
 import com.team9.deliverit.repositories.contracts.RoleRepository;
 import com.team9.deliverit.repositories.contracts.UserRepository;
 import com.team9.deliverit.services.contracts.UserService;
@@ -22,10 +23,13 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
+    private  final ParcelRepository parcelRepository;
+
     @Autowired
-    public UserServiceImpl(UserRepository repository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository repository, RoleRepository roleRepository, ParcelRepository parcelRepository) {
         this.repository = repository;
         this.roleRepository = roleRepository;
+        this.parcelRepository = parcelRepository;
     }
 
     @Override
@@ -73,6 +77,9 @@ public class UserServiceImpl implements UserService {
     public void delete(User userExecuting, int id) {
         if (!userExecuting.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "users"));
+        }
+        else if (parcelRepository.getAllUserParcels(id).size() != 0){
+            throw new IllegalArgumentException(String.format("User with id %s can't be deleted, because he/she has parcels",id));
         }
         repository.delete(id);
     }

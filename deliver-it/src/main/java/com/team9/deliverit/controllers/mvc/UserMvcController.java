@@ -86,6 +86,7 @@ public class UserMvcController {
             User admin = authenticationHelper.tryGetUser(session);
             User user = service.getById(admin, id);
             List<Parcel> parcels = parcelService.getAllUserParcels(user);
+
             model.addAttribute("user", user);
             model.addAttribute("hasParcels", !parcels.isEmpty());
             model.addAttribute("parcels", parcels);
@@ -167,6 +168,9 @@ public class UserMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:";
         }
     }
 }

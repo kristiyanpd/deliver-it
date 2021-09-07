@@ -73,6 +73,8 @@ public class ShipmentServiceImpl implements ShipmentService {
     public void delete(User user, int id) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "shipments"));
+        } else if (getParcels(id, user).size() != 0) {
+            throw new IllegalArgumentException("You can' t delete a shipment that has parcels!");
         }
         repository.delete(id);
     }

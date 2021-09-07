@@ -66,7 +66,7 @@ public class ParcelMvcController {
 
     @ModelAttribute("categories")
     public List<Category> populateCategories() {
-       return Arrays.asList(Category.values());
+        return Arrays.asList(Category.values());
     }
 
     @ModelAttribute("statuses")
@@ -265,7 +265,12 @@ public class ParcelMvcController {
             Optional<Integer> warehouseId = filterParcelDto.getWarehouseId() != -1 ? Optional.of(filterParcelDto.getWarehouseId()) : Optional.empty();
             Optional<Category> category = !filterParcelDto.getCategory().isEmpty() ? Optional.of(Category.getEnum(filterParcelDto.getCategory())) : Optional.empty();
             Optional<Status> status = !filterParcelDto.getStatus().isEmpty() ? Optional.of(Status.getEnum(filterParcelDto.getStatus())) : Optional.empty();
-            Optional<Integer> userId = filterParcelDto.getUserId() != -1 ? Optional.of(filterParcelDto.getUserId()) : Optional.empty();
+            Optional<Integer> userId;
+            if (!user.isEmployee()) {
+                userId = Optional.empty();
+            } else {
+                userId = filterParcelDto.getUserId() != -1 ? Optional.of(filterParcelDto.getUserId()) : Optional.empty();
+            }
 
             var filtered = service.filter(user, weight, warehouseId, category, status, userId);
             model.addAttribute("parcels", filtered);
