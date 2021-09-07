@@ -183,11 +183,10 @@ public class UserMvcController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteUser(@PathVariable int id, Model model) {
+    public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User admin = service.getByEmail("kristiyan.dimitrov@gmail.com");
-            User user = service.getById(admin, id);
-            service.delete(admin, user.getId());
+            User admin = authenticationHelper.tryGetUser(session);
+            service.delete(admin, id);
 
             return "redirect:/panel/users";
         } catch (EntityNotFoundException e) {
