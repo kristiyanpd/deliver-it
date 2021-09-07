@@ -50,8 +50,7 @@
                     <div class="card-header py-3">
                         <div class="row">
                             <div class="col-6">
-                                <h6 class="m-0 font-weight-bold text-primary">Viewing a Parcel (#<span
-                                        th:text="${parcel.id}">ID</span>)</h6>
+                                <h6 class="m-0 font-weight-bold text-primary" th:inline="text">Viewing Parcel (#[[${parcel.id}]])</h6>
                             </div>
                             <div class="col-6">
                                 <div class="btn-toolbar float-right">

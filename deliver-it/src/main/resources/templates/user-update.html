@@ -48,7 +48,7 @@
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Updating User (#<span th:text="${userId}"></span>)</h6>
+                        <h6 class="m-0 font-weight-bold text-primary" th:inline="text">Updating User (#[[${userId}]])</h6>
                     </div>
                     <div class="card-body">
                         <form th:replace="user-form.html :: user-form"></form>

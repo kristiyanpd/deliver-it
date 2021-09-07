@@ -6,6 +6,7 @@ import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Address;
+import com.team9.deliverit.models.Role;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.models.dtos.WarehouseDto;
@@ -69,13 +70,12 @@ public class WarehouseMvcController {
 
     @ModelAttribute("isEmployee")
     public boolean isEmployee(HttpSession session) {
-        User user;
         try {
-            user = authenticationHelper.tryGetUser(session);
+            User user = authenticationHelper.tryGetUser(session);
+            return user.isEmployee();
         } catch (AuthenticationFailureException e) {
             return false;
         }
-        return user.isEmployee();
     }
 
     @GetMapping
