@@ -8,6 +8,7 @@ import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.PasswordDto;
 import com.team9.deliverit.models.dtos.UserDto;
+import com.team9.deliverit.models.dtos.UserPictureDto;
 import com.team9.deliverit.services.contracts.CityService;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.mappers.UserModelMapper;
@@ -68,6 +69,7 @@ public class ProfileMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             UserDto userDto = modelMapper.toUserDto(user);
+            model.addAttribute("profilePicture", new UserPictureDto());
             model.addAttribute("user", userDto);
             model.addAttribute("userId", user.getId());
             return "account-profile";
@@ -138,6 +140,26 @@ public class ProfileMvcController {
         } catch (DuplicateEntityException e) {
             errors.rejectValue("email", "duplicate_email", e.getMessage());
             return "account-security";
+        } catch (UnauthorizedOperationException e) {
+            return "error";
+        }
+    }
+
+    @PostMapping("/panel/account-profile/picture")
+    public String updateProfilePicture(@Valid @ModelAttribute("profilePicture") UserPictureDto profilePicture,
+                                 BindingResult errors, HttpSession session) {
+        if (errors.hasErrors()) {
+            return "redirect:/panel/account-profile";
+        }
+
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            user.setProfilePicture(profilePicture.getProfilePicture());
+
+            service.update(user, user, user.getId());
+            return "redirect:/panel/account-profile";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         } catch (UnauthorizedOperationException e) {
             return "error";
         }

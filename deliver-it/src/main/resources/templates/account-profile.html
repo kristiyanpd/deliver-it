@@ -51,12 +51,28 @@
                             </div>
                             <div class="card-body text-center">
                                 <!-- Profile picture image-->
-                                <img class="img-account-profile rounded-circle mb-2" style="width: 250px; height: auto"
+                                <img class="img-account-profile rounded-circle mb-2" style="width: 250px; height: 250px; object-fit: cover"
                                      th:src="${currentLoggedUser.profilePicture} != null ? ${currentLoggedUser.profilePicture} : 'https://as1.ftcdn.net/v2/jpg/01/17/69/82/500_F_117698246_GhGGdddRTGX9p1SfnuVjhVHhp7XBsPOz.jpg'" alt=""/>
                                 <!-- Profile picture help block-->
                                 <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                                 <!-- Profile picture upload button-->
-                                <button class="btn btn-primary" type="button">Upload new image</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#pictureModal" type="button">Upload new image</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="pictureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Change your Profile Picture!</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form th:replace="fragments :: user-picture-form"></form>
+                                </div>
                             </div>
                         </div>
                     </div>

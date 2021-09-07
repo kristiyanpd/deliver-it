@@ -55,7 +55,8 @@
                             <h6 class="m-1 font-weight-bold text-primary">Parcels</h6>
                         </div>
 
-                        <form th:if="${parcelsExist} or (${parcelsExist} == false and ${filtered} == true)" method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
+                        <form th:if="${parcelsExist} or (${parcelsExist} == false and ${filtered} == true)"
+                              method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
                             <div class="row">
 
                                 <div class="col-sm-12 col-md-12 col-lg-2">
@@ -108,7 +109,8 @@
                                     </select>
                                 </div>
 
-                                <div class="col-sm-12 col-md-12" th:classappend="${isEmployee} ? 'col-lg-2' : 'col-lg-4'">
+                                <div class="col-sm-12 col-md-12"
+                                     th:classappend="${isEmployee} ? 'col-lg-2' : 'col-lg-4'">
                                     <div class="btn-toolbar float-right">
                                         <button type="submit" class="btn btn-primary m-1 float-right">Filter</button>
                                         <a th:if="${isEmployee}" class="btn btn-primary m-1 float-right" href="#"
@@ -150,17 +152,19 @@
                                 <tbody>
                                 <tr th:each="parcel : ${parcels}">
                                     <td>
-                                        <a th:href="@{/panel/parcels/{id}(id=${parcel.id})}"
-                                           href="#"
+                                        <a th:href="@{/panel/parcels/{id}(id=${parcel.id})}" href="#"
                                            th:text="${parcel.id}">ID</a>
                                     </td>
-                                    <td th:if="${isEmployee}"
-                                        th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">
-                                        Customer
+                                    <td th:if="${isEmployee}">
+                                        <a th:href="@{/panel/users/{id}(id=${parcel.user.id})}" href="#"
+                                           th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">Customer</a>
                                     </td>
                                     <td th:text="${parcel.getCategory()}">Category</td>
                                     <td th:text="${parcel.weight}">Weight</td>
-                                    <td th:if="${isEmployee}" th:text="${parcel.shipment.id}">Shipment ID</td>
+                                    <td th:if="${isEmployee}">
+                                        <a th:href="@{/panel/shipments/{id}(id=${parcel.shipment.id})}" href="#"
+                                           th:text="${parcel.shipment.id}">Shipment ID</a>
+                                    </td>
                                     <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
                                     <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
                                     <td th:text="${parcel.getShipment().getStatus()}">Status</td>
@@ -168,9 +172,12 @@
                                 </tbody>
                             </table>
                         </div>
-                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == true and ${filtered} == false" class="m-0 font-weight-bold text-primary">There are no parcels!</h6>
-                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == false and ${filtered} == false" class="m-0 font-weight-bold text-primary">You have no parcels!</h6>
-                        <h6 th:if="${parcelsExist} == false and ${filtered} == true" class="m-0 font-weight-bold text-primary">There are no parcels matching criteria!</h6>
+                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == true and ${filtered} == false"
+                            class="m-0 font-weight-bold text-primary">There are no parcels!</h6>
+                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == false and ${filtered} == false"
+                            class="m-0 font-weight-bold text-primary">You have no parcels!</h6>
+                        <h6 th:if="${parcelsExist} == false and ${filtered} == true"
+                            class="m-0 font-weight-bold text-primary">There are no parcels matching criteria!</h6>
                     </div>
                 </div>
                 </form>

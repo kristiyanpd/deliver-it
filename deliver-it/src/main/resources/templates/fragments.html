@@ -481,6 +481,21 @@
 
 
 
+<!--Start of User Picture Form-->
+<form th:fragment="user-picture-form" class="user" action="#" th:action="@{__${#httpServletRequest.requestURI}__/picture}" th:object="${profilePicture}" method="post">
+
+    <div class="form-group">
+        <label th:text="#{user.label.picture}">Profile Picture</label>
+        <input type="text" th:field="*{profilePicture}" class="form-select form-control" placeholder="Link to image...">
+        <label th:errors="*{profilePicture}">Profile Picture error placeholder</label>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Save">
+
+</form>
+<!--End of User Picture Form-->
+
+
 <!-- Bootstrap core JavaScript-->
 <script src="../static/panel/vendor/jquery/jquery.min.js" th:src="@{/panel/vendor/jquery/jquery.min.js}"></script>
 <script src="../static/panel/vendor/bootstrap/js/bootstrap.bundle.min.js"
