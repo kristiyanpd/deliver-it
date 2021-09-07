@@ -48,7 +48,30 @@
 
     </div>
 
-    <input class="btn btn-primary btn-user btn-block" type="submit" value="Save">
+    <input class="btn btn-primary" type="submit" value="Save">
+</form>
+
+<form th:fragment="user-password" class="user" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${userPassword}" method="post">
+
+    <div class="form-group">
+        <label th:text="#{user.label.password.old}">Old Password</label>
+        <input type="password" th:field="*{oldPassword}" class="form-select form-control">
+        <label th:errors="*{oldPassword}">Old Password error placeholder</label>
+    </div>
+
+    <div class="form-group">
+        <label th:text="#{user.label.password.new}">New Password</label>
+        <input type="password" th:field="*{newPassword}" class="form-select form-control">
+        <label th:errors="*{newPassword}">New Password error placeholder</label>
+    </div>
+
+    <div class="form-group">
+        <label th:text="#{user.label.password.new.confirm}">Confirm New Password</label>
+        <input type="password" th:field="*{confirmNewPassword}" class="form-select form-control">
+        <label th:errors="*{confirmNewPassword}">Confirm New Password error placeholder</label>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Save">
 </form>
 
 </body>
