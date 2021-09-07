@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(User user, int id) {
-        if (!user.isEmployee()) {
+        if (!user.isEmployee() && user.getId() != id) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "view", "users"));
         }
         return repository.getById(id);

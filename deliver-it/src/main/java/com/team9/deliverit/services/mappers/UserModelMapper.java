@@ -3,8 +3,9 @@ package com.team9.deliverit.services.mappers;
 import com.team9.deliverit.models.Address;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.User;
-import com.team9.deliverit.models.dtos.UserDisplayDto;
 import com.team9.deliverit.models.dtos.RegisterDto;
+import com.team9.deliverit.models.dtos.UserDisplayDto;
+import com.team9.deliverit.models.dtos.UserDto;
 import com.team9.deliverit.repositories.contracts.AddressRepository;
 import com.team9.deliverit.repositories.contracts.CityRepository;
 import com.team9.deliverit.repositories.contracts.RoleRepository;
@@ -51,6 +52,40 @@ public class UserModelMapper {
         registerDto.setLastName(user.getLastName());
 
         return registerDto;
+    }
+
+    public UserDto toUserDto(User user) {
+        UserDto userDto = new UserDto();
+
+        userDto.setEmail(user.getEmail());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setCityId(user.getAddress().getCity().getId());
+        userDto.setStreetName(user.getAddress().getStreetName());
+
+        return userDto;
+    }
+
+    public User fromUserDto(int id, UserDto userDto) {
+        User user = userRepository.getById(id);
+
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        Address address = new Address();
+        String streetName = userDto.getStreetName();
+        City city = cityRepository.getById(userDto.getCityId());
+
+        if (addressRepository.isDuplicate(streetName, city.getId())) {
+            address = addressRepository.getDuplicate(streetName, city.getId()).get(0);
+        } else {
+            address.setStreetName(streetName);
+            address.setCity(city);
+            addressRepository.create(address);
+        }
+        user.setAddress(address);
+
+        return user;
     }
 
     public User fromDto(RegisterDto userDto) {
