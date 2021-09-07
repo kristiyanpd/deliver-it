@@ -25,5 +25,4 @@ public class DeliverItApplication {
                 .paths(PathSelectors.any())
                 .build();
     }
-
 }
