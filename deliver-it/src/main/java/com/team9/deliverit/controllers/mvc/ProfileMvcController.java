@@ -43,7 +43,7 @@ public class ProfileMvcController {
     }
 
     @ModelAttribute("currentLoggedUser")
-    public String testFunction(HttpSession session, Model model) {
+    public String populateCurrentLoggedUser(HttpSession session, Model model) {
         try {
             User user = authenticationHelper.tryGetUser(session);
             model.addAttribute("currentLoggedUser", user);

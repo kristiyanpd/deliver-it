@@ -60,15 +60,15 @@ public class ShipmentMvcController {
         return userService.getAll(user);
     }
 
-    @ModelAttribute("currentUser")
-    public String currentUser(HttpSession session) {
-        User user;
+    @ModelAttribute("currentLoggedUser")
+    public String populateCurrentLoggedUser(HttpSession session, Model model) {
         try {
-            user = authenticationHelper.tryGetUser(session);
+            User user = authenticationHelper.tryGetUser(session);
+            model.addAttribute("currentLoggedUser", user);
+            return "";
         } catch (AuthenticationFailureException e) {
-            return "redirect:/auth/login";
+            return "";
         }
-        return String.format("%s %s", user.getFirstName(), user.getLastName());
     }
 
     @ModelAttribute("isEmployee")
@@ -223,6 +223,6 @@ public class ShipmentMvcController {
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
-
     }
+
 }
