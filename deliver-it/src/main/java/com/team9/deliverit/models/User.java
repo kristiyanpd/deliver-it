@@ -34,6 +34,9 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
     public User() {
     }
 
@@ -91,6 +94,14 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     @JsonIgnore
