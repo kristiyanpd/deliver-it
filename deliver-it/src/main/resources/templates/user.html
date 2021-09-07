@@ -113,50 +113,46 @@
 
                         </div>
 
-                    </div>
-                    <div th:if="${hasParcels}" class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable">
-                                    <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Customer</th>
-                                        <th>Pickup Option</th>
-                                        <th>Arrival Date</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tfoot>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Customer</th>
-                                        <th>Pickup Option</th>
-                                        <th>Arrival Date</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </tfoot>
-                                    <tbody>
-                                    <tr th:each="parcel : ${parcels}">
-                                        <td>
-                                            <a th:href="@{/panel/parcels/{id}(id=${parcel.id})}"
-                                               href="#"
-                                               th:text="${parcel.id}">ID</a>
-                                        </td>
-                                        <td th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">
-                                            Customer
-                                        </td>
-                                        <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
-                                        <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
-                                        <td th:text="${parcel.getShipment().getStatus()}">Status</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                        <div th:if="${hasParcels}" class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Parcels</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Pickup Option</th>
+                                            <th>Arrival Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Pickup Option</th>
+                                            <th>Arrival Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        <tr th:each="parcel : ${parcels}">
+                                            <td>
+                                                <a th:href="@{/panel/parcels/{id}(id=${parcel.id})}"
+                                                   href="#"
+                                                   th:text="${parcel.id}">ID</a>
+                                            </td>
+                                            <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
+                                            <td th:text="${parcel.getShipment().getArrivalDate()}">Arrival Date</td>
+                                            <td th:text="${parcel.getShipment().getStatus()}">Status</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
