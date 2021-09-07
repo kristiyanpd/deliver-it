@@ -121,7 +121,7 @@
 
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div th:if="${parcelsExist}" class="table-responsive">
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
@@ -168,6 +168,8 @@
                                 </tbody>
                             </table>
                         </div>
+                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == true" class="m-0 font-weight-bold text-primary">There are no parcels!</h6>
+                        <h6 th:if="${parcelsExist} == false and ${isEmployee} == false" class="m-0 font-weight-bold text-primary">You have no parcels!</h6>
                     </div>
                 </div>
                 </form>

@@ -107,8 +107,10 @@ public class ParcelMvcController {
     public String showAllParcels(Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetUser(session);
-            model.addAttribute("parcels", service.getAll(user));
+            List<Parcel> parcels = service.getAll(user);
+            model.addAttribute("parcels", parcels);
             model.addAttribute("filterParcelDto", new FilterParcelDto());
+            model.addAttribute("parcelsExist", !parcels.isEmpty());
             return "parcels";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
@@ -276,6 +278,7 @@ public class ParcelMvcController {
 
             var filtered = service.filter(user, weight, warehouseId, category, status, userId);
             model.addAttribute("parcels", filtered);
+            model.addAttribute("parcelsExist", !filtered.isEmpty());
             return "parcels";
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
