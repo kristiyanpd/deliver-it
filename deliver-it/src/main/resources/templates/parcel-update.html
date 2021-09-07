@@ -51,10 +51,10 @@
                         <h6 class="m-0 font-weight-bold text-primary" th:inline="text">Updating Parcel (#[[${parcelId}]])</h6>
                     </div>
                     <div th:if="${isEmployee}" class="card-body">
-                        <form th:replace="parcel-form.html :: parcel-form"></form>
+                        <form th:replace="fragments :: parcel-form"></form>
                     </div>
                     <div th:unless="${isEmployee}" class="card-body">
-                        <form th:replace="parcel-form.html :: parcel-form-user"></form>
+                        <form th:replace="fragments :: parcel-form-user"></form>
                     </div>
                 </div>
 

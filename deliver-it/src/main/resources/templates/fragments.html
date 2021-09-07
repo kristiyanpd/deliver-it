@@ -139,6 +139,348 @@
 </nav>
 <!-- End of Top Bar -->
 
+
+
+<!--Start of Address Form-->
+<form th:fragment="address-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${address}"
+      method="post">
+    <label th:text="#{address.label.street.name}">Address</label>
+
+    <br>
+    <input type="text" th:field="*{streetName}">
+    <label class="error" th:errors="*{streetName}">Name error placeholder</label>
+    <br><br>
+
+    <label th:text="#{address.label.city}">City</label>
+    <br/>
+    <select th:field="*{cityId}">
+        <option th:each="city : ${cities}"
+                th:value="${city.getId()}"
+                th:text="${city.getName()}+', '+${city.getCountry().getName()}">
+            City Country
+        </option>
+    </select>
+    <label class="error" th:errors="*{cityId}">City error placeholder</label>
+    <br/><br/>
+
+    <input type="submit" value="Save"/>
+</form>
+<!--End of Address Form-->
+
+
+
+<!--Start of Country Form-->
+<form th:fragment="country-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${country}"
+      method="post">
+    <label th:text="#{country.label.name}">Country</label>
+
+    <br/>
+    <input type="text" th:field="*{name}"/>
+    <label class="error" th:errors="*{name}">Name error placeholder</label>
+    <br/><br/>
+
+    <input type="submit" value="Save"/>
+</form>
+<!--End of Country Form-->
+
+
+
+<!--Start of City Form-->
+<form th:fragment="city-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${city}"
+      method="post">
+    <label th:text="#{city.label.name}">City</label>
+
+    <br>
+    <input type="text" th:field="*{name}">
+    <label class="error" th:errors="*{name}">Name error placeholder</label>
+    <br><br>
+
+    <label th:text="#{city.label.country}">Country</label>
+    <br/>
+    <select th:field="*{countryId}">
+        <option th:each="country : ${countries}"
+                th:value="${country.getId()}"
+                th:text="${country.getName()}">
+            City Country
+        </option>
+    </select>
+    <label class="error" th:errors="*{countryId}">Country error placeholder</label>
+    <br/><br/>
+
+    <input type="submit" value="Save"/>
+</form>
+<!--End of City Form-->
+
+
+
+<!--Start of Parcel Form-->
+<form class="user" th:fragment="parcel-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}"
+      th:object="${parcel}" method="post">
+
+    <div class="form-group">
+        <label for="user" th:text="#{parcel.label.customer}">Customer</label>
+        <select id="user" class="form-select form-control" th:field="*{userId}">
+            <option th:each="user : ${users}"
+                    th:value="${user.getId()}"
+                    th:text="${user.getFirstName()}+' '+${user.getLastName()}+' (#'+${user.getId()}+')'">
+                Customer
+            </option>
+        </select>
+        <label th:errors="*{userId}">User error placeholder</label>
+    </div>
+
+    <div class="form-group row">
+
+        <div class="col-sm-12 col-md-12 col-lg-4 mb-3 mb-sm-0">
+            <label for="category" th:text="#{parcel.label.category}">Category</label>
+            <select id="category" class="form-select form-control" th:field="*{category}">
+                <option th:each="category : ${T(com.team9.deliverit.models.enums.Category).values()}"
+                        th:value="${category}"
+                        th:text="${category.value}">
+                    Category
+                </option>
+            </select>
+            <label th:errors="*{category}">Category error placeholder</label>
+        </div>
+
+        <div class="col-sm-12 col-md-12 col-lg-4 mb-3 mb-sm-0">
+            <label for="weight" th:text="#{parcel.label.weight}">Weight</label>
+            <input id="weight" class="form-select form-control" type="number" step=".01" th:field="*{weight}">
+            <label class="error" th:errors="*{weight}">Weight error placeholder</label>
+        </div>
+
+        <div class="col-sm-12 col-md-12 col-lg-4 mb-3 mb-sm-0">
+            <label for="pickUp" th:text="#{parcel.label.pickupoption}">Pick Up Option</label>
+            <select id="pickUp" class="form-select form-control" th:field="*{pickUpOption}">
+                <option th:each="pickUp : ${T(com.team9.deliverit.models.enums.PickUpOption).values()}"
+                        th:value="${pickUp}"
+                        th:text="${pickUp.value}">
+                    Pick Up Option
+                </option>
+            </select>
+            <label th:errors="*{pickUpOption}">Pick Up Option error placeholder</label>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+        <label for="shipment" th:text="#{parcel.label.shipment}">Shipment</label>
+        <select id="shipment" class="form-select form-control" th:field="*{shipmentId}">
+            <option th:each="shipment : ${shipments}"
+                    th:value="${shipment.getId()}"
+                    th:text="'ID: '+${shipment.getId}+', From: '
+                +${shipment.getOriginWarehouse().getAddress().getStreetName()}+', '
+                +${shipment.getOriginWarehouse().getAddress().getCity().getName}+', '
+                +${shipment.getOriginWarehouse().getAddress().getCity().getCountry().getName()}+' | To: '
+                +${shipment.getDestinationWarehouse().getAddress().getStreetName()}+', '
+                +${shipment.getDestinationWarehouse().getAddress().getCity().getName}+', '
+                +${shipment.getDestinationWarehouse().getAddress().getCity().getCountry().getName()}+'.'">
+                Parcel Owner
+            </option>
+        </select>
+        <label th:errors="*{shipmentId}">Shipment error placeholder</label>
+    </div>
+
+    <input class="btn btn-primary btn-user btn-block" type="submit" value="Save"/>
+</form>
+
+<form class="user" th:fragment="parcel-form-user" action="#"
+      th:action="@{/panel/parcels/{id}/update/pickup(id = ${parcelId})}" method="post">
+
+    <div class="form-group">
+        <label for="pickUp" th:text="#{parcel.label.pickupoption}">Pick Up Option</label>
+        <select id="pickUp" class="form-select form-control" th:name="pickUpOption">
+            <option th:each="pickUp : ${T(com.team9.deliverit.models.enums.PickUpOption).values()}"
+                    th:value="${pickUp}"
+                    th:text="${pickUp.value}"
+                    th:selected="${parcel.pickUpOption} == ${pickUp.value}">
+                Pick Up Option
+            </option>
+        </select>
+        <!--        <label th:errors="*{pickUpOption}">Pick Up Option error placeholder</label>-->
+    </div>
+
+    <input class="btn btn-primary btn-user btn-block" type="submit" value="Save"/>
+</form>
+<!--End of Parcel Form-->
+
+
+
+<!--Start of Shipment Form-->
+<form class="user" th:fragment="shipment-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}"
+      th:object="${shipment}" method="post">
+
+    <div class="form-group row">
+
+        <div class="col-sm-5 mb-3 mb-sm-0">
+            <label for="departure-date" th:text="#{shipment.label.departureDate}">Departure Date</label>
+            <input class="form-select form-control" type="date" id="departure-date" th:field="*{departureDate}">
+            <label th:errors="*{departureDate}">Departure Date error placeholder</label>
+        </div>
+
+        <div class="col-sm-5 mb-3 mb-sm-0">
+            <label for="arrival-date" th:text="#{shipment.label.arrivalDate}">Arrival Date</label>
+            <input class="form-select form-control" type="date" id="arrival-date" th:field="*{arrivalDate}">
+            <label th:errors="*{arrivalDate}">Arrival Date error placeholder</label>
+        </div>
+
+        <div class="col-sm-2 mb-3 mb-sm-0">
+            <label for="full" th:text="#{shipment.label.full}">Full</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="full" th:field="*{full}">
+            </div>
+            <label th:errors="*{full}">Full error placeholder</label>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        <label for="status" th:text="#{shipment.label.status}">Status</label>
+        <select class="form-select form-control" id="status" th:field="*{status}">
+            <option th:each="status : ${T(com.team9.deliverit.models.enums.Status).values()}"
+                    th:value="${status}"
+                    th:text="${status.value}">
+                Status
+            </option>
+        </select>
+        <label th:errors="*{status}">Status error placeholder</label>
+
+    </div>
+
+    <div class="form-group row">
+
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <label for="origin-warehouse" th:text="#{shipment.label.originWarehouse}">Origin Warehouse</label>
+            <select class="form-select form-control" id="origin-warehouse" th:field="*{originWarehouseId}">
+                <option th:each="warehouse : ${warehouses}"
+                        th:value="${warehouse.getId()}"
+                        th:text="${warehouse.getAddress.getStreetName}">
+                    Warehouse Address
+                </option>
+            </select>
+            <label th:errors="*{originWarehouseId}">Status error placeholder</label>
+        </div>
+
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <label for="destination-warehouse" th:text="#{shipment.label.destinationWarehouse}">Destination
+                Warehouse</label>
+            <select class="form-select form-control" id="destination-warehouse" th:field="*{destinationWarehouseId}">
+                <option th:each="warehouse : ${warehouses}"
+                        th:value="${warehouse.getId()}"
+                        th:text="${warehouse.getAddress.getStreetName}">
+                    Warehouse Address
+                </option>
+            </select>
+            <label th:errors="*{destinationWarehouseId}">Destination Warehouse error placeholder</label>
+        </div>
+
+    </div>
+
+    <input class="btn btn-primary btn-user btn-block" type="submit" value="Save"/>
+</form>
+<!--End of Shipment Form-->
+
+
+
+<!--Start of User Form-->
+<form th:fragment="user-form" class="user" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${user}" method="post">
+
+    <div class="form-group">
+        <label th:text="#{user.label.email}">Email</label>
+        <input type="text" th:field="*{email}" class="form-select form-control" placeholder="Email Address">
+        <label th:errors="*{email}">Email error placeholder</label>
+    </div>
+
+    <div class="form-group row">
+
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <label th:text="#{user.label.first.name}">First name</label>
+            <input type="text" th:field="*{firstName}" class="form-select form-control" placeholder="First Name">
+        </div>
+
+        <div class="col-sm-6">
+            <label th:text="#{user.label.last.name}">Last name</label>
+            <input type="text" th:field="*{lastName}" class="form-select form-control" placeholder="Last Name">
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <label th:text="#{user.label.address}">Address</label>
+            <input type="text" th:field="*{streetName}" class="form-select form-control" placeholder="Address">
+        </div>
+
+        <div class="col-sm-6">
+            <label th:text="#{user.label.city}">City</label>
+            <select type="text" th:field="*{cityId}" class="form-select form-control">
+                <option th:each="city : ${cities}"
+                        th:value="${city.getId()}"
+                        th:text="${city.getName()}+', '+${city.getCountry().getName()}">
+                    City Country
+                </option>
+            </select>
+            <label class="error" th:errors="*{cityId}">City error placeholder</label>
+        </div>
+
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Save">
+</form>
+
+<form th:fragment="user-password" class="user" action="#" th:action="@{__${#httpServletRequest.requestURI}__}" th:object="${userPassword}" method="post">
+
+    <div class="form-group">
+        <label th:text="#{user.label.password.old}">Old Password</label>
+        <input type="password" th:field="*{oldPassword}" class="form-select form-control">
+        <label th:errors="*{oldPassword}">Old Password error placeholder</label>
+    </div>
+
+    <div class="form-group">
+        <label th:text="#{user.label.password.new}">New Password</label>
+        <input type="password" th:field="*{newPassword}" class="form-select form-control">
+        <label th:errors="*{newPassword}">New Password error placeholder</label>
+    </div>
+
+    <div class="form-group">
+        <label th:text="#{user.label.password.new.confirm}">Confirm New Password</label>
+        <input type="password" th:field="*{confirmNewPassword}" class="form-select form-control">
+        <label th:errors="*{confirmNewPassword}">Confirm New Password error placeholder</label>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Save">
+</form>
+<!--End of User Form-->
+
+
+<!--Start of Warehouse Form-->
+
+<form class="user" th:fragment="warehouse-form" action="#" th:action="@{__${#httpServletRequest.requestURI}__}"
+      th:object="${warehouse}" method="post">
+
+    <div class="form-group">
+
+        <label for="address" th:text="#{warehouse.label.address.street}">Address</label>
+        <select id="address" class="form-select form-control" th:field="*{addressId}">
+            <option th:each="address : ${addresses}"
+                    th:value="${address.getId()}"
+                    th:text="${address.getStreetName()}+', '+${address.getCity.getName()}+', '+${address.getCity.getCountry().getName()}">
+                Address
+            </option>
+        </select>
+        <label th:errors="*{addressId}">Address error placeholder</label>
+
+    </div>
+
+    <input class="btn btn-primary btn-user btn-block" type="submit" value="Save"/>
+</form>
+
+<!--End of Warehouse Form-->
+
+
+
 <!-- Bootstrap core JavaScript-->
 <script src="../static/panel/vendor/jquery/jquery.min.js" th:src="@{/panel/vendor/jquery/jquery.min.js}"></script>
 <script src="../static/panel/vendor/bootstrap/js/bootstrap.bundle.min.js"
