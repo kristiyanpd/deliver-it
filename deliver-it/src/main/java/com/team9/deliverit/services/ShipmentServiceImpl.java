@@ -111,4 +111,9 @@ public class ShipmentServiceImpl implements ShipmentService {
         return repository.nextShipmentToArrive(warehouseId);
     }
 
+    @Override
+    public int shipmentsCount(User user){
+        return getAll(user).size();
+    }
+
 }

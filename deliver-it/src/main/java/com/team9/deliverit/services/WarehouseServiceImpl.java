@@ -63,13 +63,17 @@ public class WarehouseServiceImpl implements WarehouseService {
     public void delete(int id, User user) {
         if (!user.isEmployee()) {
             throw new UnauthorizedOperationException(String.format(UNAUTHORIZED_ACTION, "employees", "delete", "warehouses"));
-        }
-        else if (shipmentRepository
+        } else if (shipmentRepository
                 .getAll()
-                .stream().anyMatch(shipment -> shipment.getOriginWarehouse().getId() == id || shipment.getDestinationWarehouse().getId() == id)){
-            throw new IllegalArgumentException(String.format("Warehouse with id %s can't be deleted, because it is origin/destination warehouse of a shipment!",id));
+                .stream().anyMatch(shipment -> shipment.getOriginWarehouse().getId() == id || shipment.getDestinationWarehouse().getId() == id)) {
+            throw new IllegalArgumentException(String.format("Warehouse with id %s can't be deleted, because it is origin/destination warehouse of a shipment!", id));
         }
 
         repository.delete(id);
+    }
+
+    @Override
+    public int warehousesCount() {
+        return getAll().size();
     }
 }

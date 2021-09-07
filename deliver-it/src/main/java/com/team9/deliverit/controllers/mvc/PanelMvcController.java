@@ -3,6 +3,8 @@ package com.team9.deliverit.controllers.mvc;
 import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.models.User;
+import com.team9.deliverit.services.contracts.ParcelService;
+import com.team9.deliverit.services.contracts.ShipmentService;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.contracts.WarehouseService;
 import org.springframework.stereotype.Controller;
@@ -18,10 +20,19 @@ import javax.servlet.http.HttpSession;
 public class PanelMvcController {
 
     private final UserService userService;
+    private final WarehouseService warehouseService;
+    private final ShipmentService shipmentService;
+    private final ParcelService parcelService;
     private final AuthenticationHelper authenticationHelper;
 
-    public PanelMvcController(UserService userService, AuthenticationHelper authenticationHelper) {
+    public PanelMvcController(UserService userService,
+                              WarehouseService warehouseService,
+                              ShipmentService shipmentService, ParcelService parcelService,
+                              AuthenticationHelper authenticationHelper) {
         this.userService = userService;
+        this.warehouseService = warehouseService;
+        this.shipmentService = shipmentService;
+        this.parcelService = parcelService;
         this.authenticationHelper = authenticationHelper;
     }
 
@@ -50,6 +61,25 @@ public class PanelMvcController {
     @ModelAttribute("customersCount")
     public String customersCount() {
         return String.valueOf(userService.countCustomers());
+    }
+
+    @ModelAttribute("warehousesCount")
+    public String warehousesCount() {
+        return String.valueOf(warehouseService.warehousesCount());
+    }
+
+    @ModelAttribute("parcelsCount")
+    public String parcelsCount(HttpSession session) {
+        User user = authenticationHelper.tryGetUser(session);
+
+        return String.valueOf(parcelService.parcelsCount(user));
+    }
+
+    @ModelAttribute("shipmentsCount")
+    public String shipmentsCount(HttpSession session) {
+        User user = authenticationHelper.tryGetUser(session);
+
+        return String.valueOf(shipmentService.shipmentsCount(user));
     }
 
     @GetMapping

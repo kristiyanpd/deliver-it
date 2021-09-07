@@ -132,4 +132,9 @@ public class ParcelServiceImpl implements ParcelService {
         parcel.setShipment(shipment);
         update(user, parcel);
     }
+
+    @Override
+    public int parcelsCount(User user) {
+        return getAll(user).size();
+    }
 }

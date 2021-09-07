@@ -32,4 +32,7 @@ public interface ParcelService {
     void updatePickUpOption(User user, Parcel parcel, String pickUpOption);
 
     void updateShipment(User user, Parcel parcel, int shipmentId);
+
+    int parcelsCount(User user);
+
 }
