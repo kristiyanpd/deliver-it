@@ -55,9 +55,13 @@
                             </div>
                             <div th:if="${isEmployee}" class="col-6">
                                 <div class="btn-toolbar float-right">
-                                    <a th:href="@{__${#httpServletRequest.requestURI}__/employee}"
+                                    <a th:unless="${user.isEmployee()}" th:href="@{__${#httpServletRequest.requestURI}__/employee}"
                                        class="btn btn-success text-white m-1">
                                         Make Employee
+                                    </a>
+                                    <a th:if="${user.isEmployee()}" th:href="@{__${#httpServletRequest.requestURI}__/employee/remove}"
+                                       class="btn btn-primary text-white m-1">
+                                        Remove Employee
                                     </a>
                                     <a th:href="@{__${#httpServletRequest.requestURI}__/update}"
                                        class="btn btn-warning text-white m-1">

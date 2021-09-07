@@ -20,6 +20,8 @@ public interface UserService {
 
     void registerEmployee(int id, User user);
 
+    void removeEmployee(int id, User user);
+
     int countCustomers();
 
     List<User> search(Optional<String> email, Optional<String> firstName, Optional<String> lastName, User user);
