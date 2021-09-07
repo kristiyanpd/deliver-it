@@ -5,10 +5,12 @@ import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.City;
+import com.team9.deliverit.models.Parcel;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.RegisterDto;
 import com.team9.deliverit.models.dtos.UserDto;
 import com.team9.deliverit.services.contracts.CityService;
+import com.team9.deliverit.services.contracts.ParcelService;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.mappers.UserModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +30,18 @@ public class UserMvcController {
 
     private final UserService service;
     private final CityService cityService;
+    private final ParcelService parcelService;
     private final UserModelMapper modelMapper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
     public UserMvcController(UserService service,
                              CityService cityService,
-                             UserModelMapper modelMapper,
+                             ParcelService parcelService, UserModelMapper modelMapper,
                              AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.cityService = cityService;
+        this.parcelService = parcelService;
         this.modelMapper = modelMapper;
         this.authenticationHelper = authenticationHelper;
     }
@@ -81,7 +85,10 @@ public class UserMvcController {
         try {
             User admin = authenticationHelper.tryGetUser(session);
             User user = service.getById(admin, id);
+            List<Parcel> parcels = parcelService.getAllUserParcels(user);
             model.addAttribute("user", user);
+            model.addAttribute("hasParcels", !parcels.isEmpty());
+            model.addAttribute("parcels", parcels);
             return "user";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
