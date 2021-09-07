@@ -45,7 +45,7 @@ public class UserController {
     public UserDisplayDto create(@Valid @RequestBody RegisterDto userDto) {
         User user = modelMapper.fromDto(userDto);
         service.create(user);
-        return UserModelMapper.toUserDto(user);
+        return UserModelMapper.toUserDisplayDto(user);
     }
 
     @PutMapping("/{id}")

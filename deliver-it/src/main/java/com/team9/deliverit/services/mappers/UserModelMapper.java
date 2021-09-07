@@ -31,7 +31,7 @@ public class UserModelMapper {
         this.addressRepository = addressRepository;
     }
 
-    public static UserDisplayDto toUserDto(User user) {
+    public static UserDisplayDto toUserDisplayDto(User user) {
         UserDisplayDto userDisplayDto = new UserDisplayDto();
         String fullName = user.getFirstName() + " " + user.getLastName();
         userDisplayDto.setId(user.getId());

@@ -34,7 +34,7 @@ public class ParcelModelMapper {
         parcelDisplayDto.setCategory(parcel.getCategory());
         parcelDisplayDto.setPickUpOption(parcel.getPickUpOption());
 
-        parcelDisplayDto.setUser(UserModelMapper.toUserDto(parcel.getUser()));
+        parcelDisplayDto.setUser(UserModelMapper.toUserDisplayDto(parcel.getUser()));
         parcelDisplayDto.setDestinationAddress(AddressModelMapper.toAddressDto(
                 parcel.getShipment().getDestinationWarehouse().getAddress()));
 

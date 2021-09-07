@@ -7,6 +7,7 @@ import com.team9.deliverit.exceptions.EntityNotFoundException;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.RegisterDto;
+import com.team9.deliverit.models.dtos.UserDto;
 import com.team9.deliverit.services.contracts.CityService;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.mappers.UserModelMapper;
@@ -90,38 +91,51 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/update")
-    public String showEditUserPage(Model model, HttpSession session) {
+    @GetMapping("/{id}/update")
+    public String showEditUserPage(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = authenticationHelper.tryGetUser(session);
-            RegisterDto registerDto = modelMapper.toDto(user);
-            model.addAttribute("userId", user.getId());
-            model.addAttribute("user", registerDto);
-            return "user-settings";
+            User userEditing = authenticationHelper.tryGetUser(session);
+            if (userEditing.isEmployee()) {
+                User user = service.getById(userEditing, id);
+                UserDto userDto = modelMapper.toUserDto(user);
+                model.addAttribute("userId", id);
+                model.addAttribute("user", userDto);
+                return "user-update";
+            } else {
+                return "not-found";
+            }
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
-    @PostMapping("/update")
-    public String updateUser(@Valid @ModelAttribute("user") RegisterDto registerDto,
+    @PostMapping("/{id}/update")
+    public String updateUser(@PathVariable int id,
+                             @Valid @ModelAttribute("user") UserDto userDto,
                              BindingResult errors,
                              Model model,
                              HttpSession session) {
         if (errors.hasErrors()) {
-            return "user-settings";
+            return "user-update";
         }
 
         try {
-            User admin = authenticationHelper.tryGetUser(session);
-            User user = modelMapper.fromDto(registerDto, (int) model.getAttribute("userId"));
-            service.update(admin, user, user.getId());
+            User userExecuting = authenticationHelper.tryGetUser(session);
+            if (userExecuting.isEmployee()) {
+                User user = modelMapper.fromUserDto(id, userDto);
+                service.update(userExecuting, user, id);
 
-            return "redirect:../";
+                model.addAttribute("userId", id);
+                return "user-update";
+            } else {
+                return "not-found";
+            }
         } catch (DuplicateEntityException e) {
             errors.rejectValue("email", "duplicate_email", e.getMessage());
-            return "user-settings";
+            return "user-update";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
@@ -142,7 +156,7 @@ public class UserMvcController {
             User user = service.getById(admin, id);
             service.delete(admin, user.getId());
 
-            return "redirect:../";
+            return "redirect:/panel/users";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
