@@ -176,7 +176,11 @@ public class ParcelMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             Parcel parcel = service.getById(user, id);
+
             if (user.isEmployee() || parcel.getUser().getId() == user.getId()) {
+                if (parcel.getShipment().getStatus() == Status.COMPLETED) {
+                    return "redirect:";
+                }
                 ParcelDto parcelDto = modelMapper.toDto(parcel);
                 model.addAttribute("parcelId", id);
                 model.addAttribute("parcel", parcelDto);

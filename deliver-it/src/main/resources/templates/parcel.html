@@ -60,7 +60,7 @@
                                        class="btn btn-primary text-white m-1">
                                         Edit Shipment
                                     </a>
-                                    <a th:href="@{__${#httpServletRequest.requestURI}__/update}" href="#"
+                                    <a th:if="${parcel.shipment.status != T(com.team9.deliverit.models.enums.Status).COMPLETED}" th:href="@{__${#httpServletRequest.requestURI}__/update}" href="#"
                                        class="btn btn-warning text-white m-1">
                                         Edit
                                     </a>
