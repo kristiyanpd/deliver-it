@@ -93,13 +93,12 @@ public class ParcelMvcController {
 
     @ModelAttribute("isEmployee")
     public boolean isEmployee(HttpSession session) {
-        User user;
         try {
-            user = authenticationHelper.tryGetUser(session);
+            User user = authenticationHelper.tryGetUser(session);
+            return user.isEmployee();
         } catch (AuthenticationFailureException e) {
             return false;
         }
-        return user.isEmployee();
     }
 
     //TODO Has parcels, otherwise hide tables and show "You do not have any parcels!"
