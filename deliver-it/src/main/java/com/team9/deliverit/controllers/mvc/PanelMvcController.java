@@ -69,17 +69,13 @@ public class PanelMvcController {
     }
 
     @ModelAttribute("parcelsCount")
-    public String parcelsCount(HttpSession session) {
-        User user = authenticationHelper.tryGetUser(session);
-
-        return String.valueOf(parcelService.parcelsCount(user));
+    public String parcelsCount() {
+        return String.valueOf(parcelService.parcelsCount());
     }
 
     @ModelAttribute("shipmentsCount")
-    public String shipmentsCount(HttpSession session) {
-        User user = authenticationHelper.tryGetUser(session);
-
-        return String.valueOf(shipmentService.shipmentsCount(user));
+    public String shipmentsCount() {
+        return String.valueOf(shipmentService.shipmentsCount());
     }
 
     @GetMapping

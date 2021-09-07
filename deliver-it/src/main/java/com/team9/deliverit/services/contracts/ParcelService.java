@@ -33,6 +33,6 @@ public interface ParcelService {
 
     void updateShipment(User user, Parcel parcel, int shipmentId);
 
-    int parcelsCount(User user);
+    int parcelsCount();
 
 }

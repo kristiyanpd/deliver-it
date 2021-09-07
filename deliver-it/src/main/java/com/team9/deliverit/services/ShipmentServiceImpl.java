@@ -112,8 +112,8 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public int shipmentsCount(User user){
-        return getAll(user).size();
+    public int shipmentsCount(){
+        return repository.getAll().size();
     }
 
 }

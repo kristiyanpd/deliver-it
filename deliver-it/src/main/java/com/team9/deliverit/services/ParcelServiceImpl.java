@@ -134,7 +134,7 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public int parcelsCount(User user) {
-        return getAll(user).size();
+    public int parcelsCount() {
+        return repository.getAll().size();
     }
 }

@@ -26,6 +26,6 @@ public interface ShipmentService {
 
     Shipment nextShipmentToArrive(int warehouseId, User user);
 
-    int shipmentsCount(User user);
+    int shipmentsCount();
 
 }
