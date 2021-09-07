@@ -3917,6 +3917,24 @@ input[type="button"].btn-block {
   border-color: #dddfeb #dddfeb #fff;
 }
 
+.nav-borders .nav-link {
+  color: #69707a;
+  border-bottom-width: 0.125rem;
+  border-bottom-style: solid;
+  border-bottom-color: transparent;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.nav-borders .nav-link.active {
+  color: #0061f2;
+  border-bottom-color: #0061f2;
+}
+
 .nav-tabs .dropdown-menu {
   margin-top: -1px;
   border-top-left-radius: 0;
@@ -10995,4 +11013,8 @@ footer.sticky-footer .copyright {
 
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
+}
+
+.ms-0 {
+  margin-left: 0 !important;
 }
