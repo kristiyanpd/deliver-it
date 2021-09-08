@@ -101,8 +101,6 @@ public class ParcelMvcController {
         }
     }
 
-    //TODO Has parcels, otherwise hide tables and show "You do not have any parcels!"
-
     @GetMapping
     public String showAllParcels(Model model, HttpSession session) {
         try {
@@ -194,12 +192,9 @@ public class ParcelMvcController {
             }
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
-        } catch (UnauthorizedOperationException e) {
-            model.addAttribute("error", e.getMessage());
-            return "access-denied";
         }
     }
 
@@ -218,12 +213,9 @@ public class ParcelMvcController {
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_parcel", e.getMessage());
             return "parcel-update";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
-        } catch (UnauthorizedOperationException e) {
-            model.addAttribute("error", e.getMessage());
-            return "access-denied";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
@@ -257,12 +249,9 @@ public class ParcelMvcController {
             User user = authenticationHelper.tryGetUser(session);
             service.delete(user, id);
             return "redirect:/panel/parcels";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
-        } catch (UnauthorizedOperationException e) {
-            model.addAttribute("error", e.getMessage());
-            return "access-denied";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }

@@ -4,6 +4,7 @@ import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.City;
 import com.team9.deliverit.models.Country;
 import com.team9.deliverit.models.User;
@@ -28,18 +29,16 @@ public class CityMvcController {
 
     private final CityService service;
     private final CityModelMapper modelMapper;
-    private final UserService userService;
     private final CountryService countryService;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
     public CityMvcController(CityService service,
                              CityModelMapper modelMapper,
-                             UserService userService,
-                             CountryService countryService, AuthenticationHelper authenticationHelper) {
+                             CountryService countryService,
+                             AuthenticationHelper authenticationHelper) {
         this.service = service;
         this.modelMapper = modelMapper;
-        this.userService = userService;
         this.countryService = countryService;
         this.authenticationHelper = authenticationHelper;
     }
@@ -71,61 +70,104 @@ public class CityMvcController {
     }
 
     @GetMapping
-    public String showAllCities(Model model) {
-        model.addAttribute("cities", service.getAll());
-        return "cities";
+    public String showAllCities(Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                model.addAttribute("cities", service.getAll());
+                return "cities";
+            } else {
+                return "not-found";
+            }
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
+        }
     }
 
     @GetMapping("/{id}")
-    public String showSingleCity(@PathVariable int id, Model model) {
+    public String showSingleCity(@PathVariable int id, Model model, HttpSession session) {
         try {
-            City city = service.getById(id);
-            model.addAttribute("city", city);
-            return "city";
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                City city = service.getById(id);
+                model.addAttribute("city", city);
+                return "city";
+            } else {
+                return "not-found";
+            }
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
             return "not-found";
         }
     }
 
     @GetMapping("/new")
-    public String showNewCityPage(Model model) {
-        model.addAttribute("city", new CityDto());
-        return "city-new";
+    public String showNewCityPage(Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                model.addAttribute("city", new CityDto());
+                return "city-new";
+            } else {
+                return "not-found";
+            }
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
+        }
     }
 
     @PostMapping("/new")
-    public String createCity(@Valid @ModelAttribute("city") CityDto cityDto, BindingResult errors, Model model) {
+    public String createCity(@Valid @ModelAttribute("city") CityDto cityDto, BindingResult errors, Model model, HttpSession session) {
         if (errors.hasErrors()) {
             return "city-new";
         }
 
         try {
-            //ToDo Rework with current user in MVC authentication session.
             City city = modelMapper.fromDto(cityDto);
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             service.create(city, user);
 
-            return "redirect:/cities";
+            return "redirect:/panel/cities";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_city", e.getMessage());
             return "city-new";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
     @GetMapping("/{id}/update")
-    public String showEditCityPage(@PathVariable int id, Model model) {
+    public String showEditCityPage(@PathVariable int id, Model model, HttpSession session) {
         try {
-            City city = service.getById(id);
-            CityDto cityDto = modelMapper.toDto(city);
-            model.addAttribute("cityId", id);
-            model.addAttribute("city", cityDto);
-            return "city-update";
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                City city = service.getById(id);
+                CityDto cityDto = modelMapper.toDto(city);
+                model.addAttribute("cityId", id);
+                model.addAttribute("city", cityDto);
+                return "city-update";
+            } else {
+                return "not-found";
+            }
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
             return "not-found";
         }
     }
@@ -134,35 +176,44 @@ public class CityMvcController {
     public String updateCity(@PathVariable int id,
                              @Valid @ModelAttribute("city") CityDto cityDto,
                              BindingResult errors,
-                             Model model) {
+                             Model model,
+                             HttpSession session) {
         if (errors.hasErrors()) {
             return "city-update";
         }
 
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             City city = modelMapper.fromDto(cityDto, id);
             service.update(city, user);
 
-            return "redirect:/cities";
+            return "redirect:/panel/cities";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_city", e.getMessage());
             return "city-update";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteCity(@PathVariable int id, Model model) {
+    public String deleteCity(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             service.delete(id, user);
 
-            return "redirect:/cities";
+            return "redirect:/panel/cities";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
             return "not-found";
         }
     }

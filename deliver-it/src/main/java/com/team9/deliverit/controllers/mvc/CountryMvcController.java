@@ -4,6 +4,7 @@ import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.exceptions.AuthenticationFailureException;
 import com.team9.deliverit.exceptions.DuplicateEntityException;
 import com.team9.deliverit.exceptions.EntityNotFoundException;
+import com.team9.deliverit.exceptions.UnauthorizedOperationException;
 import com.team9.deliverit.models.Country;
 import com.team9.deliverit.models.User;
 import com.team9.deliverit.models.dtos.CountryDto;
@@ -58,62 +59,105 @@ public class CountryMvcController {
     }
 
     @GetMapping
-    public String showAllCountries(Model model) {
-        model.addAttribute("countries", service.getAll());
-        return "countries";
+    public String showAllCountries(Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                model.addAttribute("countries", service.getAll());
+                return "countries";
+            } else {
+                return "not-found";
+            }
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
+        }
     }
 
     @GetMapping("/{id}")
-    public String showSingleCountry(@PathVariable int id, Model model) {
+    public String showSingleCountry(@PathVariable int id, Model model, HttpSession session) {
         try {
-            Country country = service.getById(id);
-            model.addAttribute("country", country);
-            return "country";
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                Country country = service.getById(id);
+                model.addAttribute("country", country);
+                return "country";
+            } else {
+                return "not-found";
+            }
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
             return "not-found";
         }
     }
 
     @GetMapping("/new")
-    public String showNewCountryPage(Model model) {
-        model.addAttribute("country", new CountryDto());
-        return "country-new";
+    public String showNewCountryPage(Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                model.addAttribute("country", new CountryDto());
+                return "country-new";
+            } else {
+                return "not-found";
+            }
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
+        }
     }
 
     @PostMapping("/new")
-    public String createCountry(@Valid @ModelAttribute("country") CountryDto countryDto, BindingResult errors, Model model) {
+    public String createCountry(@Valid @ModelAttribute("country") CountryDto countryDto, BindingResult errors, Model model, HttpSession session) {
         if (errors.hasErrors()) {
             return "country-new";
         }
 
         try {
-            //ToDo Rework with current user in MVC authentication session.
             Country country = modelMapper.fromDto(countryDto);
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             service.create(user, country);
 
-            return "redirect:/countries";
+            return "redirect:/panel/countries";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_country", e.getMessage());
             return "country-new";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
 
     @GetMapping("/{id}/update")
-    public String showEditCountryPage(@PathVariable int id, Model model) {
+    public String showEditCountryPage(@PathVariable int id, Model model, HttpSession session) {
         try {
-            Country country = service.getById(id);
-            CountryDto countryDto = modelMapper.toDto(country);
-            model.addAttribute("countryId", id);
-            model.addAttribute("country", countryDto);
-            return "country-update";
+            User user = authenticationHelper.tryGetUser(session);
+            if (user.isEmployee()) {
+                Country country = service.getById(id);
+                CountryDto countryDto = modelMapper.toDto(country);
+                model.addAttribute("countryId", id);
+                model.addAttribute("country", countryDto);
+                return "country-update";
+            } else {
+                return "not-found";
+            }
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
             return "not-found";
         }
     }
@@ -122,35 +166,44 @@ public class CountryMvcController {
     public String updateCountry(@PathVariable int id,
                                 @Valid @ModelAttribute("country") CountryDto dto,
                                 BindingResult errors,
-                                Model model) {
+                                Model model,
+                                HttpSession session) {
         if (errors.hasErrors()) {
             return "country-update";
         }
 
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             Country country = modelMapper.fromDto(dto, id);
             service.update(user, country);
 
-            return "redirect:/countries";
+            return "redirect:/panel/countries";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_country", e.getMessage());
             return "country-update";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteCountry(@PathVariable int id, Model model) {
+    public String deleteCountry(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user = userService.getByEmail("kristiyan.dimitrov@gmail.com");
+            User user = authenticationHelper.tryGetUser(session);
             service.delete(user, id);
 
-            return "redirect:/countries";
+            return "redirect:/panel/countries";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
             return "not-found";
         }
     }

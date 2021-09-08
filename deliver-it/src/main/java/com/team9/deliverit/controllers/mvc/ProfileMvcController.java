@@ -158,7 +158,11 @@ public class ProfileMvcController {
 
         try {
             User user = authenticationHelper.tryGetUser(session);
-            user.setProfilePicture(profilePicture.getProfilePicture());
+            if (!profilePicture.getProfilePicture().isEmpty()) {
+                user.setProfilePicture(profilePicture.getProfilePicture());
+            } else {
+                user.setProfilePicture("https://previews.123rf.com/images/shekularaz/shekularaz1608/shekularaz160800014/60979026-mops-pug-dog-animal-dressed-up-in-navy-blue-suit-with-red-tie-business-man-vector-illustration-.jpg");
+            }
 
             service.update(user, user, user.getId());
             return "redirect:/panel/account-profile";

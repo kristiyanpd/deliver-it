@@ -121,7 +121,7 @@ public class UserMvcController {
             return "redirect:/auth/login";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "access-denied";
+            return "not-found";
         }
     }
 

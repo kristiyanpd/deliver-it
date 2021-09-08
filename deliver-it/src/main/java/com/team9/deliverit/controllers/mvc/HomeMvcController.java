@@ -1,6 +1,5 @@
 package com.team9.deliverit.controllers.mvc;
 
-import com.team9.deliverit.controllers.utils.AuthenticationHelper;
 import com.team9.deliverit.models.Warehouse;
 import com.team9.deliverit.services.contracts.UserService;
 import com.team9.deliverit.services.contracts.WarehouseService;
