@@ -102,7 +102,7 @@ public class AuthenticationController {
             session.setAttribute(CURRENT_USER_SESSION_KEY, user.getEmail());
             return "redirect:/panel";
         } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("email", "username_error", e.getMessage());
+            bindingResult.rejectValue("email", "duplicate_email", e.getMessage());
             return "register";
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("email", "auth_error", e.getMessage());
