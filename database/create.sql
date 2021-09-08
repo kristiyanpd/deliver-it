@@ -34,13 +34,15 @@ create table roles
 
 create table users
 (
-    user_id    int auto_increment
+    user_id         int auto_increment
         primary key,
-    first_name varchar(50)  not null,
-    last_name  varchar(50)  not null,
-    email      varchar(100) not null,
-    address_id int          null,
-    role_id    int          not null,
+    email           varchar(100) not null,
+    password        varchar(50)  not null,
+    first_name      varchar(50)  not null,
+    last_name       varchar(50)  not null,
+    address_id      int          null,
+    profile_picture varchar(500) null,
+    role_id         int          not null,
     constraint users_addresses_fk
         foreign key (address_id) references addresses (address_id),
     constraint users_roles_fk
@@ -49,9 +51,10 @@ create table users
 
 create table warehouses
 (
+    photo_url    varchar(300) null,
     warehouse_id int auto_increment
         primary key,
-    address_id   int not null,
+    address_id   int          not null,
     constraint warehouses_addresses_fk
         foreign key (address_id) references addresses (address_id)
 );
