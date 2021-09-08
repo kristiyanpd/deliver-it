@@ -109,6 +109,8 @@ public class ShipmentMvcController {
         } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
@@ -124,6 +126,8 @@ public class ShipmentMvcController {
             }
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
+            return "redirect:/auth/login";
+        } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         }
     }
@@ -144,9 +148,11 @@ public class ShipmentMvcController {
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_shipment", e.getMessage());
             return "shipment-new";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
@@ -159,9 +165,11 @@ public class ShipmentMvcController {
             model.addAttribute("shipmentId", id);
             model.addAttribute("shipment", shipmentDto);
             return "shipment-update";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
@@ -184,9 +192,11 @@ public class ShipmentMvcController {
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_shipment", e.getMessage());
             return "shipment-update";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
@@ -197,12 +207,14 @@ public class ShipmentMvcController {
             service.delete(user, id);
 
             return "redirect:/panel/shipments";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "redirect:";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 

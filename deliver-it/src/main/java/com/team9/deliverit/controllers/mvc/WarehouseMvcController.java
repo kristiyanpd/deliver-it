@@ -147,6 +147,10 @@ public class WarehouseMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
@@ -165,6 +169,10 @@ public class WarehouseMvcController {
             }
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
+            return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
             return "not-found";
         }
     }
@@ -191,6 +199,10 @@ public class WarehouseMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
@@ -209,6 +221,8 @@ public class WarehouseMvcController {
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "redirect:";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 }

@@ -75,6 +75,8 @@ public class ProfileMvcController {
             return "account-profile";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
@@ -108,6 +110,8 @@ public class ProfileMvcController {
             return "account-security";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
@@ -147,7 +151,7 @@ public class ProfileMvcController {
 
     @PostMapping("/panel/account-profile/picture")
     public String updateProfilePicture(@Valid @ModelAttribute("profilePicture") UserPictureDto profilePicture,
-                                 BindingResult errors, HttpSession session) {
+                                       BindingResult errors, HttpSession session) {
         if (errors.hasErrors()) {
             return "redirect:/panel/account-profile";
         }

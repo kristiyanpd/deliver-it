@@ -130,7 +130,7 @@ public class ParcelMvcController {
             return "parcel";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
         }
@@ -148,6 +148,8 @@ public class ParcelMvcController {
             }
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
+        } catch (UnauthorizedOperationException e) {
+            return "not-found";
         }
     }
 
@@ -165,7 +167,7 @@ public class ParcelMvcController {
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "duplicate_parcel", e.getMessage());
             return "parcel-new";
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "not-found";
         } catch (AuthenticationFailureException e) {
@@ -222,6 +224,8 @@ public class ParcelMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "access-denied";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
@@ -259,6 +263,8 @@ public class ParcelMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "access-denied";
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         }
     }
 
