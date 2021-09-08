@@ -133,8 +133,9 @@
                                                    href="#"
                                                    th:text="${parcel.id}">ID</a>
                                             </td>
-                                            <td th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">
-                                                Customer
+                                            <td>
+                                                <a th:href="@{/panel/users/{id}(id=${parcel.user.id})}" href="#"
+                                                   th:text="${parcel.getUser().getFirstName()}+' '+${parcel.getUser().getLastName()}+' (#'+${parcel.getUser().getId()}+')'">Customer</a>
                                             </td>
                                             <td th:text="${parcel.getPickUpOption()}">Pickup Option</td>
                                         </tr>
