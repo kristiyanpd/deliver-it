@@ -91,7 +91,7 @@ public class ProfileMvcController {
             User userExecuting = authenticationHelper.tryGetUser(session);
             User user = modelMapper.fromUserDto(userExecuting.getId(), userDto);
             service.update(userExecuting, user, user.getId());
-            return "account-profile";
+            return "redirect:/panel/account-profile";
         } catch (AuthenticationFailureException e) {
             return "redirect:/auth/login";
         } catch (DuplicateEntityException e) {
