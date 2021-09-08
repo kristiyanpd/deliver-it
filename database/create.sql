@@ -51,10 +51,10 @@ create table users
 
 create table warehouses
 (
-    photo_url    varchar(300) null,
     warehouse_id int auto_increment
         primary key,
     address_id   int          not null,
+    photo_url    varchar(300) null,
     constraint warehouses_addresses_fk
         foreign key (address_id) references addresses (address_id)
 );
