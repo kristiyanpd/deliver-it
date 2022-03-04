@@ -257,7 +257,7 @@ public class ParcelMvcController {
         }
     }
 
-    @PostMapping("/filter")
+    @GetMapping("/filter")
     public String filterParcels(@ModelAttribute FilterParcelDto filterParcelDto, HttpSession session, Model model) {
         try {
             User user = authenticationHelper.tryGetUser(session);

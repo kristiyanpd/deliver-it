@@ -56,7 +56,7 @@
                         </div>
 
                         <form th:if="${parcelsExist} or (${parcelsExist} == false and ${filtered} == true)"
-                              method="post" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
+                              method="get" th:action="@{/panel/parcels/filter}" th:object="${filterParcelDto}">
                             <div class="row">
 
                                 <div class="col-sm-12 col-md-12 col-lg-2">
